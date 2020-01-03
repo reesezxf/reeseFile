@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <link rel="shortcut icon"  href="{% static 'NPI_EERF/img/favicon.ico' %}" >
+    <title>EERF Management Power</title>
+    <link rel="stylesheet" href="{% static 'NPI_EERF/css/amazeui.min.css' %}"/>
+    <script type="text/javascript" src="{% static 'NPI_EERF/js/jquery-3.2.1.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'NPI_EERF/js/ifvisible.js' %}"></script>
+    <script type="text/javascript" src="{% static 'NPI_EERF/js/js.cookie.js' %}"></script>
+    <script type="text/javascript" src="{% static 'NPI_EERF/js/amazeui.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'NPI_EERF/js/highcharts.js' %}"></script>
+    <script type="text/javascript" src="{% static 'NPI_EERF/js/exporting.js' %}"></script>
+    <script type="text/javascript" src="{% static 'NPI_EERF/js/offline-exporting.js' %}"></script>
+    <script src="{% static 'NPI_EERF/js/ReFresh.js' %}" defer=true ></script>
+    <script type="text/javascript">
+        document.write("<link rel=\"stylesheet\" href=\"{% static 'NPI_EERF/css/style.css?v="+Math.random()+"' %}\">");
+        document.write("<script language=\"javascript\" type=\"text/javascript\" src=\"{% static 'NPI_EERF/js/html2canvas.js?v="+Math.random()+"' %}\"><\/script>");
+        document.write("<script language=\"javascript\" type=\"text/javascript\" src=\"{% static 'NPI_EERF/js/WebData.js?v="+Math.random()+"' %}\"><\/script>");
+    </script>
+    <style>
+        @media screen and (max-width: 1280px) and (max-height: 600px) {
+            #chart_container {
+                height: 95%;
+            }
+        }
+
+    </style>
+</head>
+<body>
+<header style="height: 5rem;width: 100%;padding: 0;margin:0;background:linear-gradient(#30cfd0,#04a090);line-height: 5rem;">
+    <img id="header_logo" class="am-img-responsive" src="{% static 'NPI_EERF/img/header_logo.png' %}">
+    <a id="return_home" href="{% url 'NPI_EERF:index' %}"><i class="am-icon-home am-icon-md"></i></a>
+    <a id="headerPicture" class="histor_power" href="#"><i class="am-icon-camera am-icon-sm"></i></a>
+</header>
+<div class="am-g doc-am-g" id="container">
+    <nav data-am-widget="menu" class="am-menu  am-menu-offcanvas1" data-am-menu-offcanvas>
+        <a href="javascript: void(0)" class="am-menu-toggle">
+            <i class="am-menu-toggle-icon am-icon-bars" style="font-size: 3rem;"></i>
+        </a>
+        <div class="am-offcanvas">
+            <div class="am-offcanvas-bar">
+                <ul class="am-menu-nav am-avg-sm-1">
+                    <li id="user_logo_content">
+                        <img id="users_logo" class="am-img-responsive" src="{% static 'NPI_EERF/img/users.png' %}">
+                        <p id="user_name" class="am-center">{{ user_cname }} {{ user_authority }}</p>
+                    </li>
+                    <li>
+                        <a href="{% url 'NPI_EERF:power' %}" class=""><i class="am-icon-crosshairs am-icon-sm"></i>实时人力状况</a>
+                    </li>
+                    <li class="">
+                        <a href="{% url 'NPI_EERF:historypower' %}" class=""><i
+                                class="am-icon-line-chart am-icon-sm"></i>历史趋势</a>
+                    </li>
+                    <li class="">
+                        <a href="{% url 'NPI_EERF:unitspower' %}" class=""><i class="am-icon-user-plus am-icon-sm"></i>编制人力</a>
+                    </li>
+                    <li class="am-active">
+                        <a href="{% url 'NPI_EERF:recruit' %}" class=""><i class="am-icon-edit  am-icon-sm"></i>招募状况</a>
+                    </li>
+                    <li class="">
+                        <a href="{% url 'NPI_EERF:dimission' %}" class=""><i class="am-icon-user-times am-icon-sm"></i>离职状况</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</div>
+<!--chart绘图-->
+<div class="am-g doc-am-g" id="chart_container">
+    <div class="am-u-md-12 am-u-lg-12" id="histor_power">
+        <div class="am-u-md-12 am-u-lg-12" id="recruit_column_chart"></div>
+        <div id="bottom_box">
+            <div id="bottom_recruit_box">
+                <div class="am-u-md-6 am-u-lg-5" id="recruit_column_total"></div>
+                <div class="am-u-md-6 am-u-lg-7 am-u-sm-offset-1" id="recruit_column_manpower"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--模态框-->
+<div class="am-modal am-modal-alert" tabindex="-1" id="power_ly">
+    <div class="am-modal-dialog" id="power_ly_con">
+        <a id="close_logo" href="javascript: void(0)" class="am-closunitssettinge am-close-spin"
+               data-am-modal-close="">×</a>
+        <div class="am-modal-hd">人力需求和录用进度</div>
+        <div class="am-modal-bd">
+            <table class="am-table am-table-bordered am-table-radius am-table-striped am-table-centered am-text-nowrap">
+                <caption id="renli_caption">人力需求总表</caption>
+                <thead>
+                <tr>
+                    <th>申請日期</th>
+                    <th>緊急度</th>
+                    <th>需求單號</th>
+                    <th>狀態</th>
+                    <th>事業處</th>
+                    <th>需求部門</th>
+                    <th>部門簡稱</th>
+                    <th>需求職位</th>
+                    <th>需求人數</th>
+                    <th>已面試人數</th>
+                    <th>錄用人數</th>
+                    <th>待報到人數</th>
+                    <th>剩余需求</th>
+                    <th>資位要求</th>
+                    <th>職系</th>
+                    <th>學歷要求</th>
+                    <th>工作年限(年)</th>
+                    <th>面試主管1</th>
+                    <th>面試主管2</th>
+                    <th>希望到職日</th>
+                </tr>
+                </thead>
+                <tbody id="demand_tab">
+
+                </tbody>
+            </table>
+
+            <table class="am-table am-table-bordered am-table-radius am-table-striped am-text-nowrap am-table-centered">
+                <caption id="ly_caption">录用进度总表</caption>
+                <thead>
+                <tr>
+                    <th>報到日期</th>
+                    <th>作業狀態</th>
+                    <th>需求單號</th>
+                    <th>姓名</th>
+                    <th>性別</th>
+                    <th>聯系方式</th>
+                    <th>面試日期</th>
+                    <th>事業處</th>
+                    <th>應聘單位</th>
+                    <th>應聘職位</th>
+                    <th>需求主管1</th>
+                    <th>學歷</th>
+                    <th>預核資位</th>
+                    <th>面試主管1結果</th>
+                    <th>面試主管2結果</th>
+                    <th>簽核進度</th>
+                    <th>體檢日期</th>
+                    <th>體檢結果</th>
+                </tr>
+                </thead>
+                <tbody id="recruit_tab">
+
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+
+</body>
+<script type="text/javascript">
+    var fontRotationNum_first = false;
+    var fontRotationNum = false;
+    window.onload = function(){
+        // 初次显示, 如果字体未旋转 标记
+        if ($(".highcharts-xaxis-labels span:first-child").css("transform") === "none") {
+            fontRotationNum_first = true;
+        }
+    };
+
+    $(window).bind('resize', function () {  //当浏览器大小变化时
+        try {
+            // 主要用来判断 页面未刷新时, 字体发生旋转
+            if ($(".highcharts-xaxis-labels span:first-child").css("transform").split(",")[1].split(" ")[1] === "0" && screen.availWidth >= 1600) {
+                fontRotationNum_first = true;
+            }
+        }catch (e) {
+
+        }
+        
+        // 字体出现旋转,删除样式,并刷新
+        if (resizeTimer) clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(function () {
+                // 判断字体旋转
+                if($(".highcharts-xaxis-labels span:first-child").css("transform") !== "none"){
+                    fontRotationNum = true;
+                }
+                if(fontRotationNum_first){
+                    if(fontRotationNum){
+                        window.location.reload();
+                    }
+                }
+           }, 500)
+
+    });
+
+
+    var allTeamData = {{all_team_data|safe}};
+    // console.log('allTeamData:',allTeamData);
+    var teamNameList = [], chart6Series = [], series_1 = {}, series_2 = {};
+    // series_1.colorIndex = 0 series_2.colorIndex = 3  数字对应树状图的颜色
+    series_1.name = "常设", series_2.name = "浪花", series_1.data = [], series_2.data = [], series_1.colorIndex = 1, series_2.colorIndex = 3;
+
+    for (var j = 0; j < allTeamData.length; j++) {
+        teamNameList.push(allTeamData[j].name);
+        series_1.data.push(allTeamData[j].always);
+        series_2.data.push(allTeamData[j].spindrift);
+    }
+    chart6Series.push(series_1);
+    chart6Series.push(series_2);
+
+    // console.log('chart6Series',chart6Series);
+    draw_chart6(teamNameList, chart6Series);
+
+    // 招募
+    var x_val = [];
+    var data_01 = [];   // 需求人數
+    var data_02 = [];   // 招募中
+    var data_03 = [];   // 錄用人數
+    var data_04 = [];   // 剩余需求
+
+    var newList = {{new_list|safe}};
+    var detailDataDict = {{ detail_data_dic|safe }};
+    for (var i = 0; i < newList.length; i++) {
+        for (keys in newList[i]) {
+            x_val.push(keys);
+            data_01.push(newList[i][keys][0]);
+            data_02.push(newList[i][keys][1]);
+            data_03.push(newList[i][keys][2]);
+            data_04.push(newList[i][keys][3]);
+        }
+    }
+
+    var seriesDataList = [{
+        name: "需求人數",
+        data: data_01
+    }, {
+        name: "錄用已報到人數",
+        data: data_02
+    }, {
+        name: "錄用未報到人數",
+        data: data_03
+    }, {
+        name: "剩余需求",
+        data: data_04
+    }];
+    draw_chart17(seriesDataList, x_val, detailDataDict);
+
+    // 总 招募
+    var total_data_01 = 0;   // 总 需求人數
+    var total_data_02 = 0;   // 总 錄用已報到
+    var total_data_03 = 0;   // 总 錄用未報到
+    var total_data_04 = 0;   // 总 剩余需求
+    for (var i = 0; i < data_01.length; i++) {
+        total_data_01 += data_01[i];
+        total_data_02 += data_02[i];
+        total_data_03 += data_03[i];
+        total_data_04 += data_04[i];
+    }
+    var totalSeriesData = [{
+        // 当y轴的值为total_data_01的时候，该树状条的颜色为#058DC7。    
+        y: total_data_01,
+        color: "#058DC7"
+    },
+        {
+            // 当y轴的值为total_data_02的时候，该树状条的颜色为#50B432。
+            y: total_data_02,
+            color: "#50B432"
+        },
+        {
+            // 当y轴的值为total_data_03的时候，该树状条的颜色为#ED561B。
+            y: total_data_03,
+            color: "#ED561B"
+        },
+        {
+            // 当y轴的值为total_data_04的时候，该树状条的颜色为#DDDF00。
+            y: total_data_04,
+            color: "#DDDF00"
+        }];
+    draw_chart5(totalSeriesData);
+
+</script>
+</html>
