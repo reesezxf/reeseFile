@@ -18,6 +18,7 @@ from django.template.context import RequestContext
 from django.views.decorators.csrf import csrf_exempt
 
 from NPI_EERF.models import *
+from django.db.models import Q
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -686,8 +687,7 @@ def recruit(req):
     username = req.COOKIES.get('eerf_user', '')
     if username:
         user_cname, user_authority = get_CnameAndAuthority(username)
-        edemand_data = EDemand.objects.filter(d_application__year=datetime.date.today().year,
-                                              d_status__in=[u'進行中', u'完成'])
+        edemand_data = EDemand.objects.filter(Q(d_application__year=datetime.date.today().year, d_status__in=['進行中','完成']) | Q(d_application__year=datetime.date.today().year-1, d_status__in=['進行中']))
         all_team_data = get_all_team_data()
 
         # 课---functionTeam 数据
