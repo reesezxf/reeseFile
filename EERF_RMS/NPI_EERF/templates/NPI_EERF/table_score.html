@@ -1,0 +1,2950 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <link rel="shortcut icon"  href="{% static 'NPI_EERF/img/favicon.ico' %}" >
+    <title>EERF Management UnitsPower</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'NPI_EERF/css/icheck-bootstrap.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'NPI_EERF/css/tables.css' %}"/>
+    <link rel="stylesheet" href="{% static 'NPI_EERF/css/amazeui.min.css' %}"/>
+    <link rel="stylesheet" href="{% static 'NPI_EERF/css/bootstrap.min.css' %}"/>
+
+    <script type="text/javascript" src="{% static 'NPI_EERF/js/jquery-3.2.1.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'NPI_EERF/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'NPI_EERF/js/new/bootbox.min.js' %}"></script>
+    <script type="{% static 'NPI_EERF/js/new/ui-bootstrap-tpls.min.js' %}"></script>
+    <script type="{% static 'NPI_EERF/js/new/jquery.tablesorter.js' %}"></script>
+    <script type="text/javascript">
+        document.write("<link rel=\"stylesheet\" href=\"{% static 'NPI_EERF/css/style.css?v="+Math.random()+"' %}\">");
+        document.write("<script language=\"javascript\" type=\"text/javascript\" src=\"{% static 'NPI_EERF/js/bonus_table.js?v="+Math.random()+"' %}\" defer=true><\/script>");
+        //获取当前页面的缩放值
+        function detectZoom() {
+            var ratio = 0,
+                screen = window.screen,
+                ua = navigator.userAgent.toLowerCase();
+
+            if (window.devicePixelRatio !== undefined) {
+                ratio = window.devicePixelRatio;
+            }
+            else if (~ua.indexOf('msie')) {
+                if (screen.deviceXDPI && screen.logicalXDPI) {
+                    ratio = screen.deviceXDPI / screen.logicalXDPI;
+                }
+            }
+            else if (window.outerWidth !== undefined && window.innerWidth !== undefined) {
+                ratio = window.outerWidth / window.innerWidth;
+            }
+
+            if (ratio) {
+                ratio = Math.round(ratio * 100);
+            }
+            return ratio;
+        }
+        var current_size = detectZoom();
+        $(window).bind('resize', function () {
+            setTimeout(function () {
+                if(current_size==100){
+                    table_alignment_Size_100();
+                }else {
+                    table_alignment_Size()
+                }
+
+            }, 400);
+
+        });
+
+       $(function(){
+            table_alignment();
+               setTimeout(function () {
+                    var department_table_height = $('#table_score_department').outerHeight();
+
+                    team_table_height = $('#table_score_team').outerHeight();
+
+               },400);
+
+        });
+
+    </script>
+      <style>
+        #oDivF_table_score table{
+            max-width: 100% !important;
+            empty-cells: show !important;
+        }
+        #oDivF_table_score_team{
+            background-color: white;
+        }
+        #oDivF_table_score{
+            width: 98% !important;
+        }
+        #oDivL_table_score_team{
+            height: 72% !important;
+        }
+        #oDivL_table_score_team table{
+            font-family: Arial, 微软雅黑;
+        }
+        #oDivL_table_score_team td{
+            padding: 6px;
+        }
+        #oDivL_table_score_department td{
+            padding: 6px;
+        }
+        #oDivL_table_score_team table tr:nth-child(1) td:nth-child(1){
+            padding: 5px;
+        }
+        #oDivL_table_score_team table tr:nth-child(2) td:nth-child(1){
+            padding: 5px;
+        }
+        #oDivL_table_score_team table tr:nth-child(4) td:nth-child(1){
+            padding: 5px;
+        }
+        #table_score_department{
+            border: 0;
+        }
+        #table_score_team{
+            border: 0;
+        }
+
+      #div_L_color{
+          position: absolute;
+          height: 15%;
+          width: 97.6%;
+          background-color: #b8b5b5;
+
+      }
+      #div_C_color{
+            position: absolute;
+            height: 15%;
+            width: 10%;
+            background-color: #b8b5b5;
+            z-index: 99999;
+      }
+      #div_V_color{
+        position: absolute;
+        height: 74.6%;;
+        width: 10%;
+        background-color: #b8b5b5;
+        z-index: 66;
+      }
+      #div_department_V_color{
+        position: absolute;
+        height: 54.5%;;
+        width: 10%;
+        background-color: #b8b5b5;
+        z-index: 66;
+      }
+    .modal-backdrop{
+          z-index: 99999999;
+      }
+      #table_score_team_left ul li{
+          display: initial;
+          width: 10%;
+          height: 100%;
+          margin: 0;
+            padding-right: 0.5%;
+      }
+        #table_score_team_left ul li span{
+            font-weight: 700;
+            color: #944325;
+            width: 10%;
+      }
+        #table_score_team_left ul li input{
+            width: 12%;
+            font-size: 1px;
+            text-align: center;
+            font-weight:700;
+      }
+        /*科*/
+        #table_score_department_left ul li{
+          display: initial;
+          width: 10%;
+          height: 100%;
+          margin: 0;
+            padding-right: 0.5%;
+      }
+        #table_score_department_left ul li span{
+            font-weight: 700;
+            color: #944325;
+            width: 10%;
+      }
+        #table_score_department_left ul li input{
+            width: 12%;
+            font-size: 1px;
+            text-align: center;
+            font-weight:700;
+      }
+       .td_Tips{
+           font-size: 1.6rem;
+       }
+       .team_right_tip{
+           height: 100% !important;
+           width: 80%;
+           float: left;
+       }
+       .department_right_tip{
+           height: 100% !important;
+           width: 80%;
+           float: left;
+       }
+
+      .tip_top{
+          width: 100%;
+          display: block;
+          height: 50% !important;
+      }
+      .tip_bottom{
+          width: 100%;
+          display: block;
+          height: 50% !important;
+      }
+      .tip_bottom ul li span {
+        font-weight: 700;
+        color: #944325;
+        width: 10%;
+    }
+      .tip_bottom ul{
+        list-style: none;
+        height: 100%;
+        padding: 0;
+      }
+    .tip_bottom ul li{
+        display: initial;
+        width: 10%;
+        height: 100%;
+        margin: 0;
+        padding-right: 0.5%;
+      }
+    .tip_bottom ul li input {
+        width: 10% !important;
+        font-size: 13px;
+        text-align: center;
+        font-weight: 700;
+    }
+  .team_right_tip{
+      font-size: 2rem;
+      line-height: 4.6rem;
+      padding-left: 1%;
+  }
+  .department_right_tip{
+      font-size: 2rem;
+      line-height: 4.6rem;
+      padding-left: 1%;
+  }
+      @media screen and (min-width: 1370px) and (max-width: 1800px) {
+        .team_right_tip{
+          font-size: 2rem;
+          line-height: 3.6rem;
+        }.department_right_tip{
+          font-size: 2rem;
+          line-height: 3.6rem;
+        }
+          #therighttip div span{
+              font-size: 1.6rem;
+          }
+          #therighttip div input{
+              width: 14.5%;
+          }
+      }
+      @media screen and (min-width: 1300px) and (max-width: 1370px) {
+        .team_right_tip{
+          font-size: 1.6rem;
+          line-height: 2.6rem;
+        }.department_right_tip{
+          font-size: 1.6rem;
+          line-height: 2.6rem;
+        }
+        .tip_top ul li input{
+            height: 76% !important;
+        }
+        .tip_bottom ul li input{
+            height: 76% !important;
+        }
+        #therighttip div span{
+              font-size: 1.6rem;
+          }
+          #therighttip div input{
+              width: 13%;
+          }
+      }
+      @media screen and (min-width: 1100px) and (max-width: 1300px) {
+        .team_right_tip{
+          font-size: 1.6rem;
+          line-height: 3.6rem;
+        } .department_right_tip{
+          font-size: 1.6rem;
+          line-height: 3.6rem;
+        }
+        .tip_top ul li input{
+            height: 76% !important;
+        }
+        .tip_bottom ul li input{
+            height: 76% !important;
+        }
+         .td_Tips{
+           font-size: 1.3rem;
+       }
+         #therighttip div span{
+              font-size: 1.6rem;
+          }
+          #therighttip div input{
+              width: 13%;
+          }
+      }
+      @media screen and (max-width: 1300px) and (max-height: 800px) {
+        .team_right_tip{
+          font-size: 1rem !important;
+          line-height: 2.5rem !important;
+        }.department_right_tip{
+          font-size: 1rem !important;
+          line-height: 2.5rem !important;
+        }
+        .td_Tips{
+           font-size: 1rem !important;
+            color: blue !important;
+       }
+        .tip_top ul li input{
+            height: 76% !important;
+        }
+        .tip_bottom ul li input{
+            height: 76% !important;
+        }
+        #therighttip div span{
+              font-size: 1.6rem;
+          }
+          #therighttip div input{
+              width: 11%;
+          }
+      }
+
+    </style>
+</head>
+<body ng-app="app" ng-controller="ctrl" style="background: whitesmoke;">
+<header style="height: 5.1rem;width: 100%;padding: 0;margin:0;background:#4c5e51;line-height: 5rem;">
+    <img id="header_logo" class="am-img-responsive" src="{% static 'NPI_EERF/img/header_logo.png' %}"
+         style="padding-left: 0.5rem;">
+    <a id="return_home" href="{% url 'NPI_EERF:index' %}"><i class="am-icon-home am-icon-md"></i></a>
+    <p id="admin_word"><i class="am-icon-user am-icon-sm"></i>&nbsp;您好,{{ user_cname }}</p>
+</header>
+<div id="div_tip">
+    <div id="thelefttip">
+        <div style="height: 100%;text-align: left;">
+            <div style="display: inline-block;width: 20%;float: left;height: 100%" class="td_Tips">
+                <span style="padding: 1.5%;background:#229e93 ">&nbsp&nbsp&nbsp&nbsp</span>
+                <span style="font-weight: 700;color: #944325;">此顏色可編輯</span>
+            </div>
+            <div class="team_right_tip" style="display: none">
+                <div id="table_score_team_left" class="tip_top">
+                <ul style="list-style: none;height: 100%;padding: 0">
+                    <li>
+                        <span>提案: </span>
+                        <input id="ipt_zjj_1" class="top_left_1" readonly >
+                    </li>
+                    <li>
+                        <span>評價: </span>
+                        <input id="ipt_zjj_1" class="top_left_2" readonly >
+                    </li>
+                     <li>
+                         <span>考勤: </span>
+                        <input id="ipt_zjj_1" class="top_left_3" readonly >
+                    </li>
+                    <li>
+                        <span>Task Force: </span>
+                        <input id="ipt_zjj_1" class="top_left_4" readonly >
+                    </li>
+                </ul>
+            </div>
+            <div class="tip_bottom">
+                <ul>
+                    <li>
+                        <span>HR: </span>
+                        <input id="ipt_zjj_1" class="top_left_5" readonly >
+                    </li>
+                     <li>
+                        <span>總百分比: </span>
+                         <input id="ipt_zjj_1" class="top_left_0" readonly >
+                    </li>
+
+                    <li>
+                            <span id="team_error_prompt" style="color: red;font-size: 1.2rem;"></span>
+                    </li>
+                </ul>
+            </div>
+            </div>
+            <div class="department_right_tip" style="display: none">
+                <div id="table_score_department_left" class="tip_top">
+                <ul style="list-style: none;height: 100%;padding: 0">
+                    <li>
+                        <span>提案: </span>
+                        <input id="ipt_zjj_1" class="top_left_1" readonly >
+                    </li>
+                    <li>
+                        <span>評價: </span>
+                        <input id="ipt_zjj_1" class="top_left_2" readonly >
+                    </li>
+                     <li>
+                         <span>考勤: </span>
+                        <input id="ipt_zjj_1" class="top_left_3" readonly >
+                    </li>
+                    <li>
+                        <span>Task Force: </span>
+                        <input id="ipt_zjj_1" class="top_left_4" readonly >
+                    </li>
+                </ul>
+            </div>
+            <div class="tip_bottom">
+                <ul>
+                     <li>
+                        <span>總百分比: </span>
+                         <input id="ipt_zjj_1" class="top_left_0" readonly >
+                    </li>
+
+                    <li>
+                            <span id="department_error_prompt" style="color: red;font-size: 1.2rem;"></span>
+                    </li>
+                </ul>
+            </div>
+            </div>
+        </div>
+
+
+    </div>
+    <div id="therighttip">
+        <div>
+            <span id="span_zjj">總獎金</span>
+            <input id="ipt_z" style="text-align:center" value={{ bp_money.bp_totalmoney }} readonly>
+            &nbsp&nbsp
+            <span style="font-weight: 700;color: #944325;">分配金額</span>
+            <input id="ipt_zjj" style="text-align:center" value={{ bp_money.bp_personalmoney }} onkeyup="money_check()">
+            &nbsp&nbsp
+            <span style="font-weight: 700;color: #944325;">團隊獎金</span>
+            <input id="ipt_td" style="text-align:center" value={{ bp_money.bp_teammoney }} onkeyup="money_check()">
+            &nbsp&nbsp
+            <span style="font-weight: 700;color: #944325;">其他</span>
+            <input id="ipt_qt" style="text-align:center" value={{ bp_money.bp_othermoney }} onkeyup="money_check()">
+        </div>
+    </div>
+</div>
+<div id="table_score_btns">
+    <button id="team_data">課級數據</button>
+    <button id="department_data">部級數據</button>
+    <button id="excelOut">生成Excel</button>
+    <button data-toggle="modal" data-target="#myModal" id="btn_load">讀取記錄</button>
+    <button id="btn_start"  onclick="delay_table_alignment_Size()">計算</button>
+    <button data-toggle="modal" data-target="#myModal_" id="btn_save">保存到記錄</button>
+</div>
+<div id="kqbl">
+    <h3 style="text-align: center;margin: 0;font-family: 微软雅黑;color: #d0cbca;">考勤比例計算公式</h3>
+    <img class="img_common" src="../../static/NPI_EERF/img/kqbl.png" alt="">
+</div>
+<div id="HC">
+    <h3 style="text-align: center;margin: 0;font-family: 微软雅黑;color: #d0cbca;">Exceed-Expected 得分</h3>
+    <img class="img_common" src="../../static/NPI_EERF/img/Exceed-Expected×HC.png"
+         alt="">
+</div>
+<div id="Total01">
+    <h3 style="text-align: center;margin: 0;font-family: 微软雅黑;color: #d0cbca;">Total 百分比</h3>
+    <img class="img_common" src="../../static/NPI_EERF/img/Total01.png"
+         alt="">
+</div>
+<div id="Total02">
+    <h3 style="text-align: center;margin: 0;font-family: 微软雅黑;color: #d0cbca;">Total 金額</h3>
+    <img class="img_common" src="../../static/NPI_EERF/img/Total 金額.png"
+         alt="">
+</div>
+<div class="common" id="khpjzb">
+    <h3 style="text-align: center;margin: 0;font-family: 微软雅黑;color: #d0cbca;">客戶評價佔比</h3>
+    <img class="img_common" src="../../static/NPI_EERF/img/khpjzb.png"
+         alt="">
+</div>
+<div class="common" id="jsdcl">
+    <h3 style="text-align: center;margin: 0;font-family: 微软雅黑;color: #d0cbca;">金石達成率(綠色表示已達標)</h3>
+    <img class="img_common" src="../../static/NPI_EERF/img/金石達成率(绿色表示已达标).png"
+         alt="">
+</div>
+<div class="common" id="idl">
+    <h3 style="text-align: center;margin: 0;font-family: 微软雅黑;color: #d0cbca;">IDL</h3>
+    <img class="img_common" src="../../static/NPI_EERF/img/IDl.png"
+         alt="">
+</div>
+<div class="common" id="zl">
+    <h3 style="text-align: center;margin: 0;font-family: 微软雅黑;color: #d0cbca;">專利得分*n</h3>
+    <img class="img_common" src="../../static/NPI_EERF/img/專利得分.png"
+         alt="">
+</div>
+<div class="common" id="Total03">
+    <h3 style="text-align: center;margin: 0;font-family: 微软雅黑;color: #d0cbca;">Total</h3>
+    <img class="img_common" src="../../static/NPI_EERF/img/total03.png"
+         alt="">
+</div>
+<div class="common" id="zqtazb">
+    <h3 style="text-align: center;margin: 0;font-family: 微软雅黑;color: #d0cbca;">智權提案項目佔比</h3>
+    <img class="img_common" src="../../static/NPI_EERF/img/金石佔比.png"
+         alt="">
+</div>
+<div class="common" id="bjkzp">
+    <h3 style="text-align: center;margin: 0;font-family: 微软雅黑;color: #d0cbca;">部級可支配金額</h3>
+    <img class="img_common" src="../../static/NPI_EERF/img/部級可支配金額.png"
+         alt="">
+</div>
+<div class="common" id="lzl">
+    <h3 style="text-align: center;margin: 0;font-family: 微软雅黑;color: #d0cbca;">離職率佔比</h3>
+    <img  class="img_common"  src="../../static/NPI_EERF/img/離職率佔比.png"
+         alt="">
+</div>
+<div class="common" id="zldcl">
+    <h3 style="text-align: center;margin: 0;font-family: 微软雅黑;color: #d0cbca;">專利達成率(綠色表示已達標)</h3>
+    <img  class="img_common"  src="../../static/NPI_EERF/img/專利達成率(绿色表示已达标).png"
+         alt="">
+</div>
+<div class="common" id="zldf">
+    <h3 style="text-align: center;margin: 0;font-family: 微软雅黑;color: #d0cbca;">專利得分</h3>
+    <img  class="img_common"  src="../../static/NPI_EERF/img/專利得分.png"
+         alt="">
+</div>
+<div class="common" id="lzldf">
+    <h3 style="text-align: center;margin: 0;font-family: 微软雅黑;color: #d0cbca;">離職率得分</h3>
+    <img  class="img_common"  src="../../static/NPI_EERF/img/離職率得分.png"
+         alt="">
+</div>
+<div class="" id="zjj">
+    <h3 style="text-align: center;margin: 0;font-family: 微软雅黑;color: #d0cbca;">總獎金</h3>
+    <img  class="img_common"  src="../../static/NPI_EERF/img/總獎金.png"
+         alt="">
+</div>
+<div class="common" id="jsdf">
+    <h3 style="text-align: center;margin: 0;font-family: 微软雅黑;color: #d0cbca;">金石得分</h3>
+    <img  class="img_common"  src="../../static/NPI_EERF/img/金石得分.png"
+         alt="">
+</div>
+<div class="common" id="yjyw">
+    <h3 style="text-align: center;margin: 0;font-family: 微软雅黑;color: #d0cbca;">Team每人月均義務超時時數(綠色表示平均已上)</h3>
+    <img  class="img_common"  src="../../static/NPI_EERF/img/Team每人月均義務超時時數(綠色表平均已上).png"
+         alt="">
+</div>
+<div class="common" id="yj10">
+    <h3 style="text-align: center;margin: 0;font-family: 微软雅黑;color: #d0cbca;">Team每人月均超10.5h天次(綠色表示平均已上)</h3>
+    <img  class="img_common"  src="../../static/NPI_EERF/img/Team每人月均超10.5h天次(綠色表平均已上).png"
+         alt="">
+</div>
+<div class="common" id="yjwb">
+    <h3 style="text-align: center;margin: 0;font-family: 微软雅黑;color: #d0cbca;">Team每人月均晚班天次(綠色表示平均已上)</h3>
+    <img  class="img_common"  src="../../static/NPI_EERF/img/Team每人月均晚班天次(綠色表平均已上).png"
+         alt="">
+</div>
+<div class="common" id="gwcc">
+    <h3 style="text-align: center;margin: 0;font-family: 微软雅黑;color: #d0cbca;">人均國外出差天次(綠色表示平均已上)</h3>
+    <img  class="img_common"  src="../../static/NPI_EERF/img/人均國外出差天次(綠色表平均已上).png"
+         alt="">
+</div>
+<div class="common" id="gncc">
+    <h3 style="text-align: center;margin: 0;font-family: 微软雅黑;color: #d0cbca;">人均國內出差天次(綠色表示平均已上)</h3>
+    <img  class="img_common"  src="../../static/NPI_EERF/img/人均國內出差天次(綠色表平均已上).png"
+         alt="">
+</div>
+<div class="common" id="TeamLoading">
+    <h3 style="text-align: center;margin: 0;font-family: 微软雅黑;color: #d0cbca;">Team Loading(綠色表示平均已上)</h3>
+    <img  class="img_common"  src="../../static/NPI_EERF/img/TeamLoading.png"
+         alt="">
+</div>
+<div class="container" style="width: 100%;height: 92.3%;margin-top: 0.5%;">
+    <div class="" id="div_table" style="height: 83%">
+{#    <table class=" table-hover" id="table_score" border="1">#}
+
+
+        {% if user_mode == 1 %}
+            <script>
+                var sign = false;
+                department_data_click_sign=true;
+                $("#team_data").css({"background-color":"#2d2b2b","color":"#ececec","box-shadow":"0px 0px 10px 4px #6b7275"});
+                $("#team_data").one('click',function(){
+                    $("#oDivL_table_score_team").css('top',  (parseFloat($("#oDivL_table_score_team").css('top').split("p")[0]) + 1));
+                });
+                // 科級
+                setTimeout(function () {
+                    $('.td_Tips').css('width', '20%');
+                    $('.team_right_tip').css('display', "none");
+                    $('.department_right_tip').css('display', "");
+                    var department_total = (parseFloat($('#proposal_percentage').html())*((parseFloat($('#percentage_1').html()))/100))+((parseFloat($('#exceed_expected_percentage').html()) + parseFloat($('#idl_percentage').html()))*((parseFloat($('#percentage_1').html()))/100))+((parseFloat($('#duty_work_percentage').html()) + parseFloat($('#over_10_5_time_percentage').html())+ parseFloat($('#night_work_percentage').html())+ parseFloat($('#travel_abroad_percentage').html())+parseFloat($('#travel_cn_percentage').html())+parseFloat($('#leave_percentage').html()))*((parseFloat($('#percentage_1').html()))/100))+(parseFloat($('#task_force_percentage').html()));
+
+                    $('.top_left_1').val(($('#proposal_percentage').html())+'*'+($('#percentage_1').html()));
+                    $('.top_left_2').val((parseFloat($('#exceed_expected_percentage').html()) + parseFloat($('#idl_percentage').html()))+'%*'+($('#percentage_1').html()));
+                    $('.top_left_3').val((parseFloat($('#duty_work_percentage').html()) + parseFloat($('#over_10_5_time_percentage').html())+ parseFloat($('#night_work_percentage').html())+ parseFloat($('#travel_abroad_percentage').html())+parseFloat($('#travel_cn_percentage').html())+parseFloat($('#leave_percentage').html()))+'%*'+($('#percentage_1').html()));
+                    $('.top_left_4').val($('#task_force_percentage').html());
+                    $('.top_left_0').val(department_total+"%")
+                },200)
+
+            </script>
+            <table class=" table-hover departmentdata" id="table_score_department" border="1" style="display: none">
+                <div id="div_department_V_color" style="display: none"></div>
+                <tbody id="table_body_department"  >
+                    <tr  style="background: #e6cead;font-weight: 700;">
+                        <td style="background: #ececec">Leader</td>
+                        <td style="background: #c38a86;color: white;font-weight: 700;">HR</td>
+                        <td colspan="9" style="background: #e0c097">智權提案項目</td>
+                        <td colspan="3" style="background: #d8aa6d">客戶評價 年中</td>
+                        <td colspan="13" style="background: #bd9969">加班 & 晚班 & 出差 & 離職率</td>
+                        <td rowspan="3" colspan="2" style="line-height: 90px;color:#eceaea;background: #6d6663;font-size: 25px;">Task force</td>
+                        <td rowspan="3" colspan="2" style="line-height: 90px;background: #f5eedc;font-size: 30px;color: #d63333;font-size: 50px;">Total</td>
+                        <td rowspan="3" colspan="2"style="display: none;line-height: 90px;background: #f1f1f1;font-size: 30px;color: #e08d13;font-size: 25px;">個人分配金額</td>
+                        <td rowspan="3" colspan="2" style="display: none;line-height: 90px;background: #f5eedc;font-size: 30px;color: #d63333;font-size: 50px;">Total</td>
+                        <td colspan="2"></td>
+                        <td rowspan="4" style="line-height: 129px;background: #FFC107;">部級可支配金</td>
+
+                    </tr>
+                    <tr  style="font-weight: 700;">
+                        <td style="background: #ececec;font-weight: 700;"></td>
+                        <td contenteditable="true" style="background: #229e93;color: white;font-weight: 700;" id="hr_percentagedepartment">{{ bp_per.bp_hrper_d }}</td>
+                        <td colspan="25" style="background:#229e93" id="percentage_1department" contenteditable="true">{{ bp_per.bp_otherper_d }}</td>
+                        <td rowspan="2" style="width: 160px;background: #e6cead;line-height: 57px;">關務違規部門吸收</td>
+                        <td rowspan="2" style="width: 160px;background: #e6cead;line-height: 57px;">英孚未達標</td>
+                    </tr>
+                    <tr  style="font-weight: 700;background:#eacfab;">
+                        <td style="background: #ececec"></td>
+                        <td style="background: #c38a86;color: white;font-weight: 700;">2018</td>
+                        <td style="background: #e0c097">金石得分</td>
+                        <td style="background: #e0c097">金石得分*n</td>
+                        <td style="background: #e0c097">金石達成率</td>
+                        <td style="background: #e0c097">專利得分</td>
+                        <td style="background: #e0c097">專利得分*n</td>
+                        <td style="background: #e0c097">專利達成率</td>
+                        <td style="background: #e0c097">研發抵稅</td>
+                        <td style="background: #e0c097">研發抵稅 *n</td>
+                        <td style="background: #e0c097;font-weight: 700;">佔比</td>
+                        <td style="display: none;background: #d8aa6d">Exceed-Expected</td>
+                        <td style="background: #d8aa6d">Exceed-Expected 得分</td>
+                        <td style="background: #d8aa6d">IDL</td>
+                        <td style="background: #d8aa6d">佔比</td>
+                        <td style="background: #bd9969">Team 月均義務超時時數</td>
+                        <td style="background: #bd9969">Team 每人月均義務超時時數</td>
+                        <td style="background: #bd9969">Team 月均超10.5h天次</td>
+                        <td style="background: #bd9969">Team 每人月均超10.5h天次</td>
+                        <td style="background: #bd9969">Team 月均晚班天次</td>
+                        <td style="background: #bd9969">Team 每人月均晚班天次</td>
+                        <td style="background: #bd9969">國外出差天次</td>
+                        <td style="display: none;background: #bd9969">人均國外出差天次</td>
+                        <td style="background: #bd9969">國內出差天次</td>
+                        <td style="display: none;background: #bd9969">人均國內出差天次</td>
+                        <td style="background: #bd9969" colspan='3'>離職</td>
+                        <td style="background: #bd9969;line-height: 60px;" rowspan='2'>佔比</td>
+                        <td style="display: none;background: #bd9969;line-height: 60px;" rowspan='2'>DepartmentLoading</td>
+                        <td style="background: #ecc99a;line-height: 60px;" rowspan='2'>Total</td>
+                    </tr>
+                    <tr  >
+                        <td style="background: #ececec;font-weight: 700;"></td>
+                        <td style="background: #c38a86;color: white;font-weight: 700;"></td>
+                        <td style="background: #ececec;"></td>
+                        <td contenteditable="true" style="background: #229e93" id="gs_weightdepartment">{{ bp_per.bp_gsweight_d }}</td>
+                        <td style="background: #ececec;"></td>
+                        <td style="background: #ececec;"></td>
+                        <td contenteditable="true" style="background: #4db5ac" id="patent_weightdepartment">{{ bp_per.bp_patentweight_d }}</td>
+                        <td style="background: #ececec;"></td>
+                        <td style="background: #ececec;"></td>
+                        <td contenteditable="true" style="background: #4db5ac" id="taxdeduction_weightdepartment">{{ bp_per.bp_taxweight_d }}</td>
+                        <td contenteditable="true" style="background: #4db5ac" id="proposal_percentagedepartment">{{ bp_per.bp_proposal_d }}</td>
+                        <td contenteditable="true" style="background: #4db5ac" id="exceed_expected_percentagedepartment">{{ bp_per.bp_ee_d }}</td>
+                        <td  style="display: none;background: #ececec;"></td>
+                        <td contenteditable="true" style="background: #4db5ac" id="idl_percentagedepartment">{{ bp_per.bp_idl_d }}</td>
+                        <td style="background: #ececec;"></td>
+                        <td contenteditable="true" style="background: #4db5ac" id="duty_work_percentagedepartment">{{ bp_per.bp_duty_d }}</td>
+                        <td style="background: #ececec;"></td>
+                        <td contenteditable="true" style="background: #4db5ac" id="over_10_5_time_percentagedepartment">{{ bp_per.bp_10_5_d }}</td>
+                        <td style="background: #ececec;"></td>
+                        <td contenteditable="true" style="background: #4db5ac" id="night_work_percentagedepartment">{{ bp_per.bp_night_d }}</td>
+                        <td style="background: #ececec;"></td>
+                        <td contenteditable="true" style="background: #4db5ac" id="travel_abroad_percentagedepartment">{{ bp_per.bp_travel_abroad_d }}</td>
+                        <td style="display: none;background: #ececec;"></td>
+                        <td contenteditable="true" style="background: #4db5ac" id="travel_cn_percentagedepartment">{{ bp_per.bp_travel_cn_d }}</td>
+                        <td style="display: none;background: #ececec;"></td>
+                        <td style="background: #ececec;">離職率</td>
+                        <td style="background: #ececec;">離職率得分</td>
+                        <td style="background:  #4db5ac;" contenteditable="true" id="leave_percentagedepartment">{{ bp_per.bp_leave_d }}</td>
+                        <td style="width: 75px;background: #6d6663;color:white;font-weight: 700;">數量</td>
+                        <td contenteditable="true" style="width: 75px;background: #4db5ac;font-weight: 700;" id="task_force_percentagedepartment">{{ bp_per.bp_taskforceper_d }}</td>
+                        <td style="width: 150px;background: #f5eedc;"></td>
+                        <td style="width: 150px;background: #f5eedc;"></td>
+                        <td style="display: none;width: 130px;background: #f1f1f1;font-weight: 700;">2019</td>
+                        <td style="display: none;width: 130px;background: #f1f1f1;font-weight: 700;">2018</td>
+                        <td style="display: none;width: 150px;background: #f5eedc;"></td>
+                        <td style="display: none;width: 150px;background: #f5eedc;"></td>
+                        <td style="background: #e6cead;" colspan='2'></td>
+                    </tr>
+                    {% for leader_bonus in bonus_list_by_leader %}
+                        <tr  class="bonus_reportdepartment">
+                            <td style="background: white;font-weight: 700" class="department_leader">{{ leader_bonus.leader }}</td>
+                            <td style="background: white;color: red;font-weight: 700;" class="hrdepartment" id="{{ leader_bonus.team_id }}_hrdepartment">{{ leader_bonus.hr }}</td>
+                            <td style="background: white" {% if leader_bonus.leader == "Shirley" %}contenteditable="true"{% endif %} class="gs_numdepartment" id="{{ leader_bonus.team_id }}gsdepartment">{{ leader_bonus.gsp_num }}</td>
+                            <td style="background: white" id="{{ leader_bonus.team_id }}gs_weightdepartment"></td>
+                            <td class="gs_ratedepartment" id="{{ leader_bonus.team_id }}_gs_ratedepartment" style="background: white;color: #DD0CC2;font-weight: 700;">{{ leader_bonus.gs_rate }}%</td>
+                            <td class="patent_numdepartment" id="{{ leader_bonus.team_id }}patent_numdepartment"  style="background: white" {% if leader_bonus.leader == "Shirley" %}contenteditable="true"{% endif %}>{{ leader_bonus.patent }}</td>
+                            <td id="{{ leader_bonus.team_id }}patent_num_weightdepartment" style="background: white" ></td>
+                            <td class="patent_ratedepartment" id="{{ leader_bonus.team_id }}_patent_ratedepartment" style="background: white;color: #DD0CC2;font-weight: 700;">{{ leader_bonus.patent_rate }}%</td>
+                            <td class="taxdeductiondepartment" id="{{ leader_bonus.team_id }}taxdeductiondepartment"  style="background: white" {% if leader_bonus.leader == "Shirley" %}contenteditable="true"{% endif %}>{{ leader_bonus.tax }}</td>
+                            <td id="{{ leader_bonus.team_id }}taxdeduction_weightdepartment" style="background: white" ></td>
+                            <td style="background: white;color: #1986dc;font-weight: 700;" class="proposaldepartment" id="{{ leader_bonus.team_id }}_proposaldepartment"></td>
+                            <td style="display: none;background: white;color: #000000" class="exceed_expecteddepartment" id="{{ leader_bonus.team_id }}_exceed_expecteddepartment"  hc="{{ leader_bonus.total_people }}">{{ leader_bonus.gold }}</td>
+                            <td style="background: white" id="{{ leader_bonus.team_id }}_exceed_expected_pointdepartment" class="exceed_expected_pointdepartment" {% if leader_bonus.leader == "Shirley" %}contenteditable="true"{% endif %}>{{ leader_bonus.ee }}</td>
+                            <td style="background:white;color: #000000" class="idldepartment" id="{{ leader_bonus.team_id }}_idldepartment" {% if leader_bonus.leader == "Shirley" %}contenteditable="true"{% endif %}>{{ leader_bonus.idl }}</td>
+                            <td class="customerdepartment" id="{{ leader_bonus.team_id }}_customerdepartment" style="background: white;color: #1986dc;font-weight: 700;"></td>
+                            <td style="background: white" class="duty_workdepartment" id="{{ leader_bonus.team_id }}_duty_workdepartment" {% if leader_bonus.leader == "Shirley" %}contenteditable="true"{% endif %}>{{ leader_bonus.duty_work }}</td>
+                            <td style="background: white;color: #DD0CC2;font-weight: 700;" class="duty_work_hcdepartment" id="{{ leader_bonus.team_id }}_duty_work_hcdepartment">{{ leader_bonus.duty_work_hc }}</td>
+                            <td style="background: white" class="over_10_5_timedepartment" id="{{ leader_bonus.team_id }}_over_10_5_timedepartment" {% if leader_bonus.leader == "Shirley" %}contenteditable="true"{% endif %}>{{ leader_bonus.over_10_5_time }}</td>
+                            <td style="background: white;color: #DD0CC2;font-weight: 700;" class="over_10_5_time_hcdepartment" id="{{ leader_bonus.team_id }}_over_10_5_time_hcdepartment">{{ leader_bonus.over_10_5_time_hc }}</td>
+                            <td style="background: white" class="night_workdepartment" id="{{ leader_bonus.team_id }}_night_workdepartment" {% if leader_bonus.leader == "Shirley" %}contenteditable="true"{% endif %}>{{ leader_bonus.night_work }}</td>
+                            <td style="background: white;color: #DD0CC2;font-weight: 700;" class="night_work_hcdepartment" id="{{ leader_bonus.team_id }}_night_work_hcdepartment">{{ leader_bonus.night_work_hc }}</td>
+                            <td style="background: white"  class="travel_abroaddepartment" id="{{ leader_bonus.team_id }}_travel_abroaddepartment" {% if leader_bonus.leader == "Shirley" %}contenteditable="true"{% endif %}>{{ leader_bonus.travel_abroad }}</td>
+                            <td style="display: none;background: white;color: #DD0CC2;font-weight: 700;" class="travel_abroad_hcdepartment" id="{{ leader_bonus.team_id }}_travel_abroad_hcdepartment" >{{ leader_bonus.travel_abroad_hc }}</td>
+                            <td style="background: white"  class="travel_cndepartment" id="{{ leader_bonus.team_id }}_travel_cndepartment" {% if leader_bonus.leader == "Shirley" %}contenteditable="true"{% endif %}>{{ leader_bonus.travel_cn }}</td>
+                            <td style="display: none;background: white;color: #DD0CC2;font-weight: 700;" class="travel_cn_hcdepartment" id="{{ leader_bonus.team_id }}_travel_cn_hcdepartment">{{ leader_bonus.travel_cn_hc }}</td>
+                            <td style="background: white" class="leave_prob_department" id="{{ leader_bonus.team_id }}_leave_prob_department" hc="{{ leader_bonus.total_people }}" {% if leader_bonus.leader == "Shirley" %}contenteditable="true"{% endif %}>{{ leader_bonus.leave_prob }}%</td>
+                            <td style="background: white"  class="leave_pointdepartment" id="{{ leader_bonus.team_id }}_leave_pointdepartment">{{ leader_bonus.leave_prob_point }}</td>
+                            <td style="background: white;color: #1986dc;font-weight: 700;" class="dimission_percentagedepartment" id="{{ leader_bonus.team_id }}_dimission_percentagedepartment"></td>
+                            <td style="background: white;color: #1986dc;font-weight: 700;" class="attendance_percentagedepartment" id="{{ leader_bonus.team_id }}_attendance_percentagedepartment"></td>
+                            <td style="display: none;background: white;color: #DD0CC2;font-weight: 700;" class="teamloadingdepartment" id="{{ leader_bonus.team_id }}_teamloadingdepartment">departmrnt_loading</td>
+                            <td style="background: white" class="total_percentagedepartment" id="{{ leader_bonus.team_id }}_total_percentagedepartment"></td>
+                            <td  style="background: #cedfef" class="task_force_numdepartment" id="{{ leader_bonus.team_id }}_task_force_numdepartment" {% if leader_bonus.leader == "Shirley" %}contenteditable="true"{% endif %}>{{ leader_bonus.task_force }}</td>
+                            <td style="background: white" style="color: #1986dc;font-weight: 700;" class="task_force_pointdepartment" id="{{ leader_bonus.team_id }}_task_force_pointdepartment"></td>
+                            <td  style="width: 150px;background:  white;" class="all_totaldepartment" id="{{ leader_bonus.team_id }}_all_totaldepartment"></td>
+                            <td  style="width: 150px;background:  white;"  id="{{ leader_bonus.team_id }}_all_total_moneydepartment">0</td>
+                            <td style="display: none;background: white;color: #252422;font-weight: 700;">0</td>
+                            <td style="display: none;background: white;color: #252422;font-weight: 700;">{{ leader_bonus.last_year_money }}</td>
+                            <td style="display: none;width: 150px;background: white;" class="change_percentage" id="{{ leader_bonus.team_id }}_change_percentage"></td>
+                            <td style="display: none;width: 150px;background: white;" id="{{ leader_bonus.team_id }}_last_year_money">{{ leader_bonus.last_year_money }}</td>
+                            <td contenteditable="true" style="background: white;" class="violationdepartment" id="{{ leader_bonus.team_id }}_violationdepartment">{{ leader_bonus.violation }}</td>
+                            <td contenteditable="true" style="background: white;" class="below_qualitydepartment" id="{{ leader_bonus.team_id }}_below_qualitydepartment">{{ leader_bonus.belowquality }}</td>
+                            <td style="background: white;width: 150px" class="finally_moneydepartment" id="{{ leader_bonus.team_id }}_finally_moneydepartment">0</td>
+                        </tr>
+                    {% endfor %}
+                    <tr style="font-size: 15px;font-weight: 700;" class="bonus_reportdepartment">
+                        <td style="background: floralwhite;color: darkred;font-size: 16px;">EERF Total</td>
+                        <td style="background: floralwhite;color: red;font-weight: 700;" class="total_hrdepartment"></td>
+                        <td style="background: floralwhite;" class="total_gs_numdepartment"></td>
+                        <td style="background: floralwhite;"class="total_gs_weightdepartment"></td>
+                        <td style="background: floralwhite;"></td>
+                        <td style="background: floralwhite;"class="total_patent_numdepartment"></td>
+                        <td style="background: floralwhite;"class="total_patent_weightdepartment"></td>
+                        <td style="background: floralwhite;"></td>
+                        <td style="background: floralwhite;" class="total_taxdeduction_numdepartment"></td>
+                        <td style="background: floralwhite;" class="total_taxdeduction_weightdepartment"></td>
+                        <td style="background: floralwhite;" class="total_proposal_percentagedepartment"></td>
+                        <td style="display: none;background: floralwhite;" class="total_exceed_expecteddepartment"></td>
+                        <td style="background: floralwhite;" class="total_exceed_expected_pointdepartment"></td>
+                        <td style="background: floralwhite;" class="total_idldepartment"></td>
+                        <td style="background: floralwhite;" class="total_customerdepartment"></td>
+                        <td style="background: floralwhite;" class="total_duty_workdepartment"></td>
+                        <td style="background: floralwhite;" class="total_duty_workdepartment_hc"></td>
+                        <td style="background: floralwhite;" class="total_over_10_5_timedepartment"></td>
+                        <td style="background: floralwhite;" class="total_over_10_5_timedepartment_hc"></td>
+                        <td style="background: floralwhite;" class="total_night_workdepartment"></td>
+                        <td style="background: floralwhite;" class="total_night_workdepartment_hc"></td>
+                        <td style="background: floralwhite;" class="total_travel_abroaddepartment"></td>
+                        <td style="display: none;background: floralwhite;" class="total_travel_abroaddepartment_hc"></td>
+                        <td style="background: floralwhite;" class="total_travel_cndepartment"></td>
+                        <td style="display: none;background: floralwhite;" class="total_travel_cndepartment_hc"></td>
+                        <td style="background: floralwhite;" ></td>
+                        <td style="background: floralwhite;" class="total_leave_pointdepartment"></td>
+                        <td style="background: floralwhite;" class="total_dimission_percentagedepartment"></td>
+                        <td style="background: floralwhite;" class="total_attendance_percentagedepartment"></td>
+                        <td style="display: none;background: floralwhite;" class="total_teamloadingdepartment">department_loading</td>
+                        <td style="background: floralwhite;" class="total_total_percentagedepartment">2.92%</td>
+                        <td style="background: floralwhite;"  contenteditable="true" class="total_task_force_numdepartment"></td>
+                        <td style="background: floralwhite;color: #1986dc;font-weight: 700;" class="total_task_force_pointdepartment"></td>
+                        <td style="background: floralwhite;width: 150px;background: #f5edac;font-weight: 700;" class="total_all_totaldepartment">0.00%</td>
+                        <td style="background: floralwhite;width: 150px;background: #fdc0ab;" class="all_total_moneydepartment">0</td>
+                        <td style="display: none;background: floralwhite;color: #FF9800;font-weight: 700;color: red;">0</td>
+                        <td style="display: none;background: floralwhite;color: #FF9800;font-weight: 700;color: red;">0</td>
+                        <td style="display: none;background: floralwhite;width: 150px;background: #f5edac;font-weight: 700;">0.00%</td>
+                        <td style="display: none;background: floralwhite;width: 150px;background: #fdc0ab;">0</td>
+                        <td style="background: floralwhite;" class="total_violationdepartment">0</td>
+                        <td style="background: floralwhite;" class="total_below_qualitydepartment">0</td>
+                        <td style="background: floralwhite;width: 150px;color: red"  class="total_finally_moneydepartment">0</td>
+                    </tr>
+                </tbody>
+            </table>
+
+
+
+            <table class=" table-hover" id="table_score_team" border="1" freezeRowNum="2" freezeColumnNum="2">
+                <div id="div_L_color" style="display: none"></div>
+                <div id="div_C_color" style="display: none"></div>
+                <div id="div_V_color" style="display: none"></div>
+                <tbody id="table_body_team" >
+                    <tr  style="background: #e6cead;font-weight: 700;">
+                        <td style="background: #ececec">Team</td>
+                        <td style="background: #ececec">Leader</td>
+                        <td style="background: #ececec;width: 110px;">Team_Leader</td>
+{#                        <td style="background: #c38a86;color: white;font-weight: 700;">HR</td>#}
+                        <td colspan="9" style="background: #e0c097">智權提案項目</td>
+                        <td colspan="4" style="background: #d8aa6d">客戶評價 年中</td>
+                        <td colspan="16" style="background: #bd9969">加班 & 晚班 & 出差 & 離職率</td>
+                        <td rowspan="3" colspan="2" style="line-height: 90px;color:#eceaea;background: #6d6663;font-size: 25px;">Task force</td>
+                        <td rowspan="3" colspan="2" style="line-height: 90px;background: #f5eedc;font-size: 30px;color: #d63333;font-size: 50px;">Total</td>
+                        <td rowspan="3" colspan="2"style="display: none;line-height: 90px;background: #f1f1f1;font-size: 30px;color: #e08d13;font-size: 25px;">個人分配金額</td>
+                        <td rowspan="3" colspan="2" style="display: none;line-height: 90px;background: #f5eedc;font-size: 30px;color: #d63333;font-size: 50px;">Total</td>
+                        <td colspan="2"></td>
+                        <td rowspan="4" style="line-height: 129px;background: #FFC107;">部級可支配金</td>
+
+                    </tr>
+                    <tr  style="font-weight: 700;">
+                        <td style="background: #ececec;font-weight: 700;"></td>
+                        <td style="background: #ececec"></td>
+                        <td style="background: #ececec"></td>
+{#                        <td contenteditable="true" style="background: #229e93;color: white;font-weight: 700;">0%</td>#}
+                        <td colspan="29" style="background:#229e93" id="percentage_1" contenteditable="true">{{ bp_per.bp_otherper_t }}</td>
+                        <td rowspan="2" style="width: 160px;background: #e6cead;line-height: 57px;">關務違規部門吸收</td>
+                        <td rowspan="2" style="width: 160px;background: #e6cead;line-height: 57px;">英孚未達標</td>
+                    </tr>
+                    <tr  style="font-weight: 700;background:#eacfab;">
+                        <td style="background: #ececec"></td>
+                        <td style="background: #ececec"></td>
+                        <td style="background: #ececec"></td>
+{#                        <td style="background: #c38a86;color: white;font-weight: 700;">2018</td>#}
+                        <td style="background: #e0c097">金石得分</td>
+                        <td style="background: #e0c097">金石得分*n</td>
+                        <td style="background: #e0c097">金石達成率</td>
+                        <td style="background: #e0c097">專利得分</td>
+                        <td style="background: #e0c097">專利得分*n</td>
+                        <td style="background: #e0c097">專利達成率</td>
+                        <td style="background: #e0c097">研發抵稅</td>
+                        <td style="background: #e0c097">研發抵稅 *n</td>
+                        <td style="background: #e0c097;font-weight: 700;">佔比</td>
+                        <td style="background: #d8aa6d">Exceed-Expected</td>
+                        <td style="background: #d8aa6d">Exceed-Expected 得分</td>
+                        <td style="background: #d8aa6d">IDL</td>
+                        <td style="background: #d8aa6d">佔比</td>
+                        <td style="background: #bd9969">Team 月均義務超時時數</td>
+                        <td style="background: #bd9969">Team 每人月均義務超時時數</td>
+                        <td style="background: #bd9969">Team 月均超10.5h天次</td>
+                        <td style="background: #bd9969">Team 每人月均超10.5h天次</td>
+                        <td style="background: #bd9969">Team 月均晚班天次</td>
+                        <td style="background: #bd9969">Team 每人月均晚班天次</td>
+                        <td style="background: #bd9969">國外出差天次</td>
+                        <td style="background: #bd9969">人均國外出差天次</td>
+                        <td style="background: #bd9969">國內出差天次</td>
+                        <td style="background: #bd9969">人均國內出差天次</td>
+                        <td style="background: #bd9969" colspan='3'>離職</td>
+                        <td style="background: #bd9969;line-height: 60px;" rowspan='2'>佔比</td>
+                        <td style="background: #bd9969;line-height: 60px;" rowspan='2'>TeamLoading</td>
+                        <td style="background: #ecc99a;line-height: 60px;" rowspan='2'>Total</td>
+                    </tr>
+                    <tr >
+                        <td style="background: #ececec;font-weight: 700;"></td>
+                        <td style="background: #ececec"></td>
+                        <td style="background: #ececec"></td>
+{#                        <td style="background: #c38a86;color: white;font-weight: 700;"></td>#}
+                        <td style="background: #ececec;"></td>
+                        <td contenteditable="true" style="background: #229e93" id="gs_weight">{{ bp_per.bp_gsweight_t }}</td>
+                        <td style="background: #ececec;"></td>
+                        <td style="background: #ececec;"></td>
+                        <td contenteditable="true" style="background: #4db5ac" id="patent_weight">{{ bp_per.bp_patentweight_t }}</td>
+                        <td style="background: #ececec;"></td>
+                        <td style="background: #ececec;"></td>
+                        <td contenteditable="true" style="background: #4db5ac" id="taxdeduction_weight">{{ bp_per.bp_taxweight_t }}</td>
+                        <td contenteditable="true" style="background: #4db5ac" id="proposal_percentage">{{ bp_per.bp_proposal_t }}</td>
+                        <td  style="background: #ececec;"></td>
+                        <td contenteditable="true" style="background: #4db5ac" id="exceed_expected_percentage">{{ bp_per.bp_ee_t }}</td>
+                        <td contenteditable="true" style="background: #4db5ac" id="idl_percentage">{{ bp_per.bp_idl_t }}</td>
+                        <td style="background: #ececec;"></td>
+                        <td contenteditable="true" style="background: #4db5ac" id="duty_work_percentage">{{ bp_per.bp_duty_t }}</td>
+                        <td style="background: #ececec;"></td>
+                        <td contenteditable="true" style="background: #4db5ac" id="over_10_5_time_percentage">{{ bp_per.bp_10_5_t }}</td>
+                        <td style="background: #ececec;"></td>
+                        <td contenteditable="true" style="background: #4db5ac" id="night_work_percentage">{{ bp_per.bp_night_t }}</td>
+                        <td style="background: #ececec;"></td>
+                        <td contenteditable="true" style="background: #4db5ac" id="travel_abroad_percentage">{{ bp_per.bp_travel_abroad_t }}</td>
+                        <td style="background: #ececec;"></td>
+                        <td contenteditable="true" style="background: #4db5ac" id="travel_cn_percentage">{{ bp_per.bp_travel_cn_t }}</td>
+                        <td style="background: #ececec;"></td>
+                        <td style="background: #ececec;">離職率</td>
+                        <td style="background: #ececec;">離職率得分</td>
+                        <td style="background:  #4db5ac;" contenteditable="true" id="leave_percentage">{{ bp_per.bp_leave_t }}</td>
+                        <td style="width: 75px;background: #6d6663;color:white;font-weight: 700;">數量</td>
+                        <td contenteditable="true" style="width: 75px;background: #4db5ac;font-weight: 700;" id="task_force_percentage">{{ bp_per.bp_taskforceper_t }}</td>
+                        <td style="width: 150px;background: #f5eedc;"></td>
+                        <td style="width: 150px;background: #f5eedc;"></td>
+                        <td style="display: none;width: 130px;background: #f1f1f1;font-weight: 700;">2019</td>
+                        <td style="display: none;width: 130px;background: #f1f1f1;font-weight: 700;">2018</td>
+                        <td style="display: none;width: 150px;background: #f5eedc;"></td>
+                        <td style="display: none;width: 150px;background: #f5eedc;"></td>
+                        <td style="background: #e6cead;" colspan='2'></td>
+                    </tr>
+                    {% for leader_bonus in bonus_list %}
+                        <tr class="bonus_report">
+                            <td style="background: white;font-weight: 700" class="functionteam">{{ leader_bonus.team }}</td>
+                            <td style="background: white;">{{ leader_bonus.leader }}</td>
+                            <td style="background: white;">{{ leader_bonus.team_leader }}</td>
+
+{#                            <td contenteditable="true" style="background: #e63529;color: white;font-weight: 700;"></td>#}
+                            <td style="background: white;" class="gs_num" id="{{ leader_bonus.team_id }}gs">{{ leader_bonus.gsp_num }}</td>
+                            <td style="background: white;" id="{{ leader_bonus.team_id }}gs_weight"></td>
+                            <td class="gs_rate" id="{{ leader_bonus.team_id }}_gs_rate" style="background: white;color: #DD0CC2;font-weight: 700;">{{ leader_bonus.gs_rate }}%</td>
+                            <td class="patent_num" id="{{ leader_bonus.team_id }}patent_num"  style="background: white;color: #000000">{{ leader_bonus.patent }}</td>
+                            <td style="background: white;" id="{{ leader_bonus.team_id }}patent_num_weight"></td>
+                            <td class="patent_rate" id="{{ leader_bonus.team_id }}_patent_rate" style="background: white;color: #DD0CC2;font-weight: 700;">{{ leader_bonus.patent_rate }}%</td>
+                            <td class="taxdeduction" id="{{ leader_bonus.team_id }}taxdeduction" style="background: white;color: #000000">{{ leader_bonus.tax }}</td>
+                            <td style="background: white;" id="{{ leader_bonus.team_id }}taxdeduction_weight"></td>
+                            <td style="background: white;color: #1986dc;font-weight: 700;" class="proposal" id="{{ leader_bonus.team_id }}_proposal"></td>
+                            <td style="background: white;color: #000000" class="exceed_expected" id="{{ leader_bonus.team_id }}_exceed_expected" hc="{{ leader_bonus.total_people }}">{{ leader_bonus.gold }}</td>
+                            <td style="background: white;" id="{{ leader_bonus.team_id }}_exceed_expected_point" class="exceed_expected_point">{{ leader_bonus.ee }}</td>
+                            <td style="background: white;color: #000000" class="idl" id="{{ leader_bonus.team_id }}_idl">{{ leader_bonus.idl }}</td>
+                            <td class="customer" id="{{ leader_bonus.team_id }}_customer" style="background: white;color: #1986dc;font-weight: 700;"></td>
+                            <td style="background: white;" class="duty_work" id="{{ leader_bonus.team_id }}_duty_work">{{ leader_bonus.duty_work }}</td>
+                            <td style="background: white;color: #DD0CC2;font-weight: 700;" class="duty_work_hc" id="{{ leader_bonus.team_id }}_duty_work_hc">{{ leader_bonus.duty_work_hc }}</td>
+                            <td style="background: white;" class="over_10_5_time" id="{{ leader_bonus.team_id }}_over_10_5_time">{{ leader_bonus.over_10_5_time }}</td>
+                            <td style="background: white;color: #DD0CC2;font-weight: 700;" class="over_10_5_time_hc" id="{{ leader_bonus.team_id }}_over_10_5_time_hc">{{ leader_bonus.over_10_5_time_hc }}</td>
+                            <td style="background: white;" class="night_work" id="{{ leader_bonus.team_id }}_night_work">{{ leader_bonus.night_work }}</td>
+                            <td style="background: white;color: #DD0CC2;font-weight: 700;" class="night_work_hc" id="{{ leader_bonus.team_id }}_night_work_hc">{{ leader_bonus.night_work_hc }}</td>
+                            <td style="background: white;" class="travel_abroad" id="{{ leader_bonus.team_id }}_travel_abroad">{{ leader_bonus.travel_abroad }}</td>
+                            <td style="background: white;color: #DD0CC2;font-weight: 700;" class="travel_abroad_hc" id="{{ leader_bonus.team_id }}_travel_abroad_hc">{{ leader_bonus.travel_abroad_hc }}</td>
+                            <td style="background: white;" class="travel_cn" id="{{ leader_bonus.team_id }}_travel_cn">{{ leader_bonus.travel_cn }}</td>
+                            <td style="background: white;color: #DD0CC2;font-weight: 700;" class="travel_cn_hc" id="{{ leader_bonus.team_id }}_travel_cn_hc">{{ leader_bonus.travel_cn_hc }}</td>
+                            <td style="background: white;">{{ leader_bonus.leave_prob }}%</td>
+                            <td class="leave_point" id="{{ leader_bonus.team_id }}_leave_point">{{ leader_bonus.leave_prob_point }}</td>
+                            <td style="background: white;color: #1986dc;font-weight: 700;" class="dimission_percentage" id="{{ leader_bonus.team_id }}_dimission_percentage"></td>
+                            <td style="background: white;color: #1986dc;font-weight: 700;" class="attendance_percentage" id="{{ leader_bonus.team_id }}_attendance_percentage"></td>
+                            <td style="background: white;color: #DD0CC2;font-weight: 700;" class="teamloading" id="{{ leader_bonus.team_id }}_teamloading">teamloading</td>
+                            <td style="background: white;" class="total_percentage" id="{{ leader_bonus.team_id }}_total_percentage"></td>
+                            <td contenteditable="true" style="background: white;color: #000000" class="task_force_num" id="{{ leader_bonus.team_id }}_task_force_num">{{ leader_bonus.task_force }}</td>
+                            <td style="background: white;color: #1986dc;font-weight: 700;" class="task_force_point" id="{{ leader_bonus.team_id }}_task_force_point"></td>
+                            <td  style="width: 150px;background:  white;" class="all_total" id="{{ leader_bonus.team_id }}_all_total"></td>
+                            <td  style="width: 150px;background:  white;"  id="{{ leader_bonus.team_id }}_all_total_money">0</td>
+                            <td style="display: none;background: white;color: #252422;font-weight: 700;">0</td>
+                            <td style="display: none;background: white;color: #252422;font-weight: 700;">0</td>
+                            <td style="display: none;background: white;width: 150px;color: #000000;">0</td>
+                            <td style="display: none;background: white;width: 150px;color: #000000;">0</td>
+                            <td contenteditable="true" style="background: white;color: #000000" class="violation" id="{{ leader_bonus.team_id }}_violation">0</td>
+                            <td contenteditable="true" style="background: white;color: #000000" class="below_quality" id="{{ leader_bonus.team_id }}_below_quality">0</td>
+                            <td style="background: white;width: 150px" class="finally_money" id="{{ leader_bonus.team_id }}_finally_money">0</td>
+                        </tr>
+                    {% endfor %}
+                    <tr style="font-size: 15px;font-weight: 700;" class="bonus_report">
+                        <td style="background: white;color: darkred;font-size: 16px;">EERF Total</td>
+                        <td></td>
+                        <td></td>
+    {#                    <td style="background: #c38a86;color: white;font-weight: 700;"></td>#}
+                        <td class="total_gs_num"></td>
+                        <td class="total_gs_weight"></td>
+                        <td ></td>
+                        <td class="total_patent_num"></td>
+                        <td class="total_patent_weight"></td>
+                        <td ></td>
+                        <td class="total_taxdeduction_num"></td>
+                        <td class="total_taxdeduction_weight"></td>
+                        <td class="total_proposal_percentage"></td>
+                        <td class="total_exceed_expected"></td>
+                        <td class="total_exceed_expected_point"></td>
+                        <td class="total_idl"></td>
+                        <td class="total_customer"></td>
+                        <td class="total_duty_work"></td>
+                        <td class="total_ducty_work_hc"></td>
+                        <td class="total_over_10_5_time"></td>
+                        <td class="total_over_10_5_time_hc"></td>
+                        <td class="total_night_work"></td>
+                        <td class="total_night_work_hc"></td>
+                        <td class="total_travel_abroad"></td>
+                        <td class="total_travel_abroad_hc"></td>
+                        <td class="total_travel_cn"></td>
+                        <td class="total_travel_cn_hc"></td>
+                        <td></td>
+                        <td class="total_leave_point"></td>
+                        <td class="total_dimission_percentage"></td>
+                        <td class="total_attendance_percentage"></td>
+                        <td class="total_teamloading">teamloading</td>
+                        <td class="total_total_percentage">2.92%</td>
+                        <td contenteditable="true" class="total_task_force_num"></td>
+                        <td style="color: #1986dc;font-weight: 700;" class="total_task_force_point"></td>
+                        <td style="width: 150px;background: #f5edac;font-weight: 700;" class="total_all_total">0.00%</td>
+                        <td style="width: 150px;background: #fdc0ab;" class="all_total_money">0</td>
+                        <td style="display: none;color: #FF9800;font-weight: 700;color: red;">0</td>
+                        <td style="display: none;color: #FF9800;font-weight: 700;color: red;">0</td>
+                        <td style="display: none;width: 150px;background: #f5edac;font-weight: 700;">0.00%</td>
+                        <td style="display: none;width: 150px;background: #fdc0ab;">0</td>
+                        <td class="total_violation">0</td>
+                        <td class="total_below_quality">0</td>
+                        <td style="background: #ffc107;width: 150px;color: red"  class="total_finally_money">0</td>
+                    </tr>
+                </tbody>
+            </table>
+        {% endif %}
+
+        {% if user_mode == 0 %}
+            <script>
+                var sign = true;
+                department_data_click_sign=false;
+                $("#department_data").css({"background-color":"#2d2b2b","color":"#ececec","box-shadow":"0px 0px 10px 4px #6b7275"});
+                 $("#team_data").one('click',function(){
+                     $('#oDivF_table_score_team').css('top', '');
+                     $('#oDivF_table_score_team').css('bottom', '3.5%');
+                     $('#oDivL_table_score_team table').css('height', (team_table_height-2));
+                     $('#oDivL_table_score_team').css('top', (parseFloat($("#oDivL_table_score_team").css('top').split("p")[0]) -1))
+                 });
+                 // 部級
+                setTimeout(function () {
+                        $('.td_Tips').css('width', '20%');
+                        $('.team_right_tip').css('display', "");
+                        $('.department_right_tip').css('display', "none");
+                        var team_total = (parseFloat($('#hr_percentagedepartment').html())+parseFloat($('#proposal_percentagedepartment').html())*((parseFloat($('#percentage_1department').html()))/100))+((parseFloat($('#exceed_expected_percentagedepartment').html()) + parseFloat($('#idl_percentagedepartment').html()))*((parseFloat($('#percentage_1department').html()))/100))+((parseFloat($('#duty_work_percentagedepartment').html()) + parseFloat($('#over_10_5_time_percentagedepartment').html())+ parseFloat($('#night_work_percentagedepartment').html())+ parseFloat($('#travel_abroad_percentagedepartment').html())+parseFloat($('#travel_cn_percentagedepartment').html())+parseFloat($('#leave_percentagedepartment').html()))*((parseFloat($('#percentage_1department').html()))/100))+(parseFloat($('#task_force_percentagedepartment').html()));
+                        $('.top_left_1').val(($('#proposal_percentagedepartment').html())+'*'+($('#percentage_1department').html()));
+                        $('.top_left_2').val((parseFloat($('#exceed_expected_percentagedepartment').html()) + parseFloat($('#idl_percentagedepartment').html()))+'%*'+($('#percentage_1department').html()));
+                        $('.top_left_3').val((parseFloat($('#duty_work_percentagedepartment').html()) + parseFloat($('#over_10_5_time_percentagedepartment').html())+ parseFloat($('#night_work_percentagedepartment').html())+ parseFloat($('#travel_abroad_percentagedepartment').html())+parseFloat($('#travel_cn_percentagedepartment').html())+parseFloat($('#leave_percentagedepartment').html()))+'%*'+($('#percentage_1department').html()));
+                        $('.top_left_4').val(($('#task_force_percentagedepartment').html()));
+                        $('.top_left_5').val($('#hr_percentagedepartment').html());
+                        $('.top_left_0').val(team_total+"%");
+                    },200)
+            </script>
+            <table class=" table-hover" id="table_score_team" border="1" style="display: none">
+                <div id="div_L_color" style="display: none"></div>
+                <div id="div_C_color" style="display: none"></div>
+                <div id="div_V_color" style="display: none"></div>
+                <tbody id="table_body_team" >
+                    <tr  style="background: #e6cead;font-weight: 700;">
+                        <td style="background: #ececec">Team</td>
+                        <td style="background: #ececec">Leader</td>
+                        <td style="background: #ececec;width: 110px;">Team_Leader</td>
+{#                        <td style="background: #c38a86;color: white;font-weight: 700;">HR</td>#}
+                        <td colspan="9" style="background: #e0c097">智權提案項目</td>
+                        <td colspan="4" style="background: #d8aa6d">客戶評價 年中</td>
+                        <td colspan="16" style="background: #bd9969">加班 & 晚班 & 出差 & 離職率</td>
+                        <td rowspan="3" colspan="2" style="line-height: 90px;color:#eceaea;background: #6d6663;font-size: 25px;">Task force</td>
+                        <td rowspan="3" colspan="2" style="line-height: 90px;background: #f5eedc;font-size: 30px;color: #d63333;font-size: 50px;">Total</td>
+                        <td rowspan="3" colspan="2"style="display: none;line-height: 90px;background: #f1f1f1;font-size: 30px;color: #e08d13;font-size: 25px;">個人分配金額</td>
+                        <td rowspan="3" colspan="2" style="display: none;line-height: 90px;background: #f5eedc;font-size: 30px;color: #d63333;font-size: 50px;">Total</td>
+                        <td colspan="2"></td>
+                        <td rowspan="4" style="line-height: 129px;background: #FFC107;">部級可支配金</td>
+
+                    </tr>
+                    <tr  style="font-weight: 700;">
+                        <td style="background: #ececec;font-weight: 700;"></td>
+                        <td style="background: #ececec"></td>
+                        <td style="background: #ececec"></td>
+{#                        <td contenteditable="true" style="background: #229e93;color: white;font-weight: 700;">0%</td>#}
+                        <td colspan="29" style="background:#229e93" id="percentage_1" contenteditable="true">{{ bp_per.bp_otherper_t }}</td>
+                        <td rowspan="2" style="width: 160px;background: #e6cead;line-height: 57px;">關務違規部門吸收</td>
+                        <td rowspan="2" style="width: 160px;background: #e6cead;line-height: 57px;">英孚未達標</td>
+                    </tr>
+                    <tr  style="font-weight: 700;background:#eacfab;">
+                        <td style="background: #ececec"></td>
+                        <td style="background: #ececec"></td>
+                        <td style="background: #ececec"></td>
+{#                        <td style="background: #c38a86;color: white;font-weight: 700;">2018</td>#}
+                        <td style="background: #e0c097">金石得分</td>
+                        <td style="background: #e0c097">金石得分*n</td>
+                        <td style="background: #e0c097">金石達成率</td>
+                        <td style="background: #e0c097">專利得分</td>
+                        <td style="background: #e0c097">專利得分*n</td>
+                        <td style="background: #e0c097">專利達成率</td>
+                        <td style="background: #e0c097">研發抵稅</td>
+                        <td style="background: #e0c097">研發抵稅 *n</td>
+                        <td style="background: #e0c097;font-weight: 700;">佔比</td>
+                        <td style="background: #d8aa6d">Exceed-Expected</td>
+                        <td style="background: #d8aa6d">Exceed-Expected 得分</td>
+                        <td style="background: #d8aa6d">IDL</td>
+                        <td style="background: #d8aa6d">佔比</td>
+                        <td style="background: #bd9969">Team 月均義務超時時數</td>
+                        <td style="background: #bd9969">Team 每人月均義務超時時數</td>
+                        <td style="background: #bd9969">Team 月均超10.5h天次</td>
+                        <td style="background: #bd9969">Team 每人月均超10.5h天次</td>
+                        <td style="background: #bd9969">Team 月均晚班天次</td>
+                        <td style="background: #bd9969">Team 每人月均晚班天次</td>
+                        <td style="background: #bd9969">國外出差天次</td>
+                        <td style="background: #bd9969">人均國外出差天次</td>
+                        <td style="background: #bd9969">國內出差天次</td>
+                        <td style="background: #bd9969">人均國內出差天次</td>
+                        <td style="background: #bd9969" colspan='3'>離職</td>
+                        <td style="background: #bd9969;line-height: 60px;" rowspan='2'>佔比</td>
+                        <td style="background: #bd9969;line-height: 60px;" rowspan='2'>TeamLoading</td>
+                        <td style="background: #ecc99a;line-height: 60px;" rowspan='2'>Total</td>
+                    </tr>
+                    <tr >
+                        <td style="background: #ececec;font-weight: 700;"></td>
+                        <td style="background: #ececec"></td>
+                        <td style="background: #ececec"></td>
+{#                        <td style="background: #c38a86;color: white;font-weight: 700;"></td>#}
+                        <td style="background: #ececec;"></td>
+                        <td contenteditable="true" style="background: #229e93" id="gs_weight">{{ bp_per.bp_gsweight_t }}</td>
+                        <td style="background: #ececec;"></td>
+                        <td style="background: #ececec;"></td>
+                        <td contenteditable="true" style="background: #4db5ac" id="patent_weight">{{ bp_per.bp_patentweight_t }}</td>
+                        <td style="background: #ececec;"></td>
+                        <td style="background: #ececec;"></td>
+                        <td contenteditable="true" style="background: #4db5ac" id="taxdeduction_weight">{{ bp_per.bp_taxweight_t }}</td>
+                        <td contenteditable="true" style="background: #4db5ac" id="proposal_percentage">{{ bp_per.bp_proposal_t }}</td>
+                        <td  style="background: #ececec;"></td>
+                        <td contenteditable="true" style="background: #4db5ac" id="exceed_expected_percentage">{{ bp_per.bp_ee_t }}</td>
+                        <td contenteditable="true" style="background: #4db5ac" id="idl_percentage">{{ bp_per.bp_idl_t }}</td>
+                        <td style="background: #ececec;"></td>
+                        <td contenteditable="true" style="background: #4db5ac" id="duty_work_percentage">{{ bp_per.bp_duty_t }}</td>
+                        <td style="background: #ececec;"></td>
+                        <td contenteditable="true" style="background: #4db5ac" id="over_10_5_time_percentage">{{ bp_per.bp_10_5_t }}</td>
+                        <td style="background: #ececec;"></td>
+                        <td contenteditable="true" style="background: #4db5ac" id="night_work_percentage">{{ bp_per.bp_night_t }}</td>
+                        <td style="background: #ececec;"></td>
+                        <td contenteditable="true" style="background: #4db5ac" id="travel_abroad_percentage">{{ bp_per.bp_travel_abroad_t }}</td>
+                        <td style="background: #ececec;"></td>
+                        <td contenteditable="true" style="background: #4db5ac" id="travel_cn_percentage">{{ bp_per.bp_travel_cn_t }}</td>
+                        <td style="background: #ececec;"></td>
+                        <td style="background: #ececec;">離職率</td>
+                        <td style="background: #ececec;">離職率得分</td>
+                        <td style="background:  #4db5ac;" contenteditable="true" id="leave_percentage">{{ bp_per.bp_leave_t }}</td>
+                        <td style="width: 75px;background: #6d6663;color:white;font-weight: 700;">數量</td>
+                        <td contenteditable="true" style="width: 75px;background: #4db5ac;font-weight: 700;" id="task_force_percentage">{{ bp_per.bp_taskforceper_t }}</td>
+                        <td style="width: 150px;background: #f5eedc;"></td>
+                        <td style="width: 150px;background: #f5eedc;"></td>
+                        <td style="display: none;width: 130px;background: #f1f1f1;font-weight: 700;">2019</td>
+                        <td style="display: none;width: 130px;background: #f1f1f1;font-weight: 700;">2018</td>
+                        <td style="display: none;width: 150px;background: #f5eedc;"></td>
+                        <td style="display: none;width: 150px;background: #f5eedc;"></td>
+                        <td style="background: #e6cead;" colspan='2'></td>
+                    </tr>
+                    {% for leader_bonus in bonus_list %}
+                        <tr class="bonus_report">
+                            <td style="background: white;font-weight: 700" class="functionteam">{{ leader_bonus.team }}</td>
+                            <td style="background: white;">{{ leader_bonus.leader }}</td>
+                            <td style="background: white;">{{ leader_bonus.team_leader }}</td>
+
+{#                            <td contenteditable="true" style="background: #e63529;color: white;font-weight: 700;"></td>#}
+                            <td style="background: white;" class="gs_num" id="{{ leader_bonus.team_id }}gs">{{ leader_bonus.gsp_num }}</td>
+                            <td style="background: white;" id="{{ leader_bonus.team_id }}gs_weight"></td>
+                            <td class="gs_rate" id="{{ leader_bonus.team_id }}_gs_rate" style="background: white;color: #DD0CC2;font-weight: 700;">{{ leader_bonus.gs_rate }}%</td>
+                            <td class="patent_num" id="{{ leader_bonus.team_id }}patent_num"  style="background: white;color: #000000">{{ leader_bonus.patent }}</td>
+                            <td style="background: white;" id="{{ leader_bonus.team_id }}patent_num_weight"></td>
+                            <td class="patent_rate" id="{{ leader_bonus.team_id }}_patent_rate" style="background: white;color: #DD0CC2;font-weight: 700;">{{ leader_bonus.patent_rate }}%</td>
+                            <td class="taxdeduction" id="{{ leader_bonus.team_id }}taxdeduction" style="background: white;color: #000000">{{ leader_bonus.tax }}</td>
+                            <td style="background: white;" id="{{ leader_bonus.team_id }}taxdeduction_weight"></td>
+                            <td style="background: white;color: #1986dc;font-weight: 700;" class="proposal" id="{{ leader_bonus.team_id }}_proposal"></td>
+                            <td style="background: white;color: #000000" class="exceed_expected" id="{{ leader_bonus.team_id }}_exceed_expected" hc="{{ leader_bonus.total_people }}">{{ leader_bonus.gold }}</td>
+                            <td style="background: white;" id="{{ leader_bonus.team_id }}_exceed_expected_point" class="exceed_expected_point">{{ leader_bonus.ee }}</td>
+                            <td style="background: white;color: #000000" class="idl" id="{{ leader_bonus.team_id }}_idl">{{ leader_bonus.idl }}</td>
+                            <td class="customer" id="{{ leader_bonus.team_id }}_customer" style="background: white;color: #1986dc;font-weight: 700;"></td>
+                            <td style="background: white;" class="duty_work" id="{{ leader_bonus.team_id }}_duty_work">{{ leader_bonus.duty_work }}</td>
+                            <td style="background: white;color: #DD0CC2;font-weight: 700;" class="duty_work_hc" id="{{ leader_bonus.team_id }}_duty_work_hc">{{ leader_bonus.duty_work_hc }}</td>
+                            <td style="background: white;" class="over_10_5_time" id="{{ leader_bonus.team_id }}_over_10_5_time">{{ leader_bonus.over_10_5_time }}</td>
+                            <td style="background: white;color: #DD0CC2;font-weight: 700;" class="over_10_5_time_hc" id="{{ leader_bonus.team_id }}_over_10_5_time_hc">{{ leader_bonus.over_10_5_time_hc }}</td>
+                            <td style="background: white;" class="night_work" id="{{ leader_bonus.team_id }}_night_work">{{ leader_bonus.night_work }}</td>
+                            <td style="background: white;color: #DD0CC2;font-weight: 700;" class="night_work_hc" id="{{ leader_bonus.team_id }}_night_work_hc">{{ leader_bonus.night_work_hc }}</td>
+                            <td style="background: white;" class="travel_abroad" id="{{ leader_bonus.team_id }}_travel_abroad">{{ leader_bonus.travel_abroad }}</td>
+                            <td style="background: white;color: #DD0CC2;font-weight: 700;" class="travel_abroad_hc" id="{{ leader_bonus.team_id }}_travel_abroad_hc">{{ leader_bonus.travel_abroad_hc }}</td>
+                            <td style="background: white;" class="travel_cn" id="{{ leader_bonus.team_id }}_travel_cn">{{ leader_bonus.travel_cn }}</td>
+                            <td style="background: white;color: #DD0CC2;font-weight: 700;" class="travel_cn_hc" id="{{ leader_bonus.team_id }}_travel_cn_hc">{{ leader_bonus.travel_cn_hc }}</td>
+                            <td style="background: white;">{{ leader_bonus.leave_prob }}%</td>
+                            <td class="leave_point" id="{{ leader_bonus.team_id }}_leave_point">{{ leader_bonus.leave_prob_point }}</td>
+                            <td style="background: white;color: #1986dc;font-weight: 700;" class="dimission_percentage" id="{{ leader_bonus.team_id }}_dimission_percentage"></td>
+                            <td style="background: white;color: #1986dc;font-weight: 700;" class="attendance_percentage" id="{{ leader_bonus.team_id }}_attendance_percentage"></td>
+                            <td style="background: white;color: #DD0CC2;font-weight: 700;" class="teamloading" id="{{ leader_bonus.team_id }}_teamloading">teamloading</td>
+                            <td style="background: white;" class="total_percentage" id="{{ leader_bonus.team_id }}_total_percentage"></td>
+                            <td contenteditable="true" style="background: white;color: #000000" class="task_force_num" id="{{ leader_bonus.team_id }}_task_force_num">{{ leader_bonus.task_force }}</td>
+                            <td style="background: white;color: #1986dc;font-weight: 700;" class="task_force_point" id="{{ leader_bonus.team_id }}_task_force_point"></td>
+                            <td  style="width: 150px;background:  white;" class="all_total" id="{{ leader_bonus.team_id }}_all_total"></td>
+                            <td  style="width: 150px;background:  white;"  id="{{ leader_bonus.team_id }}_all_total_money">0</td>
+                            <td style="display: none;background: white;color: #252422;font-weight: 700;">0</td>
+                            <td style="display: none;background: white;color: #252422;font-weight: 700;">0</td>
+                            <td style="display: none;background: white;width: 150px;color: #000000;">0</td>
+                            <td style="display: none;background: white;width: 150px;color: #000000;">0</td>
+                            <td contenteditable="true" style="background: white;color: #000000" class="violation" id="{{ leader_bonus.team_id }}_violation">0</td>
+                            <td contenteditable="true" style="background: white;color: #000000" class="below_quality" id="{{ leader_bonus.team_id }}_below_quality">0</td>
+                            <td style="background: white;width: 150px" class="finally_money" id="{{ leader_bonus.team_id }}_finally_money">0</td>
+                        </tr>
+                    {% endfor %}
+                    <tr style="font-size: 15px;font-weight: 700;" class="bonus_report">
+                        <td style="background: white;color: darkred;font-size: 16px;">EERF Total</td>
+                        <td></td>
+                        <td></td>
+    {#                    <td style="background: #c38a86;color: white;font-weight: 700;"></td>#}
+                        <td class="total_gs_num"></td>
+                        <td class="total_gs_weight"></td>
+                        <td ></td>
+                        <td class="total_patent_num"></td>
+                        <td class="total_patent_weight"></td>
+                        <td ></td>
+                        <td class="total_taxdeduction_num"></td>
+                        <td class="total_taxdeduction_weight"></td>
+                        <td class="total_proposal_percentage"></td>
+                        <td class="total_exceed_expected"></td>
+                        <td class="total_exceed_expected_point"></td>
+                        <td class="total_idl"></td>
+                        <td class="total_customer"></td>
+                        <td class="total_duty_work"></td>
+                        <td class="total_ducty_work_hc"></td>
+                        <td class="total_over_10_5_time"></td>
+                        <td class="total_over_10_5_time_hc"></td>
+                        <td class="total_night_work"></td>
+                        <td class="total_night_work_hc"></td>
+                        <td class="total_travel_abroad"></td>
+                        <td class="total_travel_abroad_hc"></td>
+                        <td class="total_travel_cn"></td>
+                        <td class="total_travel_cn_hc"></td>
+                        <td></td>
+                        <td class="total_leave_point"></td>
+                        <td class="total_dimission_percentage"></td>
+                        <td class="total_attendance_percentage"></td>
+                        <td class="total_teamloading">teamloading</td>
+                        <td class="total_total_percentage">2.92%</td>
+                        <td contenteditable="true" class="total_task_force_num"></td>
+                        <td style="color: #1986dc;font-weight: 700;" class="total_task_force_point"></td>
+                        <td style="width: 150px;background: #f5edac;font-weight: 700;" class="total_all_total">0.00%</td>
+                        <td style="width: 150px;background: #fdc0ab;" class="all_total_money">0</td>
+                        <td style="display: none;color: #FF9800;font-weight: 700;color: red;">0</td>
+                        <td style="display: none;color: #FF9800;font-weight: 700;color: red;">0</td>
+                        <td style="display: none;width: 150px;background: #f5edac;font-weight: 700;">0.00%</td>
+                        <td style="display: none;width: 150px;background: #fdc0ab;">0</td>
+                        <td class="total_violation">0</td>
+                        <td class="total_below_quality">0</td>
+                        <td style="background: #ffc107;width: 150px;color: red"  class="total_finally_money">0</td>
+                    </tr>
+                </tbody>
+            </table>
+
+
+            <table class=" table-hover" id="table_score_department" border="1" >
+                <div id="div_department_V_color" style="display: none"></div>
+                <tbody id="table_body_department"  >
+                    <tr  style="background: #e6cead;font-weight: 700;">
+                        <td style="background: #ececec">Leader</td>
+                        <td style="background: #c38a86;color: white;font-weight: 700;">HR</td>
+                        <td colspan="9" style="background: #e0c097">智權提案項目</td>
+                        <td colspan="3" style="background: #d8aa6d">客戶評價 年中</td>
+                        <td colspan="13" style="background: #bd9969">加班 & 晚班 & 出差 & 離職率</td>
+                        <td rowspan="3" colspan="2" style="line-height: 90px;color:#eceaea;background: #6d6663;font-size: 25px;">Task force</td>
+                        <td rowspan="3" colspan="2" style="line-height: 90px;background: #f5eedc;font-size: 30px;color: #d63333;font-size: 50px;">Total</td>
+                        <td rowspan="3" colspan="2"style="display: none;line-height: 90px;background: #f1f1f1;font-size: 30px;color: #e08d13;font-size: 25px;">個人分配金額</td>
+                        <td rowspan="3" colspan="2" style="display: none;line-height: 90px;background: #f5eedc;font-size: 30px;color: #d63333;font-size: 50px;">Total</td>
+                        <td colspan="2"></td>
+                        <td rowspan="4" style="line-height: 129px;background: #FFC107;">部級可支配金</td>
+
+                    </tr>
+                    <tr  style="font-weight: 700;">
+                        <td style="background: #ececec;font-weight: 700;"></td>
+                        <td contenteditable="true" style="background: #229e93;color: white;font-weight: 700;" id="hr_percentagedepartment">{{ bp_per.bp_hrper_d }}</td>
+                        <td colspan="25" style="background:#229e93" id="percentage_1department" contenteditable="true">{{ bp_per.bp_otherper_d }}</td>
+                        <td rowspan="2" style="width: 160px;background: #e6cead;line-height: 57px;">關務違規部門吸收</td>
+                        <td rowspan="2" style="width: 160px;background: #e6cead;line-height: 57px;">英孚未達標</td>
+                    </tr>
+                    <tr  style="font-weight: 700;background:#eacfab;">
+                        <td style="background: #ececec"></td>
+                        <td style="background: #c38a86;color: white;font-weight: 700;">2018</td>
+                        <td style="background: #e0c097">金石得分</td>
+                        <td style="background: #e0c097">金石得分*n</td>
+                        <td style="background: #e0c097">金石達成率</td>
+                        <td style="background: #e0c097">專利得分</td>
+                        <td style="background: #e0c097">專利得分*n</td>
+                        <td style="background: #e0c097">專利達成率</td>
+                        <td style="background: #e0c097">研發抵稅</td>
+                        <td style="background: #e0c097">研發抵稅 *n</td>
+                        <td style="background: #e0c097;font-weight: 700;">佔比</td>
+                        <td style="display: none;background: #d8aa6d">Exceed-Expected</td>
+                        <td style="background: #d8aa6d">Exceed-Expected 得分</td>
+                        <td style="background: #d8aa6d">IDL</td>
+                        <td style="background: #d8aa6d">佔比</td>
+                        <td style="background: #bd9969">Team 月均義務超時時數</td>
+                        <td style="background: #bd9969">Team 每人月均義務超時時數</td>
+                        <td style="background: #bd9969">Team 月均超10.5h天次</td>
+                        <td style="background: #bd9969">Team 每人月均超10.5h天次</td>
+                        <td style="background: #bd9969">Team 月均晚班天次</td>
+                        <td style="background: #bd9969">Team 每人月均晚班天次</td>
+                        <td style="background: #bd9969">國外出差天次</td>
+                        <td style="display: none;background: #bd9969">人均國外出差天次</td>
+                        <td style="background: #bd9969">國內出差天次</td>
+                        <td style="display: none;background: #bd9969">人均國內出差天次</td>
+                        <td style="background: #bd9969" colspan='3'>離職</td>
+                        <td style="background: #bd9969;line-height: 60px;" rowspan='2'>佔比</td>
+                        <td style="display: none;background: #bd9969;line-height: 60px;" rowspan='2'>DepartmentLoading</td>
+                        <td style="background: #ecc99a;line-height: 60px;" rowspan='2'>Total</td>
+                    </tr>
+                    <tr  >
+                        <td style="background: #ececec;font-weight: 700;"></td>
+                        <td style="background: #c38a86;color: white;font-weight: 700;"></td>
+                        <td style="background: #ececec;"></td>
+                        <td contenteditable="true" style="background: #229e93" id="gs_weightdepartment">{{ bp_per.bp_gsweight_d }}</td>
+                        <td style="background: #ececec;"></td>
+                        <td style="background: #ececec;"></td>
+                        <td contenteditable="true" style="background: #4db5ac" id="patent_weightdepartment">{{ bp_per.bp_patentweight_d }}</td>
+                        <td style="background: #ececec;"></td>
+                        <td style="background: #ececec;"></td>
+                        <td contenteditable="true" style="background: #4db5ac" id="taxdeduction_weightdepartment">{{ bp_per.bp_taxweight_d }}</td>
+                        <td contenteditable="true" style="background: #4db5ac" id="proposal_percentagedepartment">{{ bp_per.bp_proposal_d }}</td>
+                        <td contenteditable="true" style="background: #4db5ac" id="exceed_expected_percentagedepartment">{{ bp_per.bp_ee_d }}</td>
+                        <td  style="display: none;background: #ececec;"></td>
+                        <td contenteditable="true" style="background: #4db5ac" id="idl_percentagedepartment">{{ bp_per.bp_idl_d }}</td>
+                        <td style="background: #ececec;"></td>
+                        <td contenteditable="true" style="background: #4db5ac" id="duty_work_percentagedepartment">{{ bp_per.bp_duty_d }}</td>
+                        <td style="background: #ececec;"></td>
+                        <td contenteditable="true" style="background: #4db5ac" id="over_10_5_time_percentagedepartment">{{ bp_per.bp_10_5_d }}</td>
+                        <td style="background: #ececec;"></td>
+                        <td contenteditable="true" style="background: #4db5ac" id="night_work_percentagedepartment">{{ bp_per.bp_night_d }}</td>
+                        <td style="background: #ececec;"></td>
+                        <td contenteditable="true" style="background: #4db5ac" id="travel_abroad_percentagedepartment">{{ bp_per.bp_travel_abroad_d }}</td>
+                        <td style="display: none;background: #ececec;"></td>
+                        <td contenteditable="true" style="background: #4db5ac" id="travel_cn_percentagedepartment">{{ bp_per.bp_travel_cn_d }}</td>
+                        <td style="display: none;background: #ececec;"></td>
+                        <td style="background: #ececec;">離職率</td>
+                        <td style="background: #ececec;">離職率得分</td>
+                        <td style="background:  #4db5ac;" contenteditable="true" id="leave_percentagedepartment">{{ bp_per.bp_leave_d }}</td>
+                        <td style="width: 75px;background: #6d6663;color:white;font-weight: 700;">數量</td>
+                        <td contenteditable="true" style="width: 75px;background: #4db5ac;font-weight: 700;" id="task_force_percentagedepartment">{{ bp_per.bp_taskforceper_d }}</td>
+                        <td style="width: 150px;background: #f5eedc;"></td>
+                        <td style="width: 150px;background: #f5eedc;"></td>
+                        <td style="display: none;width: 130px;background: #f1f1f1;font-weight: 700;">2019</td>
+                        <td style="display: none;width: 130px;background: #f1f1f1;font-weight: 700;">2018</td>
+                        <td style="display: none;width: 150px;background: #f5eedc;"></td>
+                        <td style="display: none;width: 150px;background: #f5eedc;"></td>
+                        <td style="background: #e6cead;" colspan='2'></td>
+                    </tr>
+                    {% for leader_bonus in bonus_list_by_leader %}
+                        <tr  class="bonus_reportdepartment">
+                            <td style="background: white;font-weight: 700" class="department_leader">{{ leader_bonus.leader }}</td>
+                            <td style="background: white;color: red;font-weight: 700;" class="hrdepartment" id="{{ leader_bonus.team_id }}_hrdepartment">{{ leader_bonus.hr }}</td>
+                            <td style="background: white" {% if leader_bonus.leader == "Shirley" %}contenteditable="true"{% endif %} class="gs_numdepartment" id="{{ leader_bonus.team_id }}gsdepartment">{{ leader_bonus.gsp_num }}</td>
+                            <td style="background: white" id="{{ leader_bonus.team_id }}gs_weightdepartment"></td>
+                            <td class="gs_ratedepartment" id="{{ leader_bonus.team_id }}_gs_ratedepartment" style="background: white;color: #DD0CC2;font-weight: 700;">{{ leader_bonus.gs_rate }}%</td>
+                            <td class="patent_numdepartment" id="{{ leader_bonus.team_id }}patent_numdepartment"  style="background: white" {% if leader_bonus.leader == "Shirley" %}contenteditable="true"{% endif %}>{{ leader_bonus.patent }}</td>
+                            <td id="{{ leader_bonus.team_id }}patent_num_weightdepartment" style="background: white" ></td>
+                            <td class="patent_ratedepartment" id="{{ leader_bonus.team_id }}_patent_ratedepartment" style="background: white;color: #DD0CC2;font-weight: 700;">{{ leader_bonus.patent_rate }}%</td>
+                            <td class="taxdeductiondepartment" id="{{ leader_bonus.team_id }}taxdeductiondepartment"  style="background: white" {% if leader_bonus.leader == "Shirley" %}contenteditable="true"{% endif %}>{{ leader_bonus.tax }}</td>
+                            <td id="{{ leader_bonus.team_id }}taxdeduction_weightdepartment" style="background: white" ></td>
+                            <td style="background: white;color: #1986dc;font-weight: 700;" class="proposaldepartment" id="{{ leader_bonus.team_id }}_proposaldepartment"></td>
+                            <td style="display: none;background: white;color: #000000" class="exceed_expecteddepartment" id="{{ leader_bonus.team_id }}_exceed_expecteddepartment"  hc="{{ leader_bonus.total_people }}">{{ leader_bonus.gold }}</td>
+                            <td style="background: white" id="{{ leader_bonus.team_id }}_exceed_expected_pointdepartment" class="exceed_expected_pointdepartment" {% if leader_bonus.leader == "Shirley" %}contenteditable="true"{% endif %}>{{ leader_bonus.ee }}</td>
+                            <td style="background:white;color: #000000" class="idldepartment" id="{{ leader_bonus.team_id }}_idldepartment" {% if leader_bonus.leader == "Shirley" %}contenteditable="true"{% endif %}>{{ leader_bonus.idl }}</td>
+                            <td class="customerdepartment" id="{{ leader_bonus.team_id }}_customerdepartment" style="background: white;color: #1986dc;font-weight: 700;"></td>
+                            <td style="background: white" class="duty_workdepartment" id="{{ leader_bonus.team_id }}_duty_workdepartment" {% if leader_bonus.leader == "Shirley" %}contenteditable="true"{% endif %}>{{ leader_bonus.duty_work }}</td>
+                            <td style="background: white;color: #DD0CC2;font-weight: 700;" class="duty_work_hcdepartment" id="{{ leader_bonus.team_id }}_duty_work_hcdepartment">{{ leader_bonus.duty_work_hc }}</td>
+                            <td style="background: white" class="over_10_5_timedepartment" id="{{ leader_bonus.team_id }}_over_10_5_timedepartment" {% if leader_bonus.leader == "Shirley" %}contenteditable="true"{% endif %}>{{ leader_bonus.over_10_5_time }}</td>
+                            <td style="background: white;color: #DD0CC2;font-weight: 700;" class="over_10_5_time_hcdepartment" id="{{ leader_bonus.team_id }}_over_10_5_time_hcdepartment">{{ leader_bonus.over_10_5_time_hc }}</td>
+                            <td style="background: white" class="night_workdepartment" id="{{ leader_bonus.team_id }}_night_workdepartment" {% if leader_bonus.leader == "Shirley" %}contenteditable="true"{% endif %}>{{ leader_bonus.night_work }}</td>
+                            <td style="background: white;color: #DD0CC2;font-weight: 700;" class="night_work_hcdepartment" id="{{ leader_bonus.team_id }}_night_work_hcdepartment">{{ leader_bonus.night_work_hc }}</td>
+                            <td style="background: white"  class="travel_abroaddepartment" id="{{ leader_bonus.team_id }}_travel_abroaddepartment" {% if leader_bonus.leader == "Shirley" %}contenteditable="true"{% endif %}>{{ leader_bonus.travel_abroad }}</td>
+                            <td style="display: none;background: white;color: #DD0CC2;font-weight: 700;" class="travel_abroad_hcdepartment" id="{{ leader_bonus.team_id }}_travel_abroad_hcdepartment" >{{ leader_bonus.travel_abroad_hc }}</td>
+                            <td style="background: white"  class="travel_cndepartment" id="{{ leader_bonus.team_id }}_travel_cndepartment" {% if leader_bonus.leader == "Shirley" %}contenteditable="true"{% endif %}>{{ leader_bonus.travel_cn }}</td>
+                            <td style="display: none;background: white;color: #DD0CC2;font-weight: 700;" class="travel_cn_hcdepartment" id="{{ leader_bonus.team_id }}_travel_cn_hcdepartment">{{ leader_bonus.travel_cn_hc }}</td>
+                            <td style="background: white" class="leave_prob_department" id="{{ leader_bonus.team_id }}_leave_prob_department" hc="{{ leader_bonus.total_people }}" {% if leader_bonus.leader == "Shirley" %}contenteditable="true"{% endif %}>{{ leader_bonus.leave_prob }}%</td>
+                            <td style="background: white"  class="leave_pointdepartment" id="{{ leader_bonus.team_id }}_leave_pointdepartment">{{ leader_bonus.leave_prob_point }}</td>
+                            <td style="background: white;color: #1986dc;font-weight: 700;" class="dimission_percentagedepartment" id="{{ leader_bonus.team_id }}_dimission_percentagedepartment"></td>
+                            <td style="background: white;color: #1986dc;font-weight: 700;" class="attendance_percentagedepartment" id="{{ leader_bonus.team_id }}_attendance_percentagedepartment"></td>
+                            <td style="display: none;background: white;color: #DD0CC2;font-weight: 700;" class="teamloadingdepartment" id="{{ leader_bonus.team_id }}_teamloadingdepartment">departmrnt_loading</td>
+                            <td style="background: white" class="total_percentagedepartment" id="{{ leader_bonus.team_id }}_total_percentagedepartment"></td>
+                            <td  style="background: #cedfef" class="task_force_numdepartment" id="{{ leader_bonus.team_id }}_task_force_numdepartment" {% if leader_bonus.leader == "Shirley" %}contenteditable="true"{% endif %}>{{ leader_bonus.task_force }}</td>
+                            <td style="background: white" style="color: #1986dc;font-weight: 700;" class="task_force_pointdepartment" id="{{ leader_bonus.team_id }}_task_force_pointdepartment"></td>
+                            <td  style="width: 150px;background:  white;" class="all_totaldepartment" id="{{ leader_bonus.team_id }}_all_totaldepartment"></td>
+                            <td  style="width: 150px;background:  white;"  id="{{ leader_bonus.team_id }}_all_total_moneydepartment">0</td>
+                            <td style="display: none;background: white;color: #252422;font-weight: 700;">0</td>
+                            <td style="display: none;background: white;color: #252422;font-weight: 700;">{{ leader_bonus.last_year_money }}</td>
+                            <td style="display: none;width: 150px;background: white;" class="change_percentage" id="{{ leader_bonus.team_id }}_change_percentage"></td>
+                            <td style="display: none;width: 150px;background: white;" id="{{ leader_bonus.team_id }}_last_year_money">{{ leader_bonus.last_year_money }}</td>
+                            <td contenteditable="true" style="background: white;" class="violationdepartment" id="{{ leader_bonus.team_id }}_violationdepartment">{{ leader_bonus.violation }}</td>
+                            <td contenteditable="true" style="background: white;" class="below_qualitydepartment" id="{{ leader_bonus.team_id }}_below_qualitydepartment">{{ leader_bonus.belowquality }}</td>
+                            <td style="background: white;width: 150px" class="finally_moneydepartment" id="{{ leader_bonus.team_id }}_finally_moneydepartment">0</td>
+                        </tr>
+                    {% endfor %}
+                    <tr style="font-size: 15px;font-weight: 700;" class="bonus_reportdepartment">
+                        <td style="background: floralwhite;color: darkred;font-size: 16px;">EERF Total</td>
+                        <td style="background: floralwhite;color: red;font-weight: 700;" class="total_hrdepartment"></td>
+                        <td style="background: floralwhite;" class="total_gs_numdepartment"></td>
+                        <td style="background: floralwhite;"class="total_gs_weightdepartment"></td>
+                        <td style="background: floralwhite;"></td>
+                        <td style="background: floralwhite;"class="total_patent_numdepartment"></td>
+                        <td style="background: floralwhite;"class="total_patent_weightdepartment"></td>
+                        <td style="background: floralwhite;"></td>
+                        <td style="background: floralwhite;" class="total_taxdeduction_numdepartment"></td>
+                        <td style="background: floralwhite;" class="total_taxdeduction_weightdepartment"></td>
+                        <td style="background: floralwhite;" class="total_proposal_percentagedepartment"></td>
+                        <td style="display: none;background: floralwhite;" class="total_exceed_expecteddepartment"></td>
+                        <td style="background: floralwhite;" class="total_exceed_expected_pointdepartment"></td>
+                        <td style="background: floralwhite;" class="total_idldepartment"></td>
+                        <td style="background: floralwhite;" class="total_customerdepartment"></td>
+                        <td style="background: floralwhite;" class="total_duty_workdepartment"></td>
+                        <td style="background: floralwhite;" class="total_duty_workdepartment_hc"></td>
+                        <td style="background: floralwhite;" class="total_over_10_5_timedepartment"></td>
+                        <td style="background: floralwhite;" class="total_over_10_5_timedepartment_hc"></td>
+                        <td style="background: floralwhite;" class="total_night_workdepartment"></td>
+                        <td style="background: floralwhite;" class="total_night_workdepartment_hc"></td>
+                        <td style="background: floralwhite;" class="total_travel_abroaddepartment"></td>
+                        <td style="display: none;background: floralwhite;" class="total_travel_abroaddepartment_hc"></td>
+                        <td style="background: floralwhite;" class="total_travel_cndepartment"></td>
+                        <td style="display: none;background: floralwhite;" class="total_travel_cndepartment_hc"></td>
+                        <td style="background: floralwhite;" ></td>
+                        <td style="background: floralwhite;" class="total_leave_pointdepartment"></td>
+                        <td style="background: floralwhite;" class="total_dimission_percentagedepartment"></td>
+                        <td style="background: floralwhite;" class="total_attendance_percentagedepartment"></td>
+                        <td style="display: none;background: floralwhite;" class="total_teamloadingdepartment">department_loading</td>
+                        <td style="background: floralwhite;" class="total_total_percentagedepartment">2.92%</td>
+                        <td style="background: floralwhite;"  contenteditable="true" class="total_task_force_numdepartment"></td>
+                        <td style="background: floralwhite;color: #1986dc;font-weight: 700;" class="total_task_force_pointdepartment"></td>
+                        <td style="background: floralwhite;width: 150px;background: #f5edac;font-weight: 700;" class="total_all_totaldepartment">0.00%</td>
+                        <td style="background: floralwhite;width: 150px;background: #fdc0ab;" class="all_total_moneydepartment">0</td>
+                        <td style="display: none;background: floralwhite;color: #FF9800;font-weight: 700;color: red;">0</td>
+                        <td style="display: none;background: floralwhite;color: #FF9800;font-weight: 700;color: red;">0</td>
+                        <td style="display: none;background: floralwhite;width: 150px;background: #f5edac;font-weight: 700;">0.00%</td>
+                        <td style="display: none;background: floralwhite;width: 150px;background: #fdc0ab;">0</td>
+                        <td style="background: floralwhite;" class="total_violationdepartment">0</td>
+                        <td style="background: floralwhite;" class="total_below_qualitydepartment">0</td>
+                        <td style="background: floralwhite;width: 150px;color: red"  class="total_finally_moneydepartment">0</td>
+                    </tr>
+                </tbody>
+            </table>
+        {% endif %}
+
+
+
+</div>
+</div>
+
+<!-- 模态框（Modal） -->
+<div style="font-family: Arial,微软雅黑;font-weight: 700;z-index: 999999999;" class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div style="width: 70%;height: 100%;" class="modal-dialog">
+        <div id="modal_content" class="modal-content" style="height: 70%;">
+            <div class="modal-header">
+                <button style="opacity: 1;" type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">
+					<img src="{% static 'NPI_EERF/img/32x32.png' %}" >
+                </button>
+                <h2 style="font-weight: 700;" class="modal-title" id="myModalLabel">
+                    讀取记录
+                </h2>
+            </div>
+            <div class="modal-body" style="height: 80%;">
+                <div style="box-shadow: 0px 0px 12px 7px #9a9494;border-radius: 10px;" class="box">
+                    <div style="background: #f3f3f3;height: 100%;overflow: auto;" class="content">
+                        <!--搜索输入框及查询、重置按钮-->
+                        <div  class="content_width">
+                            <div style="text-align: center;" class="person_search">
+                                <div class="" style="width: 45%;display: inline-block">
+                                        <input id="Ktext" type="text" class="form-control" placeholder="请输入序號關鍵字">
+                                </div>
+                                <div class="" style="text-align: center;display: inline-block;margin-left: 0.5%;">
+                                    <button class="btn btn-primary search_btn" type="button" id="search_btn">查詢</button>
+                                    <button class="btn btn-primary search_btn" type="button" id="back_btn">重置</button>
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                        </div>
+                        <!--添加按钮及bootstrap的模态框-->
+                        <div class="export">
+                            <button id="click_delete" type="button" class="btn btn-primary btn-sm"
+                                    >
+                                <img src="../../static/NPI_EERF/img/delete.png"/>
+                                <span style="">刪除選中</span>
+                            </button>
+                            <div class="modal fade" id="renyuan">
+                                <div class="modal-dialog modal-lg modal_position">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title">修改</h4>
+                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <table id="xztb" class="table">
+                                                <!--新修改弹窗的样式-->
+                                                <tbody>
+                                                <tr>
+                                                    <td class="tb_bg"><label for=""><font
+                                                            style="font-size: 14px; color: red;">*</font>信息</label>
+                                                    </td>
+                                                    <td><input class="phoneNum" type="text" placeholder="請輸入信息"/></td>
+                                                    <td class="tb_bg"><label for="">時間</label></td>
+                                                    <td><input class="time" type="text" placeholder="请输入時間"/></td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">取消
+                                            </button>
+                                            <button id="add_btn" type="button" class="btn btn-secondary">確定</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="tb_div">
+
+                            <table style="border-top: 2px solid gray;" id="tb" class="table tablesorter table-00">
+                                <thead>
+                                <tr>
+                                    <td id="checkbox_all">
+                                        <div class="checkbox icheck-emerland">
+                                            <input type="checkbox" id="all_emerland" value="all"
+                                                   onclick="selectAll(this);"/>
+                                            <label for="all_emerland"></label>
+                                        </div>
+                                    </td>
+                                    <th>信息</th>
+                                    <th>時間</th>
+                                    <th>刪除</th>
+                                </tr>
+                                </thead>
+                                <tbody id="show_tbody">
+                                <tr ng-repeat="data in datas">
+                                    <td>
+                                        <div class="checkbox icheck-emerland">
+                                            <input type="checkbox" id="{{ data.order }}" value="{{ data.order }}"/>
+                                            <label for="{{ data.order }}"></label>
+                                        </div>
+                                    </td>
+                                    <td>{{ data.message }}</td>
+                                    <td>{{ data.time }}</td>
+                                    <td style="padding-top: 16px;">
+                                        <a href="#" class="del" style="font-size: 16px;font-family: 微软雅黑;color: #d6453a;">刪除</a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button  id="btn_loadbonus" type="button" data-dismiss="modal" class="btn btn-primary" style="font-size: 18px;border: none;background: #269288;color: white;">
+                    讀取
+                </button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="myModal_" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="z-index: 999999999">
+	<div class="modal-dialog">
+		<div id="modal_content" class="modal-content">
+			<div class="modal-header">
+				<button style="opacity: 1" type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">
+					<img src="{% static 'NPI_EERF/img/32x32.png' %}">
+				</button>
+				<h3  style="font-weight: 700;color: #383e3d;font-family: 微软雅黑;" class="modal-title" id="myModalLabel">
+					保存記錄
+				</h3>
+			</div>
+			<div class="modal-body">
+				<h4 style="text-align: center;font-size: 21px;font-weight: 700;color: #383e3d;font-family: 微软雅黑;">請輸入信息</h4>
+                <textarea name="" id="text_info" cols="30" rows="10"></textarea>
+			</div>
+			<div class="modal-footer">
+				<button style="font-size: 18px;border: none;background: #269288;color: white;" type="button" class="btn btn-default"
+						data-dismiss="modal" id="save_ajax">保存
+				</button>
+
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+</body>
+<script src="{% static 'NPI_EERF/js/new/mejs.js' %}"></script>
+<script type='text/javascript'>
+   $('#ipt_z').mouseover(function () {
+        $('#zjj').css('display', 'block');
+    });
+    $('#ipt_z').mouseout(function () {
+        $('#zjj').css('display', 'none');
+    });
+    $('#span_zjj').mouseover(function () {
+        $('#zjj').css('display', 'block');
+    });
+    $('#span_zjj').mouseout(function () {
+        $('#zjj').css('display', 'none');
+    });
+    $("#table_score_team tr").each(function () {
+        $(this).children('td:eq(7)').mouseover(function () {
+            $('#zl').css('display', 'block');
+        })
+        $(this).children('td:eq(7)').mouseout(function () {
+            $('#zl').css('display', 'none');
+        })
+    });
+    $("#table_score_team tr").each(function () {
+        $(this).children('td:eq(13)').mouseover(function () {
+            $('#HC').css('display', 'block');
+        })
+        $(this).children('td:eq(13)').mouseout(function () {
+            $('#HC').css('display', 'none');
+        })
+    });
+    $("#table_score_team tr").each(function () {
+        $(this).children('td:eq(14)').mouseover(function () {
+            $('#idl').css('display', 'block');
+        })
+        $(this).children('td:eq(14)').mouseout(function () {
+            $('#idl').css('display', 'none');
+        })
+    });
+    $("#table_score_team tr").each(function () {
+        $(this).children('td:eq(29)').mouseover(function () {
+            $('#kqbl').css('display', 'block');
+        })
+        $(this).children('td:eq(29)').mouseout(function () {
+            $('#kqbl').css('display', 'none');
+        })
+    });
+    $("#table_score_team tr").each(function () {
+        $(this).children('td:eq(34)').mouseover(function () {
+            $('#Total01').css('display', 'block');
+        })
+        $(this).children('td:eq(34)').mouseout(function () {
+            $('#Total01').css('display', 'none');
+        })
+    });
+    $("#table_score_team tr").each(function () {
+        $(this).children('td:eq(31)').mouseover(function () {
+            $('#Total03').css('display', 'block');
+        })
+        $(this).children('td:eq(31)').mouseout(function () {
+            $('#Total03').css('display', 'none');
+        })
+    });
+    $("#table_score_team tr").each(function () {
+        $(this).children('td:eq(35)').mouseover(function () {
+            $('#Total02').css('display', 'block');
+        })
+        $(this).children('td:eq(35)').mouseout(function () {
+            $('#Total02').css('display', 'none');
+        })
+    });
+    $("#table_score_team tr").each(function () {
+        $(this).children('td:eq(15)').mouseover(function () {
+            $('#khpjzb').css('display', 'block');
+        })
+        $(this).children('td:eq(15)').mouseout(function () {
+            $('#khpjzb').css('display', 'none');
+        })
+    });
+    $("#table_score_team tr").each(function () {
+        $(this).children('td:eq(5)').mouseover(function () {
+            $('#jsdcl').css('display', 'block');
+        })
+        $(this).children('td:eq(5)').mouseout(function () {
+            $('#jsdcl').css('display', 'none');
+        })
+    });
+    $("#table_score_team tr").each(function () {
+        $(this).children('td:eq(11)').mouseover(function () {
+            $('#zqtazb').css('display', 'block');
+        })
+        $(this).children('td:eq(11)').mouseout(function () {
+            $('#zqtazb').css('display', 'none');
+        })
+    });
+    $("#table_score_team tr").each(function () {
+        $(this).children('td:eq(28)').mouseover(function () {
+            $('#lzl').css('display', 'block');
+        })
+        $(this).children('td:eq(28)').mouseout(function () {
+            $('#lzl').css('display', 'none');
+        })
+    });
+    $("#table_score_team tr").each(function () {
+        $(this).children('td:eq(42)').mouseover(function () {
+            $('#bjkzp').css('display', 'block');
+        })
+        $(this).children('td:eq(42)').mouseout(function () {
+            $('#bjkzp').css('display', 'none');
+        })
+    });
+    $("#table_score_team tr").each(function () {
+        $(this).children('td:eq(8)').mouseover(function () {
+            $('#zldcl').css('display', 'block');
+        })
+        $(this).children('td:eq(8)').mouseout(function () {
+            $('#zldcl').css('display', 'none');
+        })
+    });
+    $("#table_score_team tr").each(function () {
+        $(this).children('td:eq(6)').mouseover(function () {
+            $('#zldf').css('display', 'block');
+        })
+        $(this).children('td:eq(6)').mouseout(function () {
+            $('#zldf').css('display', 'none');
+        })
+    });
+    $("#table_score_team tr").each(function () {
+        $(this).children('td:eq(27)').mouseover(function () {
+            $('#lzldf').css('display', 'block');
+        })
+        $(this).children('td:eq(27)').mouseout(function () {
+            $('#lzldf').css('display', 'none');
+        })
+    });
+    $("#table_score_team tr").each(function () {
+        $(this).children('td:eq(4)').mouseover(function () {
+            $('#jsdf').css('display', 'block');
+        })
+        $(this).children('td:eq(4)').mouseout(function () {
+            $('#jsdf').css('display', 'none');
+        })
+    });
+    $("#table_score_team tr").each(function () {
+        $(this).children('td:eq(30)').mouseover(function () {
+            $('#TeamLoading').css('display', 'block');
+        })
+        $(this).children('td:eq(30)').mouseout(function () {
+            $('#TeamLoading').css('display', 'none');
+        })
+    });
+    $("#table_score_team tr").each(function () {
+        $(this).children('td:eq(25)').mouseover(function () {
+            $('#gncc').css('display', 'block');
+        })
+        $(this).children('td:eq(25)').mouseout(function () {
+            $('#gncc').css('display', 'none');
+        })
+    });
+    $("#table_score_team tr").each(function () {
+        $(this).children('td:eq(23)').mouseover(function () {
+            $('#gwcc').css('display', 'block');
+        })
+        $(this).children('td:eq(23)').mouseout(function () {
+            $('#gwcc').css('display', 'none');
+        })
+    });
+    $("#table_score_team tr").each(function () {
+        $(this).children('td:eq(19)').mouseover(function () {
+            $('#yj10').css('display', 'block');
+        })
+        $(this).children('td:eq(19)').mouseout(function () {
+            $('#yj10').css('display', 'none');
+        })
+    });
+    $("#table_score_team tr").each(function () {
+        $(this).children('td:eq(21)').mouseover(function () {
+            $('#yjwb').css('display', 'block');
+        })
+        $(this).children('td:eq(21)').mouseout(function () {
+            $('#yjwb').css('display', 'none');
+        })
+    });
+    $("#table_score_team tr").each(function () {
+        $(this).children('td:eq(17)').mouseover(function () {
+            $('#yjyw').css('display', 'block');
+        })
+        $(this).children('td:eq(17)').mouseout(function () {
+            $('#yjyw').css('display', 'none');
+        })
+    });
+
+
+
+    //部級
+
+    $("#table_score_department tr").each(function () {
+        $(this).children('td:eq(12)').mouseover(function () {
+            $('#HC').css('display', 'block');
+        })
+        $(this).children('td:eq(12)').mouseout(function () {
+            $('#HC').css('display', 'none');
+        })
+    });
+    $("#table_score_department tr").each(function () {
+        $(this).children('td:eq(6)').mouseover(function () {
+            $('#zl').css('display', 'block');
+        })
+        $(this).children('td:eq(6)').mouseout(function () {
+            $('#zl').css('display', 'none');
+        })
+    });
+    $("#table_score_department tr").each(function () {
+        $(this).children('td:eq(13)').mouseover(function () {
+            $('#idl').css('display', 'block');
+        })
+        $(this).children('td:eq(13)').mouseout(function () {
+            $('#idl').css('display', 'none');
+        })
+    });
+    $("#table_score_department tr").each(function () {
+        $(this).children('td:eq(30)').mouseover(function () {
+            $('#Total03').css('display', 'block');
+        })
+        $(this).children('td:eq(30)').mouseout(function () {
+            $('#Total03').css('display', 'none');
+        })
+    });
+    $("#table_score_department tr").each(function () {
+        $(this).children('td:eq(30)').mouseover(function () {
+            $('#Total03').css('display', 'block');
+        })
+        $(this).children('td:eq(30)').mouseout(function () {
+            $('#Total03').css('display', 'none');
+        })
+    });
+    $("#table_score_department tr").each(function () {
+        $(this).children('td:eq(28)').mouseover(function () {
+            $('#kqbl').css('display', 'block');
+        })
+        $(this).children('td:eq(28)').mouseout(function () {
+            $('#kqbl').css('display', 'none');
+        })
+    });
+    $("#table_score_department tr").each(function () {
+        $(this).children('td:eq(33)').mouseover(function () {
+            $('#Total01').css('display', 'block');
+        })
+        $(this).children('td:eq(33)').mouseout(function () {
+            $('#Total01').css('display', 'none');
+        })
+    });
+    $("#table_score_department tr").each(function () {
+        $(this).children('td:eq(34)').mouseover(function () {
+            $('#Total02').css('display', 'block');
+        })
+        $(this).children('td:eq(34)').mouseout(function () {
+            $('#Total02').css('display', 'none');
+        })
+    });
+    $("#table_score_department tr").each(function () {
+        $(this).children('td:eq(14)').mouseover(function () {
+            $('#khpjzb').css('display', 'block');
+        })
+        $(this).children('td:eq(14)').mouseout(function () {
+            $('#khpjzb').css('display', 'none');
+        })
+    });
+    $("#table_score_department tr").each(function () {
+        $(this).children('td:eq(4)').mouseover(function () {
+            $('#jsdcl').css('display', 'block');
+        })
+        $(this).children('td:eq(4)').mouseout(function () {
+            $('#jsdcl').css('display', 'none');
+        })
+    });
+    $("#table_score_department tr").each(function () {
+        $(this).children('td:eq(10)').mouseover(function () {
+            $('#zqtazb').css('display', 'block');
+        })
+        $(this).children('td:eq(10)').mouseout(function () {
+            $('#zqtazb').css('display', 'none');
+        })
+    });
+    $("#table_score_department tr").each(function () {
+        $(this).children('td:eq(27)').mouseover(function () {
+            $('#lzl').css('display', 'block');
+        })
+        $(this).children('td:eq(27)').mouseout(function () {
+            $('#lzl').css('display', 'none');
+        })
+    });
+    $("#table_score_department tr").each(function () {
+        $(this).children('td:eq(41)').mouseover(function () {
+            $('#bjkzp').css('display', 'block');
+        })
+        $(this).children('td:eq(41)').mouseout(function () {
+            $('#bjkzp').css('display', 'none');
+        })
+    });
+    $("#table_score_department tr").each(function () {
+        $(this).children('td:eq(7)').mouseover(function () {
+            $('#zldcl').css('display', 'block');
+        })
+        $(this).children('td:eq(7)').mouseout(function () {
+            $('#zldcl').css('display', 'none');
+        })
+    });
+    $("#table_score_department tr").each(function () {
+        $(this).children('td:eq(5)').mouseover(function () {
+            $('#zldf').css('display', 'block');
+        })
+        $(this).children('td:eq(5)').mouseout(function () {
+            $('#zldf').css('display', 'none');
+        })
+    });
+    $("#table_score_department tr").each(function () {
+        $(this).children('td:eq(26)').mouseover(function () {
+            $('#lzldf').css('display', 'block');
+        })
+        $(this).children('td:eq(26)').mouseout(function () {
+            $('#lzldf').css('display', 'none');
+        })
+    });
+    $("#table_score_department tr").each(function () {
+        $(this).children('td:eq(3)').mouseover(function () {
+            $('#jsdf').css('display', 'block');
+        })
+        $(this).children('td:eq(3)').mouseout(function () {
+            $('#jsdf').css('display', 'none');
+        })
+    });
+    $("#table_score_department tr").each(function () {
+        $(this).children('td:eq(29)').mouseover(function () {
+            $('#TeamLoading').css('display', 'block');
+        })
+        $(this).children('td:eq(29)').mouseout(function () {
+            $('#TeamLoading').css('display', 'none');
+        })
+    });
+
+    $("#table_score_department tr").each(function () {
+        $(this).children('td:eq(18)').mouseover(function () {
+            $('#yj10').css('display', 'block');
+        })
+        $(this).children('td:eq(18)').mouseout(function () {
+            $('#yj10').css('display', 'none');
+        })
+    });
+    $("#table_score_department tr").each(function () {
+        $(this).children('td:eq(20)').mouseover(function () {
+            $('#yjwb').css('display', 'block');
+        })
+        $(this).children('td:eq(20)').mouseout(function () {
+            $('#yjwb').css('display', 'none');
+        })
+    });
+    $("#table_score_department tr").each(function () {
+        $(this).children('td:eq(16)').mouseover(function () {
+            $('#yjyw').css('display', 'block');
+        })
+        $(this).children('td:eq(16)').mouseout(function () {
+            $('#yjyw').css('display', 'none');
+        })
+    });
+
+
+    document.onkeydown = function (e) {
+        if (e.keyCode == 13) {
+            e.preventDefault();
+        }
+    };
+    $(document).ready(function () {
+        var oDivL_height = $("#oDivL_table_score").css("height");
+        // $("#oDivL_table_score").css("height", oDivL_height.split("p")[0]-1);
+        // 解决冻结背景分辨率问题
+        setTimeout(function () {
+            if (current_size == 100) {
+                $("#div_L_color").css('width', $('#div_table').outerWidth() - 15);
+                $("#div_V_color").css('width', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").outerWidth()) + 2);
+                $("#div_C_color").css('width', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").outerWidth()) + 2);
+
+                $("#div_L_color").css('height', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").outerHeight()) * 4 + 5);
+                //$("#div_V_color").css('height', $("#table_score_team tr:nth-child(1) td:nth-child(1)").outerWidth())
+                $("#div_C_color").css('height', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").outerHeight()) * 4 + 5);
+
+                $("#div_department_V_color").css('width', ($("#table_score_department tr:nth-child(1) td:nth-child(1)").outerWidth()) + 2);
+
+                $("#div_department_V_color").css('height', (($("#table_score_department tr:nth-child(1) td:nth-child(1)").outerHeight()) * ($('#table_score_department tr').length)) + 4);
+
+            }else if(100<current_size && current_size <125){
+                 $("#div_L_color").css('width', $('#div_table').width() - 15);
+                $("#div_V_color").css('width', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").width()) + 2);
+                $("#div_C_color").css('width', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").width()) + 2);
+
+                $("#div_L_color").css('height', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").height()) * 4 + 5);
+                //$("#div_V_color").css('height', $("#table_score_team tr:nth-child(1) td:nth-child(1)").outerWidth())
+                $("#div_C_color").css('height', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").height()) * 4 + 5);
+
+                $("#div_department_V_color").css('width', ($("#table_score_department tr:nth-child(1) td:nth-child(1)").width()) + 2);
+
+                $("#div_department_V_color").css('height', (($("#table_score_department tr:nth-child(1) td:nth-child(1)").height()) * ($('#table_score_department tr').length)) + 4);
+
+            }else if(125<=current_size){
+                 $("#div_L_color").css('width', $('#div_table').outerWidth() - 15);
+                 $("#div_V_color").css('width', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").outerWidth()) + 2);
+                 $("#div_C_color").css('width', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").outerWidth()) + 2);
+
+                 $("#div_L_color").css('height', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").outerHeight()) * 4 + 5);
+                 //$("#div_V_color").css('height', $("#table_score_team tr:nth-child(1) td:nth-child(1)").outerWidth())
+                 $("#div_C_color").css('height', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").outerHeight()) * 4 + 5);
+
+                 $("#div_department_V_color").css('width', ($("#table_score_department tr:nth-child(1) td:nth-child(1)").outerWidth()) + 2);
+
+                 $("#div_department_V_color").css('height', (($("#table_score_department tr:nth-child(1) td:nth-child(1)").outerHeight()) * ($('#table_score_department tr').length)) + 4);
+
+            }else if(80 <= current_size && current_size <= 100) {
+                $("#div_L_color").css('width', $('#div_table').width() - 15);
+                $("#div_V_color").css('width', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").width()) + 2);
+                $("#div_C_color").css('width', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").width()) + 2);
+
+                $("#div_L_color").css('height', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").height()) * 4 + 5);
+                //$("#div_V_color").css('height', $("#table_score_team tr:nth-child(1) td:nth-child(1)").outerWidth())
+                $("#div_C_color").css('height', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").height()) * 4 + 5);
+
+                $("#div_department_V_color").css('width', ($("#table_score_department tr:nth-child(1) td:nth-child(1)").width()) + 2);
+
+                $("#div_department_V_color").css('height', (($("#table_score_department tr:nth-child(1) td:nth-child(1)").height()) * ($('#table_score_department tr').length)) + 4);
+
+            }else if(67 < current_size && current_size <= 75){
+                $("#div_L_color").css('width', $('#div_table').outerWidth() - 15);
+                $("#div_V_color").css('width', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").outerWidth()) + 2);
+                $("#div_C_color").css('width', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").outerWidth()) + 2);
+
+                $("#div_L_color").css('height', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").outerHeight()) * 4 + 5);
+                //$("#div_V_color").css('height', $("#table_score_team tr:nth-child(1) td:nth-child(1)").outerWidth())
+                $("#div_C_color").css('height', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").outerHeight()) * 4 + 5);
+
+                $("#div_department_V_color").css('width', ($("#table_score_department tr:nth-child(1) td:nth-child(1)").outerWidth()) + 2);
+
+                $("#div_department_V_color").css('height', (($("#table_score_department tr:nth-child(1) td:nth-child(1)").outerHeight()) * ($('#table_score_department tr').length)) + 4);
+
+            }else {
+                 $("#div_L_color").css('width', $('#div_table').width() - 15);
+                 $("#div_V_color").css('width', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").width()) + 2);
+                 $("#div_C_color").css('width', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").width()) + 2);
+
+                 $("#div_L_color").css('height', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").height()) * 4 + 5);
+                 $("#div_C_color").css('height', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").height()) * 4 + 5);
+
+                 $("#div_department_V_color").css('width', ($("#table_score_department tr:nth-child(1) td:nth-child(1)").width()) + 2);
+
+                 $("#div_department_V_color").css('height', (($("#table_score_department tr:nth-child(1) td:nth-child(1)").height()) * ($('#table_score_department tr').length)) + 4);
+            }
+
+        }, 200);
+
+        $('#div_table').each(function(){$(this).data('slt',{sl:this.scrollLeft,st:this.scrollTop});}).scroll(function(){
+            var sl=this.scrollLeft,st=this.scrollTop,d=$(this).data('slt');
+            if(sl!=d.sl){
+                if(department_data_click_sign){
+                    $("#div_C_color").css('display', '');
+                    $("#div_V_color").css('display', '');
+                }else {
+                     $("#div_department_V_color").css('display','');
+                }
+                // 左右
+                 var top_1=$("#div_table").scrollTop();//获取滚动的距离
+                    var left = $("#div_table").scrollLeft();
+                    var trs = $("#div_table table tr");
+                    trs.each(function (i) {
+                        $(this).children().eq(0).css({
+                            "position": "relative",
+                            "top": "0px",
+                            "left": left,
+                            "background-color": "#ece8e8",
+                            "z-index":"6666"
+                        });
+                    });
+
+
+                    var trs_td1 = $("#table_body_team tr:nth-child(1) td:nth-child(1)");
+                    trs_td1.each(function (i) {
+                        $(this).css({
+                            "position": "relative",
+                            "top": top_1,
+                            "left": left,
+                            "background-color": "#ece8e8",
+                            "z-index":"999999"
+                        });
+                    });
+                    var trs_td2 = $("#table_body_team tr:nth-child(2) td:nth-child(1)");
+                    trs_td2.each(function (i) {
+                        $(this).css({
+                            "position": "relative",
+                            "top": top_1,
+                            "left": left,
+                            "background-color": "#ece8e8",
+                            "z-index":"999999"
+                        });
+                    });
+                    var trs_td3 = $("#table_body_team tr:nth-child(3) td:nth-child(1)");
+                    trs_td3.each(function (i) {
+                        $(this).css({
+                            "position": "relative",
+                            "top": top_1,
+                            "left": left,
+                            "background-color": "#ece8e8",
+                            "z-index":"999999"
+                        });
+                    });
+                    var trs_td4 = $("#table_body_team tr:nth-child(4) td:nth-child(1)");
+                    trs_td4.each(function (i) {
+                        $(this).css({
+                            "position": "relative",
+                            "top": top_1,
+                            "left": left,
+                            "background-color": "#ece8e8",
+                            "z-index":"999999"
+                        });
+                    });
+
+            }
+            if(st!=d.st){
+                    // 上下
+                    if(department_data_click_sign){
+                        $("#div_L_color").css('display', '');
+                        $("#div_C_color").css('display', '');
+                        $("#div_V_color").css('display', '');
+                    }
+                    var left_1 = $("#div_table").scrollLeft();
+
+                    var trs_666 = $("#div_table table tr");
+                    trs_666.each(function (i) {
+                        $(this).children().eq(0).css({
+                            "position": "relative",
+                            "top": "0px",
+                            "left": left_1,
+                            "background-color": "#ece8e8",
+                            "z-index":"6666"
+                        });
+                    });
+
+
+                    var top=$("#div_table").scrollTop();//获取滚动的距离
+                    var trs1=$("#table_score_team tr:nth-child(1)");//获取表格的所有tr
+                       trs1.each(function(i){//对每一个tr（每一行）进行处理
+                        //获得每一行下面的所有的td，然后选中下标为0的，即第一列，设置position为相对定位
+                        //相对于父div左边的距离为滑动的距离，然后设置个背景颜色，覆盖住后面几列数据滑动到第一列下面的情况
+                        //如果有必要也可以设置一个z-index属性
+                        $(this).children().css({"position":"relative","right": "0px","top": top, "z-index":"9999"});
+                    });
+                   var trs2=$("#table_score_team tr:nth-child(2)");//获取表格的所有tr
+                       trs2.each(function(i){//对每一个tr（每一行）进行处理
+                        //获得每一行下面的所有的td，然后选中下标为0的，即第一列，设置position为相对定位
+                        //相对于父div左边的距离为滑动的距离，然后设置个背景颜色，覆盖住后面几列数据滑动到第一列下面的情况
+                        //如果有必要也可以设置一个z-index属性
+                        $(this).children().css({"position":"relative","right": "0px","top": top, "z-index":"9999"});
+                    });
+
+                   var trs3=$("#table_score_team tr:nth-child(3)");//获取表格的所有tr
+                       trs3.each(function(i){//对每一个tr（每一行）进行处理
+                        //获得每一行下面的所有的td，然后选中下标为0的，即第一列，设置position为相对定位
+                        //相对于父div左边的距离为滑动的距离，然后设置个背景颜色，覆盖住后面几列数据滑动到第一列下面的情况
+                        //如果有必要也可以设置一个z-index属性
+                        $(this).children().css({"position":"relative","right": "0px","top": top, "z-index":"9999"});
+                    });
+
+                   var trs4=$("#table_score_team tr:nth-child(4)");//获取表格的所有tr
+                       trs4.each(function(i){//对每一个tr（每一行）进行处理
+                        //获得每一行下面的所有的td，然后选中下标为0的，即第一列，设置position为相对定位
+                        //相对于父div左边的距离为滑动的距离，然后设置个背景颜色，覆盖住后面几列数据滑动到第一列下面的情况
+                        //如果有必要也可以设置一个z-index属性
+                        $(this).children().css({"position":"relative","right": "0px","top": top, "z-index":"9999"});
+                    });
+
+                    $("#table_body_team tr:nth-child(1) td:nth-child(1)").css("background", "rgb(236, 236, 236)");
+                    $("#table_body_team tr:nth-child(2) td:nth-child(1)").css("background", "rgb(236, 236, 236)");
+                    $("#table_body_team tr:nth-child(3) td:nth-child(1)").css("background", "rgb(236, 236, 236)");
+                    $("#table_body_team tr:nth-child(4) td:nth-child(1)").css("background", "rgb(236, 236, 236)");
+                    $("#table_body_team tr:nth-child(1) td:nth-child(11)").css("background", "rgb(230, 206, 173)");
+
+                    $("#table_body_department tr:nth-child(1) td:nth-child(1)").css("background", "rgb(236, 236, 236)");
+                    $("#table_body_department tr:nth-child(2) td:nth-child(1)").css("background", "rgb(236, 236, 236)");
+                    $("#table_body_department tr:nth-child(3) td:nth-child(1)").css("background", "rgb(236, 236, 236)");
+                    $("#table_body_department tr:nth-child(4) td:nth-child(1)").css("background", "rgb(236, 236, 236)");
+                    $("#table_body_department tr:nth-child(1) td:nth-child(10)").css("background", "rgb(230, 206, 173)");
+
+                    var trs_td1_1 = $("#table_body_team tr:nth-child(1) td:nth-child(1)");
+                    trs_td1_1.each(function (i) {
+                        $(this).css({
+                            "position": "relative",
+                            "top": top,
+                            "left": left,
+                            "background-color": "#ece8e8",
+                            "z-index":"999999"
+                        });
+                    });
+
+                    var trs_td2_2 = $("#table_body_team tr:nth-child(2) td:nth-child(1)");
+                    trs_td2_2.each(function (i) {
+                        $(this).css({
+                            "position": "relative",
+                            "top": top,
+                            "left": left,
+                            "background-color": "#ece8e8",
+                            "z-index":"999999"
+                        });
+                    });
+                    var trs_td3_3 = $("#table_body_team tr:nth-child(3) td:nth-child(1)");
+                    trs_td3_3.each(function (i) {
+                        $(this).css({
+                            "position": "relative",
+                            "top": top,
+                            "left": left,
+                            "background-color": "#ece8e8",
+                            "z-index":"999999"
+                        });
+                    });
+                    var trs_td4_4 = $("#table_body_team tr:nth-child(4) td:nth-child(1)");
+                    trs_td4_4.each(function (i) {
+                        $(this).css({
+                            "position": "relative",
+                            "top": top,
+                            "left": left,
+                            "background-color": "#ece8e8",
+                            "z-index":"999999"
+                        });
+                    });
+
+                   // 部级
+                 var trs_td2_1_1 = $("#table_score_department tr:nth-child(1) td:nth-child(1)");
+                    trs_td2_1_1.each(function (i) {
+                        $(this).css({
+                            "position": "relative",
+                            "top": top,
+                            "left": left,
+                            "background-color": "#ece8e8",
+                            "z-index":"999999"
+                        });
+                    });
+
+                    var trs_td2_2_1 = $("#table_score_department tr:nth-child(2) td:nth-child(1)");
+                    trs_td2_2_1.each(function (i) {
+                        $(this).css({
+                            "position": "relative",
+                            "top": top,
+                            "left": left,
+                            "background-color": "#ece8e8",
+                            "z-index":"999999"
+                        });
+                    });
+                    var trs_td2_3_1 = $("#table_score_department tr:nth-child(3) td:nth-child(1)");
+                    trs_td2_3_1.each(function (i) {
+                        $(this).css({
+                            "position": "relative",
+                            "top": top,
+                            "left": left,
+                            "background-color": "#ece8e8",
+                            "z-index":"999999"
+                        });
+                    });
+                    var trs_td2_4_1 = $("#table_score_department tr:nth-child(4) td:nth-child(1)");
+                    trs_td2_4_1.each(function (i) {
+                        $(this).css({
+                            "position": "relative",
+                            "top": top,
+                            "left": left,
+                            "background-color": "#ece8e8",
+                            "z-index":"999999"
+                        });
+                    });
+
+            }
+            $(this).data('slt',{sl:sl,st:st});///
+
+             var scrollHeight =$('#div_table').scrollTop();//滚动高度
+             var scrollWidth =$('#div_table').scrollLeft();//滚动宽度
+
+             if(scrollHeight == 0 && scrollWidth == 0) {
+
+                 $("#div_L_color").css('display', 'none');
+                 $("#div_C_color").css('display', 'none');
+                 $("#div_V_color").css('display', 'none');
+                 $("#div_department_V_color").css('display','none');
+
+                var trs_6 = $("#div_table table tr");
+                    trs_6.each(function (i) {
+                        if(i>4){
+                        $(this).children().eq(0).css({
+                            "position": "",
+                            "top": "",
+                            "left": "",
+                        });
+                        }
+                    });
+
+                var trs11=$("#div_table table tr:nth-child(1)");//获取表格的所有tr
+                       trs11.each(function(i){//对每一个tr（每一行）进行处理
+                        //获得每一行下面的所有的td，然后选中下标为0的，即第一列，设置position为相对定位
+                        //相对于父div左边的距离为滑动的距离，然后设置个背景颜色，覆盖住后面几列数据滑动到第一列下面的情况
+                        //如果有必要也可以设置一个z-index属性
+                        $(this).children().css({"position":"","right": "","top": ""});
+                    });
+                   var trs12=$("#div_table table tr:nth-child(2)");//获取表格的所有tr
+                       trs12.each(function(i){//对每一个tr（每一行）进行处理
+                        //获得每一行下面的所有的td，然后选中下标为0的，即第一列，设置position为相对定位
+                        //相对于父div左边的距离为滑动的距离，然后设置个背景颜色，覆盖住后面几列数据滑动到第一列下面的情况
+                        //如果有必要也可以设置一个z-index属性
+                        $(this).children().css({"position":"","right": "","top": ""});
+                    });
+
+                   var trs13=$("#div_table table tr:nth-child(3)");//获取表格的所有tr
+                       trs13.each(function(i){//对每一个tr（每一行）进行处理
+                        //获得每一行下面的所有的td，然后选中下标为0的，即第一列，设置position为相对定位
+                        //相对于父div左边的距离为滑动的距离，然后设置个背景颜色，覆盖住后面几列数据滑动到第一列下面的情况
+                        //如果有必要也可以设置一个z-index属性
+                        $(this).children().css({"position":"","right": "","top": ""});
+                    });
+
+                   var trs14=$("#div_table table tr:nth-child(4)");//获取表格的所有tr
+                       trs14.each(function(i){//对每一个tr（每一行）进行处理
+                        //获得每一行下面的所有的td，然后选中下标为0的，即第一列，设置position为相对定位
+                        //相对于父div左边的距离为滑动的距离，然后设置个背景颜色，覆盖住后面几列数据滑动到第一列下面的情况
+                        //如果有必要也可以设置一个z-index属性
+                       $(this).children().css({"position":"","right": "","top": ""});
+                    });
+
+
+                    var trs_td1_1_1 = $("#table_body_team tr:nth-child(1) td:nth-child(1)");
+                    trs_td1_1_1.each(function (i) {
+                        $(this).css({
+                            "position": "relative",
+                            "top": "",
+                            "left": left,
+                            "background-color": "#ece8e8",
+                            "z-index":"999999"
+                        });
+                    });
+                    var trs_td2_2_2 = $("#table_body_team tr:nth-child(2) td:nth-child(1)");
+                    trs_td2_2_2.each(function (i) {
+                        $(this).css({
+                            "position": "relative",
+                            "top": "",
+                            "left": left,
+                            "background-color": "#ece8e8",
+                            "z-index":"999999"
+                        });
+                    });
+                    var trs_td3_3_3 = $("#table_body_team tr:nth-child(3) td:nth-child(1)");
+                    trs_td3_3_3.each(function (i) {
+                        $(this).css({
+                            "position": "relative",
+                            "top": "",
+                            "left": left,
+                            "background-color": "#ece8e8",
+                            "z-index":"999999"
+                        });
+                    });
+                    var trs_td4_4_4 = $("#table_body_team tr:nth-child(4) td:nth-child(1)");
+                    trs_td4_4_4.each(function (i) {
+                        $(this).css({
+                            "position": "relative",
+                            "top": "",
+                            "left": left,
+                            "background-color": "#ece8e8",
+                            "z-index":"999999"
+                        });
+                    });
+
+            }
+
+        })
+
+
+    });
+    // 部级
+    $("#department_data").click(function () {
+         $('.td_Tips').css('width', '20%');
+         $('.team_right_tip').css('display', "");
+         $('.department_right_tip').css('display', "none");
+        var team_total = (parseFloat($('#hr_percentagedepartment').html())+parseFloat($('#proposal_percentagedepartment').html())*((parseFloat($('#percentage_1department').html()))/100))+((parseFloat($('#exceed_expected_percentagedepartment').html()) + parseFloat($('#idl_percentagedepartment').html()))*((parseFloat($('#percentage_1department').html()))/100))+((parseFloat($('#duty_work_percentagedepartment').html()) + parseFloat($('#over_10_5_time_percentagedepartment').html())+ parseFloat($('#night_work_percentagedepartment').html())+ parseFloat($('#travel_abroad_percentagedepartment').html())+parseFloat($('#travel_cn_percentagedepartment').html())+parseFloat($('#leave_percentagedepartment').html()))*((parseFloat($('#percentage_1department').html()))/100))+(parseFloat($('#task_force_percentagedepartment').html()));
+        $('.top_left_1').val(($('#proposal_percentagedepartment').html())+'*'+($('#percentage_1department').html()));
+        $('.top_left_2').val((parseFloat($('#exceed_expected_percentagedepartment').html()) + parseFloat($('#idl_percentagedepartment').html()))+'%*'+($('#percentage_1department').html()));
+        $('.top_left_3').val((parseFloat($('#duty_work_percentagedepartment').html()) + parseFloat($('#over_10_5_time_percentagedepartment').html())+ parseFloat($('#night_work_percentagedepartment').html())+ parseFloat($('#travel_abroad_percentagedepartment').html())+parseFloat($('#travel_cn_percentagedepartment').html())+parseFloat($('#leave_percentagedepartment').html()))+'%*'+($('#percentage_1department').html()));
+        $('.top_left_4').val(($('#task_force_percentagedepartment').html()));
+        $('.top_left_5').val($('#hr_percentagedepartment').html());
+        $('.top_left_0').val(team_total+"%");
+        department_data_click_sign=false;
+        $("#div_V_color").css('display', 'none');
+        $("#div_C_color").css('display', 'none');
+        $("#div_L_color").css('display', 'none');
+         var scrollWidth =$('#div_table').scrollLeft();//滚动宽度
+
+         if(scrollWidth != 0) {
+             $("#div_department_V_color").css('display', '');
+         }
+        setTimeout(function () {
+            if(current_size==100) {
+                $("#div_department_V_color").css('width', ($("#table_score_department tr:nth-child(1) td:nth-child(1)").outerWidth()) + 2);
+
+                $("#div_department_V_color").css('height', (($("#table_score_department tr:nth-child(1) td:nth-child(1)").outerHeight()) * ($('#table_score_department tr').length)) + 4);
+                //$("#div_V_color").css('height', $("#table_score_team tr:nth-child(1) td:nth-child(1)").outerWidth())
+            }else if(100<current_size && current_size <125){
+                 $("#div_department_V_color").css('width', ($("#table_score_department tr:nth-child(1) td:nth-child(1)").width()) + 2);
+
+                $("#div_department_V_color").css('height', (($("#table_score_department tr:nth-child(1) td:nth-child(1)").height()) * ($('#table_score_department tr').length)) + 4);
+
+            }else if(125<=current_size){
+                $("#div_department_V_color").css('width', ($("#table_score_department tr:nth-child(1) td:nth-child(1)").outerWidth()) + 2);
+
+                $("#div_department_V_color").css('height', (($("#table_score_department tr:nth-child(1) td:nth-child(1)").outerHeight()) * ($('#table_score_department tr').length)) + 4);
+
+            }
+            else if(80 <= current_size && current_size <= 100){
+                $("#div_department_V_color").css('width', ($("#table_score_department tr:nth-child(1) td:nth-child(1)").width()) + 2);
+
+                $("#div_department_V_color").css('height', (($("#table_score_department tr:nth-child(1) td:nth-child(1)").height()) * ($('#table_score_department tr').length)) + 4);
+
+            }else if(67 < current_size && current_size <= 75){
+                 $("#div_department_V_color").css('width', ($("#table_score_department tr:nth-child(1) td:nth-child(1)").outerWidth()) + 2);
+
+                $("#div_department_V_color").css('height', (($("#table_score_department tr:nth-child(1) td:nth-child(1)").outerHeight()) * ($('#table_score_department tr').length)) + 4);
+
+            }else {
+                 $("#div_department_V_color").css('width', ($("#table_score_department tr:nth-child(1) td:nth-child(1)").width()) + 2);
+
+                $("#div_department_V_color").css('height', (($("#table_score_department tr:nth-child(1) td:nth-child(1)").height()) * ($('#table_score_department tr').length)) + 4);
+
+            }
+
+        },400)
+    });
+    // 科级
+     $("#team_data").click(function () {
+         // 課級
+         $('.td_Tips').css('width', '20%');
+        $('.team_right_tip').css('display', "none");
+        $('.department_right_tip').css('display', "");
+        var department_total = (parseFloat($('#proposal_percentage').html())*((parseFloat($('#percentage_1').html()))/100))+((parseFloat($('#exceed_expected_percentage').html()) + parseFloat($('#idl_percentage').html()))*((parseFloat($('#percentage_1').html()))/100))+((parseFloat($('#duty_work_percentage').html()) + parseFloat($('#over_10_5_time_percentage').html())+ parseFloat($('#night_work_percentage').html())+ parseFloat($('#travel_abroad_percentage').html())+parseFloat($('#travel_cn_percentage').html())+parseFloat($('#leave_percentage').html()))*((parseFloat($('#percentage_1').html()))/100))+(parseFloat($('#task_force_percentage').html()));
+
+        $('.top_left_1').val(($('#proposal_percentage').html())+'*'+($('#percentage_1').html()));
+        $('.top_left_2').val((parseFloat($('#exceed_expected_percentage').html()) + parseFloat($('#idl_percentage').html()))+'%*'+($('#percentage_1').html()));
+        $('.top_left_3').val((parseFloat($('#duty_work_percentage').html()) + parseFloat($('#over_10_5_time_percentage').html())+ parseFloat($('#night_work_percentage').html())+ parseFloat($('#travel_abroad_percentage').html())+parseFloat($('#travel_cn_percentage').html())+parseFloat($('#leave_percentage').html()))+'%*'+($('#percentage_1').html()));
+        $('.top_left_4').val($('#task_force_percentage').html());
+        $('.top_left_0').val(department_total+"%");
+         department_data_click_sign=true;
+          var scrollWidth =$('#div_table').scrollLeft();//滚动宽度
+
+         if(scrollWidth != 0) {
+             $("#div_V_color").css('display', '');
+             $("#div_C_color").css('display', '');
+             setTimeout(function () {
+                 var trs_td1_1 = $("#table_body_team tr:nth-child(1) td:nth-child(1)");
+                    trs_td1_1.each(function (i) {
+                        $(this).css({
+                            "position": "relative",
+                            "top": top,
+                            "left": left,
+                            "background-color": "#ece8e8",
+                            "z-index":"9999"
+                        });
+                    });
+
+                    var trs_td2_2 = $("#table_body_team tr:nth-child(2) td:nth-child(1)");
+                    trs_td2_2.each(function (i) {
+                        $(this).css({
+                            "position": "relative",
+                            "top": top,
+                            "left": left,
+                            "background-color": "#ece8e8",
+                            "z-index":"9999"
+                        });
+                    });
+                    var trs_td3_3 = $("#table_body_team tr:nth-child(3) td:nth-child(1)");
+                    trs_td3_3.each(function (i) {
+                        $(this).css({
+                            "position": "relative",
+                            "top": top,
+                            "left": left,
+                            "background-color": "#ece8e8",
+                            "z-index":"9999"
+                        });
+                    });
+                    var trs_td4_4 = $("#table_body_team tr:nth-child(4) td:nth-child(1)");
+                    trs_td4_4.each(function (i) {
+                        $(this).css({
+                            "position": "relative",
+                            "top": top,
+                            "left": left,
+                            "background-color": "#ece8e8",
+                            "z-index":"9999"
+                        });
+                    });
+             },300)
+
+         }
+         $("#div_department_V_color").css('display', 'none');
+
+        setTimeout(function () {
+         if(current_size==100) {
+             $("#div_L_color").css('width', $('#div_table').outerWidth() - 15);
+             $("#div_V_color").css('width', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").outerWidth()) + 2);
+             $("#div_C_color").css('width', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").outerWidth()) + 2);
+
+             $("#div_L_color").css('height', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").outerHeight()) * 4 + 5);
+             //$("#div_V_color").css('height', $("#table_score_team tr:nth-child(1) td:nth-child(1)").outerWidth())
+             $("#div_C_color").css('height', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").outerHeight()) * 4 + 5);
+         }else if(100<current_size && current_size <125){
+              $("#div_L_color").css('width', $('#div_table').width() - 15);
+              $("#div_V_color").css('width', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").width()) + 2);
+              $("#div_C_color").css('width', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").width()) + 2);
+
+              $("#div_L_color").css('height', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").height()) * 4 + 5);
+              //$("#div_V_color").css('height', $("#table_score_team tr:nth-child(1) td:nth-child(1)").outerWidth())
+              $("#div_C_color").css('height', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").height()) * 4 + 5);
+         }else if(125<=current_size){
+              $("#div_L_color").css('width', $('#div_table').outerWidth() - 15);
+              $("#div_V_color").css('width', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").outerWidth()) + 2);
+              $("#div_C_color").css('width', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").outerWidth()) + 2);
+
+              $("#div_L_color").css('height', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").outerHeight()) * 4 + 5);
+              //$("#div_V_color").css('height', $("#table_score_team tr:nth-child(1) td:nth-child(1)").outerWidth())
+              $("#div_C_color").css('height', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").outerHeight()) * 4 + 5);
+         }
+         else if(80 <= current_size && current_size <= 100){
+             $("#div_L_color").css('width', $('#div_table').width() - 15);
+             $("#div_V_color").css('width', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").width()) + 2);
+             $("#div_C_color").css('width', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").width()) + 2);
+
+             $("#div_L_color").css('height', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").height()) * 4 + 5);
+             //$("#div_V_color").css('height', $("#table_score_team tr:nth-child(1) td:nth-child(1)").outerWidth())
+             $("#div_C_color").css('height', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").height()) * 4 + 5);
+         }else if(67 < current_size && current_size <= 75){
+            $("#div_L_color").css('width', $('#div_table').outerWidth() - 15);
+             $("#div_V_color").css('width', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").outerWidth()) + 2);
+             $("#div_C_color").css('width', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").outerWidth()) + 2);
+
+             $("#div_L_color").css('height', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").outerHeight()) * 4 + 5);
+             //$("#div_V_color").css('height', $("#table_score_team tr:nth-child(1) td:nth-child(1)").outerWidth())
+             $("#div_C_color").css('height', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").outerHeight()) * 4 + 5);
+
+         }else {
+             $("#div_L_color").css('width', $('#div_table').width() - 15);
+              $("#div_V_color").css('width', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").width()) + 2);
+              $("#div_C_color").css('width', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").width()) + 2);
+
+              $("#div_L_color").css('height', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").height()) * 4 + 5);
+              //$("#div_V_color").css('height', $("#table_score_team tr:nth-child(1) td:nth-child(1)").outerWidth())
+              $("#div_C_color").css('height', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").height()) * 4 + 5);
+         }
+        },500)
+    });
+
+
+    function selectAll(checkbox) {
+            $('input[type=checkbox]').prop("checked", $(checkbox).prop('checked'))
+        }
+    /**************刪除選中******************/
+    function delete_checkbox(){
+        //jquery获取复选框值
+        var chk_value =[];//定义一个数组
+        $('input[type="checkbox"]:checked').each(function(){//遍历每一个名字为interest的复选框，其中选中的执行函数
+            chk_value.push($(this).val());//将选中的值添加到数组chk_value中
+        });
+        // 調用刪除
+        index = chk_value.indexOf("all");
+        // 剔除all
+        if(index != -1){
+            chk_value.splice(index, 1);
+        }
+        // 遍历删除
+        for(delete_i in chk_value){
+            $("input[value=" + chk_value[delete_i] + "]").parents('tr').remove();
+        }
+    }
+
+    function table_alignment() {
+        $('#oDivF_table_score_team table').css("width","");
+        $('#oDivF_table_score_team').css("width","");
+        var bety = true;
+        for(len_i=1,len=$('#oDivF_table_score_team table td').length;len_i<=len;len_i++){
+            if(detectZoom() == 100){
+
+                 if(len_i < 4){
+                    heard_width = $('#table_score_team tr:nth-child(1) td:nth-child(' + len_i + ')').outerWidth(true);
+                    try{
+                        if(parseInt(heard_width.toString().split(".")[1].split("")[0]) < 5 ){
+                            num_list = heard_width.toString().split(".")[1].split("");
+                            num_list.splice(0,1,"5");
+                            num_str = num_list.join('');
+                            heard_width = parseFloat(heard_width.toString().split(".")[0]+"."+num_str)
+                        }
+                    }catch (e) {
+
+                    }
+                    $('#oDivF_table_score_team table td:nth-child(' + len_i + ')').css("width", heard_width);
+                    continue
+                }
+                else if(len_i >= 4){
+
+                    heard_width =$('#table_score_team  tr:nth-child(5) td:nth-child(' + len_i + ')').outerWidth(true);
+
+                    if(heard_width.toString().split(".")[1]){
+                        if(parseInt(heard_width.toString().split(".")[1].split("")[0]) < 5 ){
+                                num_list = heard_width.toString().split(".")[1].split("");
+                                num_list.splice(0,1,"5");
+                                num_str = num_list.join('');
+                                heard_width = parseFloat(heard_width.toString().split(".")[0]+"."+num_str)
+                        }
+                    }
+
+                }
+                $('#oDivF_table_score_team table td:nth-child(' + len_i + ')').css("width", heard_width);
+            }else {
+
+                if(len_i < 4){
+                    heard_width = $('#table_score_team tr:nth-child(1) td:nth-child(' + len_i + ')').width();
+                    try{
+                        if(parseInt(heard_width.toString().split(".")[1].split("")[0]) < 5 ){
+                            num_list = heard_width.toString().split(".")[1].split("");
+                            num_list.splice(0,1,"5");
+                            num_str = num_list.join('');
+                            heard_width = parseFloat(heard_width.toString().split(".")[0]+"."+num_str)
+                        }
+                    }catch (e) {
+
+                    }
+                    $('#oDivF_table_score_team table td:nth-child(' + len_i + ')').css("width", heard_width);
+                    continue
+                }
+                else if(len_i >= 4){
+
+                    heard_width =$('#table_score_team  tr:nth-child(5) td:nth-child(' + len_i + ')').width();
+
+                    if(heard_width.toString().split(".")[1]){
+                        if(parseInt(heard_width.toString().split(".")[1].split("")[0]) < 5 ){
+                                num_list = heard_width.toString().split(".")[1].split("");
+                                num_list.splice(0,1,"5");
+                                num_str = num_list.join('');
+                                heard_width = parseFloat(heard_width.toString().split(".")[0]+"."+num_str)
+                        }
+                    }
+
+                }
+                $('#oDivF_table_score_team table td:nth-child(' + len_i + ')').css("width", heard_width);
+            }
+        }
+    }
+
+
+
+    function table_alignment_Size_100() {
+        $('#oDivF_table_score_team table').css("width","");
+        $('#oDivF_table_score_team').css("width","");
+        var bety = true;
+        for(len_i=1,len=$('#oDivF_table_score_team table td').length;len_i<=len;len_i++){
+            if(detectZoom() == 100){
+
+                 if(len_i < 4){
+                    heard_width = $('#table_score_team tr:nth-child(1) td:nth-child(' + len_i + ')').outerWidth(true);
+                    if(len_i == 1){
+                        heard_width = heard_width+1;
+                    }
+                    try{
+                        if(parseInt(heard_width.toString().split(".")[1].split("")[0]) < 5 ){
+                            num_list = heard_width.toString().split(".")[1].split("");
+                            num_list.splice(0,1,"5");
+                            num_str = num_list.join('');
+                            heard_width = parseFloat(heard_width.toString().split(".")[0]+"."+num_str)
+                        }
+                    }catch (e) {
+
+                    }
+                    $('#oDivF_table_score_team table td:nth-child(' + len_i + ')').css("width", heard_width);
+                    continue
+                }
+                else if(len_i >= 4){
+                    heard_width =$('#table_score_team  tr:nth-child(5) td:nth-child(' + len_i + ')').outerWidth(true);
+
+                    if(heard_width.toString().split(".")[1]){
+                        if(parseInt(heard_width.toString().split(".")[1].split("")[0]) < 5 ){
+                                num_list = heard_width.toString().split(".")[1].split("");
+                                num_list.splice(0,1,"5");
+                                num_str = num_list.join('');
+                                heard_width = parseFloat(heard_width.toString().split(".")[0]+"."+num_str)
+                        }
+                    }
+
+                }
+                $('#oDivF_table_score_team table td:nth-child(' + len_i + ')').css("width", heard_width);
+            }else {
+
+                if(len_i < 4){
+                    heard_width = $('#table_score_team tr:nth-child(1) td:nth-child(' + len_i + ')').outerWidth(true);
+                    try{
+                        if(parseInt(heard_width.toString().split(".")[1].split("")[0]) < 5 ){
+                            num_list = heard_width.toString().split(".")[1].split("");
+                            num_list.splice(0,1,"5");
+                            num_str = num_list.join('');
+                            heard_width = parseFloat(heard_width.toString().split(".")[0]+"."+num_str)
+                        }
+                    }catch (e) {
+
+                    }
+                    $('#oDivF_table_score_team table td:nth-child(' + len_i + ')').css("width", heard_width);
+                    continue
+                }
+                else if(len_i >= 4){
+                    heard_width =$('#table_score_team  tr:nth-child(5) td:nth-child(' + len_i + ')').outerWidth(true);
+
+                    if(heard_width.toString().split(".")[1]){
+                        if(parseInt(heard_width.toString().split(".")[1].split("")[0]) < 5 ){
+                                num_list = heard_width.toString().split(".")[1].split("");
+                                num_list.splice(0,1,"5");
+                                num_str = num_list.join('');
+                                heard_width = parseFloat(heard_width.toString().split(".")[0]+"."+num_str)
+                        }
+                    }
+
+                }
+                $('#oDivF_table_score_team table td:nth-child(' + len_i + ')').css("width", heard_width);
+            }
+        }
+    }
+
+    function table_alignment_Size() {
+        $('#oDivF_table_score_team table').css("width","");
+        $('#oDivF_table_score_team').css("width","");
+        var bety = true;
+        for(len_i=1,len=$('#oDivF_table_score_team table td').length;len_i<=len;len_i++){
+            if(detectZoom() == 100){
+
+                 if(len_i < 4){
+                    heard_width = $('#table_score_team tr:nth-child(1) td:nth-child(' + len_i + ')').width();
+                    try{
+                        if(parseInt(heard_width.toString().split(".")[1].split("")[0]) < 5 ){
+                            num_list = heard_width.toString().split(".")[1].split("");
+                            num_list.splice(0,1,"5");
+                            num_str = num_list.join('');
+                            heard_width = parseFloat(heard_width.toString().split(".")[0]+"."+num_str)
+                        }
+                    }catch (e) {
+
+                    }
+                    $('#oDivF_table_score_team table td:nth-child(' + len_i + ')').css("width", heard_width);
+                    continue
+                }
+                else if(len_i >= 4){
+                    heard_width =$('#table_score_team  tr:nth-child(5) td:nth-child(' + len_i + ')').width();
+
+                    if(heard_width.toString().split(".")[1]){
+                        if(parseInt(heard_width.toString().split(".")[1].split("")[0]) < 5 ){
+                                num_list = heard_width.toString().split(".")[1].split("");
+                                num_list.splice(0,1,"5");
+                                num_str = num_list.join('');
+                                heard_width = parseFloat(heard_width.toString().split(".")[0]+"."+num_str)
+                        }
+                    }
+
+                }
+                $('#oDivF_table_score_team table td:nth-child(' + len_i + ')').css("width", heard_width);
+            }else {
+
+                if(len_i < 4){
+                    heard_width = $('#table_score_team tr:nth-child(1) td:nth-child(' + len_i + ')').width();
+                    try{
+                        if(parseInt(heard_width.toString().split(".")[1].split("")[0]) < 5 ){
+                            num_list = heard_width.toString().split(".")[1].split("");
+                            num_list.splice(0,1,"5");
+                            num_str = num_list.join('');
+                            heard_width = parseFloat(heard_width.toString().split(".")[0]+"."+num_str)
+                        }
+                    }catch (e) {
+
+                    }
+                    $('#oDivF_table_score_team table td:nth-child(' + len_i + ')').css("width", heard_width);
+                    continue
+                }
+                else if(len_i >= 4){
+                    heard_width =$('#table_score_team  tr:nth-child(5) td:nth-child(' + len_i + ')').width();
+
+                    if(heard_width.toString().split(".")[1]){
+                        if(parseInt(heard_width.toString().split(".")[1].split("")[0]) < 5 ){
+                                num_list = heard_width.toString().split(".")[1].split("");
+                                num_list.splice(0,1,"5");
+                                num_str = num_list.join('');
+                                heard_width = parseFloat(heard_width.toString().split(".")[0]+"."+num_str)
+                        }
+                    }
+
+                }
+                $('#oDivF_table_score_team table td:nth-child(' + len_i + ')').css("width", heard_width);
+            }
+        }
+    }
+
+
+    //获取当前页面的缩放值
+    function detectZoom() {
+        var ratio = 0,
+            screen = window.screen,
+            ua = navigator.userAgent.toLowerCase();
+
+        if (window.devicePixelRatio !== undefined) {
+            ratio = window.devicePixelRatio;
+        }
+        else if (~ua.indexOf('msie')) {
+            if (screen.deviceXDPI && screen.logicalXDPI) {
+                ratio = screen.deviceXDPI / screen.logicalXDPI;
+            }
+        }
+        else if (window.outerWidth !== undefined && window.innerWidth !== undefined) {
+            ratio = window.outerWidth / window.innerWidth;
+        }
+
+        if (ratio) {
+            ratio = Math.round(ratio * 100);
+        }
+        return ratio;
+    };
+
+     $('#excelOut').click(function () {
+         // 判断当前显示科级还是部级
+         if($('#table_score_team').css('display') == 'none'){
+             tableToExcel('table_score_department', 'Sheet', '部級數據');
+         }else if($('#table_score_department').css('display') == 'none'){
+             tableToExcel('table_score_team', 'Sheet', '課級數據')
+         }
+
+     });
+
+    //base64转码
+    var base64 = function (s) {
+        return window.btoa(unescape(encodeURIComponent(s)));
+    };
+    //替换table数据和worksheet名字
+    var format = function (s, c) {
+        return s.replace(/{(\w+)}/g,
+            function (m, p) {
+                return c[p];
+            });
+    };
+
+    function tableToExcel(tableid, sheetName, excel_name) {
+        var uri = 'data:application/vnd.ms-excel;base64,';
+        var template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel"' +
+            'xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="UTF-8"><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet>'
+            + '<x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets>'
+            + '</x:ExcelWorkbook></xml><![endif]-->' +
+            ' <style type="text/css">' +
+            'table td {' +
+            'border: 1px solid #000000;' +
+            // 'width: 400px;' +
+            'height: 30px;' +
+            ' text-align: center;' +
+            // 'background-color: #4f891e;' +
+            'color: #000000;' + 'font-family: 微軟正黑體, Arial;'+
+            ' }' +
+            '</style>' +
+            '</head><body ><table class="excelTable">{table}</table></body></html>';
+        if (!tableid.nodeType) tableid = document.getElementById(tableid);
+        var table_str = tableid.innerHTML.replace(/<td .*display: none;.*td>/ig, "");
+        /*
+        // 增加一行增加一列
+        var tr_arr = table_str.split('<tr');
+        for (var i=0; i<tr_arr.length; i++){
+            if (i == 0){
+                tr_arr[i] += '<tr></tr>';
+			} else {
+                var td_arr = tr_arr[i].split('<td');
+                td_arr[0] += '<td></td>';
+                tr_arr[i] = td_arr.join('<td')
+			}
+		}
+		var new_table_str = tr_arr.join('<tr');
+		*/
+        var ctx = {worksheet: sheetName || 'Worksheet', table: table_str};
+        document.getElementById("excelOut").href = uri + base64(format(template, ctx));
+        // console.log(base64(format(template, ctx)));
+        //
+        var a = document.createElement("a");
+        a.href = uri + base64(format(template, ctx));
+        a.download = excel_name;
+        a.click()
+        // window.location.href= uri + base64(format(template, ctx));
+    }
+
+    function delay_table_alignment_Size() {
+         setTimeout(function () {
+                if(current_size==100){
+                    table_alignment_Size_100();
+                }else {
+                    table_alignment_Size()
+                }
+             $("#oDivF_table_score_team").css('width', ($('#div_table').outerWidth()-15));
+            }, 500);
+    }
+
+     // 聚焦回车事件
+    $("#table_score_team td").focus(function(){
+        if_focus = false;
+         sum_team(!if_focus);
+        $(document).keyup(function(event){
+              if(event.keyCode == 13){
+                //这里填写你要做的事件
+               sum_team(if_focus);
+              }
+              else if(event.keyCode == 9){
+                //这里填写你要做的事件
+               sum_team(if_focus);
+              }
+        });
+    })
+    ;$("#table_score_department td").focus(function(){
+        if_focus = false;
+         sum_team(!if_focus);
+        $(document).keyup(function(event){
+              if(event.keyCode == 13){
+                //这里填写你要做的事件
+               sum_team(if_focus);
+              }
+              else if(event.keyCode == 9){
+                //这里填写你要做的事件
+               sum_team(if_focus);
+              }
+        });
+    });
+    // 聚焦回车事件
+    $("#ipt_zjj").focus(function(){
+        if_focus = false;
+         sum_team(!if_focus);
+        $(document).keyup(function(event){
+              if(event.keyCode == 13){
+                //这里填写你要做的事件
+               sum_team(if_focus);
+              }
+              else if(event.keyCode == 9){
+                //这里填写你要做的事件
+               sum_team(if_focus);
+              }
+        });
+    });
+    $("#table_score_team td").blur(function(){
+        if_focus = true;
+        //响应事件
+        sum_team(!if_focus);
+        $(document).keyup(function(event){
+              if(event.keyCode == 13){
+                //这里填写你要做的事件
+                sum_team(if_focus);
+              }
+              else if(event.keyCode == 9){
+               //这里填写你要做的事件
+               sum_team(if_focus);
+              }
+        });
+    });
+    $("#table_score_department td").blur(function(){
+        if_focus = true;
+        //响应事件
+        sum_team(!if_focus);
+        $(document).keyup(function(event){
+              if(event.keyCode == 13){
+                //这里填写你要做的事件
+                sum_team(if_focus);
+              }
+              else if(event.keyCode == 9){
+               //这里填写你要做的事件
+               sum_team(if_focus);
+              }
+        });
+    });
+     $("#ipt_zjj").blur(function(){
+        if_focus = true;
+         sum_team(!if_focus);
+        $(document).keyup(function(event){
+              if(event.keyCode == 13){
+                //这里填写你要做的事件
+                sum_team(if_focus);
+              }
+              else if(event.keyCode == 9){
+               //这里填写你要做的事件
+               sum_team(if_focus);
+              }
+        });
+    });
+
+  $("#table_score_team tr:nth-child(1)").each(function () {
+        $(this).children().unbind('mouseover')
+    });
+   $("#table_score_team tr:nth-child(2)").each(function () {
+        $(this).children().unbind('mouseover')
+    });
+    $("#table_score_team tr:nth-child(3)").each(function () {
+        $(this).children().unbind('mouseover')
+    });
+     $("#table_score_team tr:nth-child(4)").each(function () {
+        $(this).children().unbind('mouseover')
+    });
+
+     $("#table_score_department tr:nth-child(1)").each(function () {
+        $(this).children().unbind('mouseover')
+    });
+   $("#table_score_department tr:nth-child(2)").each(function () {
+        $(this).children().unbind('mouseover')
+    });
+    $("#table_score_department tr:nth-child(3)").each(function () {
+        $(this).children().unbind('mouseover')
+    });
+     $("#table_score_department tr:nth-child(4)").each(function () {
+        $(this).children().unbind('mouseover')
+    });
+</script>
+
+</html>
