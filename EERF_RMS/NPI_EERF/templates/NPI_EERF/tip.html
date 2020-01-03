@@ -1,0 +1,76 @@
+
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Title</title>
+</head>
+<style>
+    html, body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        background: url("{% static 'NPI_EERF/img/tip.jpg' %}") no-repeat;
+        background-size: 100% 100%;
+        -ms-filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='{% static 'NPI_EERF/img/tip.jpg' %}', sizingMethod='scale');
+        filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='{% static 'NPI_EERF/img/tip.jpg' %}', sizingMethod='scale');
+    }
+
+    #center {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        margin: auto;
+        height: 220px;
+        width: 50%;
+        background: #403a38;
+        border-radius: 6px;
+        opacity: 0.9;
+    }
+
+    #h2_tip {
+        text-align: center;
+        font-size: 2rem;
+        font-family: Arial;
+        color: #f2eff3;
+        display: inline-block;
+        background: #ca3e3e;
+        padding: 1%;
+        border-radius: 6px;
+    }
+
+    #p_word {
+        font-size: 1.5em;
+        font-weight: 700;
+        font-family: 微软雅黑;
+        color: #e6e6e6;
+        margin: 0;
+    }
+
+    #div_p_word {
+        margin-top: 5%;
+        height: 110px;
+        width: 100%;
+        text-align: center;
+    }
+</style>
+<body>
+<div id="center">
+    <div style="text-align: center;height: 100px;"><h2 id="h2_tip">Tip</h2></div>
+    <hr style="margin: 0;">
+    <div id="div_p_word"><p id="p_word">本系統暫不支持IE瀏覽器,請使用谷歌瀏覽器(Google Chrome).</p>
+    
+    </div>
+</div>
+</body>
+</html>
