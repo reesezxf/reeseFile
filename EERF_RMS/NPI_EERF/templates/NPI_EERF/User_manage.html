@@ -1,0 +1,265 @@
+<!--
+    作者：Hsiao
+    时间：2018-01-31
+    描述：EERF Management System_index
+-->
+<!DOCTYPE html>
+<html>
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <link rel="shortcut icon"  href="{% static 'NPI_EERF/img/favicon.ico' %}" >
+    <title>EERF Management UnitsPower</title>
+    <link rel="stylesheet" href="{% static 'NPI_EERF/css/amazeui.min.css' %}"/>
+    <script type="text/javascript" src="{% static 'NPI_EERF/js/jquery-3.2.1.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'NPI_EERF/js/amazeui.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'NPI_EERF/js/ifvisible.js' %}"></script>
+    <script type="text/javascript" src="{% static 'NPI_EERF/js/js.cookie.js' %}"></script>
+    <script type="text/javascript">
+        document.write("<link rel=\"stylesheet\" href=\"{% static 'NPI_EERF/css/style.css?v="+Math.random()+"' %}\">");
+        document.write("<script language=\"javascript\" type=\"text/javascript\" src=\"{% static 'NPI_EERF/js/WebData.js?v="+Math.random()+"' %}\"><\/script>");
+    </script>
+</head>
+<body>
+<header style="height: 5rem;width: 100%;padding: 0;margin:0;background:#4c5e51;line-height: 5rem;">
+    <img id="header_logo" class="am-img-responsive" src="{% static 'NPI_EERF/img/header_logo.png' %}"
+         style="padding-left: 0.5rem;">
+    <a id="return_home" href="{% url 'NPI_EERF:index' %}"><i class="am-icon-home am-icon-md"></i></a>
+    <p id="admin_word"><i class="am-icon-user am-icon-sm"></i>&nbsp;您好,admin</p>
+</header>
+
+<!--chart绘图-->
+<div class="am-g doc-am-g" id="user_manage">
+    <div class="am-u-lg10 am-u-sm-10 am-u-lg-offset-1 am-u-sm-offset-1" id="user_manage_con">
+        <p id="search_user">*用户信息查询</p>
+        <div id="search1" class="am-u-lg-6 am-u-sm-6">
+            <div id="search" class="am-input-group">
+                <input id="search_ip" type="text" class="am-form-field am-round" placeholder="请输入工号">
+                <span id="search_btn" class="am-input-group-label am-round"><i class="am-icon-search"></i></span>
+            </div>
+        </div>
+
+        <div class="am-u-lg-12 am-u-sm-12" id="user_tab">
+            <p id="user_infor">用户信息</p>
+            <div class="am-u-lg-12 am-u-sm-12" id="user_tab_con">
+
+                <button id="confirm" type="button" class="am-btn am-btn-success am-round">&nbsp;<i
+                        class="am-icon-check"></i>确认&nbsp;
+                </button>
+                <button id="delete" type="button" class="am-btn am-btn-danger am-round">&nbsp;<i
+                        class="am-icon-trash "></i>删除&nbsp;
+                </button>
+                <button id="add" type="button" class="am-btn am-btn-primary am-round">&nbsp;<i class="am-icon-plus"></i>增加&nbsp;
+                </button>
+                <table id="user_infor_tab" class="am-table am-table-bordered am-table-striped am-text-nowrap">
+                    <thead>
+                    <tr>
+                        <th>工号</th>
+                        <th>姓名</th>
+                        <th>密码</th>
+                        <th>权限</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/javascript">
+    // 查询 修改用户
+    var search_ip = $("#search_ip");
+    window.first_value = "";
+
+    $("#search_btn").click(function () {
+        console.log("fff_", window.first_value);
+        $("#add").css("display", "none");
+        $("#add").attr("disabled", true);
+        var search_value = $("#search_ip").val();
+        var message = "search";
+
+        if (window.first_value == search_value) {
+            $("#search_btn").attr("disabled", true);
+            alert("搜索的用户已存在!!!");
+            return false;
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "/user_manage_ajax/",
+            data: {"message": message, "search_value": search_value},
+            dataType: "json",
+            success: function (info) {
+                if (info.id != undefined) {
+                    window.first_value = search_value;
+                    if (info.adduser == "") {
+                        $("#user_infor_tab").append("<tr><td name=\"id_td\">" + info.id + "</td><td name=\"cname_td\">" + info.cname + "</td><td name=\"pwd_td\" contenteditable=\"true\">" + info.pwd + "</td><td name=\"chmod_td\" contenteditable=\"true\">" + info.chmod + "</td></tr>");
+
+                    } else if (info.adduser == "add") {
+                        $("#user_infor_tab").append("<tr><td name=\"id_td\"><input value=\"" + info.id + "\" type=\"checkbox\">" + info.id + "</td><td name=\"cname_td\">" + info.cname + "</td><td name=\"pwd_td\" contenteditable=\"true\">" + info.pwd + "</td><td name=\"chmod_td\" contenteditable=\"true\">" + info.chmod + "</td></tr>");
+                    }
+                } else {
+                    alert("not found");
+                }
+            },
+            error: function () {
+                console.log("user manage fail....");
+            }
+        });
+        $("#confirm").click(function () {
+            $("#add").css("display", "block");
+            $("#add").attr("disabled", false);
+            var message = "update";
+            var id_ele = document.getElementsByName("id_td");
+            var cname_ele = document.getElementsByName("cname_td");
+            var pwd_ele = document.getElementsByName("pwd_td");
+            var chmod_ele = document.getElementsByName("chmod_td");
+            var id_value = "", cname_value = "", pwd_value = "", chmod_value = "";
+
+            for (var k = 0; k < id_ele.length; k++) {
+                if ($(id_ele[k]).text() != "") {
+                    id_value += $(id_ele[k]).text() + "_";
+                } else {
+                    alert("请输入工号!!!");
+                    return false;
+                }
+                if ($(cname_ele[k]).text() != "") {
+                    cname_value += $(cname_ele[k]).text() + "_";
+                } else {
+                    alert("请输入姓名!!!");
+                    return false;
+                }
+                if ($(pwd_ele[k]).text() != "") {
+                    pwd_value += $(pwd_ele[k]).text() + "_";
+                } else {
+                    alert("请输入密码!!!");
+                    return false;
+                }
+                if ($(chmod_ele[k]).text() != "") {
+                    chmod_value += $(chmod_ele[k]).text() + "_";
+                } else {
+                    alert("请输入权限!!!");
+                    return false;
+                }
+
+            }
+            $.ajax({
+                type: "POST",
+                url: "/user_manage_ajax/",
+                data: {"message": message, "id_value": id_value, "pwd_value": pwd_value, "chmod_value": chmod_value},
+                dataType: "json",
+                success: function (data) {
+                    alert("修改成功");
+                    location.reload();
+                },
+                error: function () {
+                    alert("修改失败");
+                }
+
+            });
+        });
+
+    });
+    //增加用户
+    $("#add").click(function () {
+        $("#search").css("display", "none");
+        $("#search_user").css("display", "none");
+        $("#user_infor_tab").append("<tr><td contenteditable=\"true\" name=\"id_td\"></td><td contenteditable=\"true\" name=\"cname_td\"></td><td name=\"pwd_td\" contenteditable=\"true\"></td><td name=\"chmod_td\"><select name=\"chmod_sel\"><option>" + "admin" + "</option><option>" + "user" + "</option></select></td></tr>");
+
+        var message = "add";
+        $("#confirm").click(function () {
+            var id_td = document.getElementsByName("id_td");
+            var cname_td = document.getElementsByName("cname_td");
+            var pwd_td = document.getElementsByName("pwd_td");
+            var chmod_sel = document.getElementsByName("chmod_sel");
+            var id_value = "", cname_value = "", pwd_value = "", chmod_value = "";
+            for (var i = 0; i < id_td.length; i++) {
+                if ($(id_td[i]).text() != "") {
+                    id_value += $(id_td[i]).text() + "_";
+                } else {
+                    alert("请输入工号!!!");
+                    return false;
+                }
+                if ($(cname_td[i]).text() != "") {
+                    cname_value += $(cname_td[i]).text() + "_";
+                } else {
+                    alert("请输入姓名!!!");
+                    return false;
+                }
+                if ($(pwd_td[i]).text() != "") {
+                    pwd_value += $(pwd_td[i]).text() + "_";
+                } else {
+                    alert("请输入密码!!!");
+                    return false;
+                }
+
+                chmod_value += $(chmod_sel[i]).val() + "_";
+            }
+            {#console.log("id_value__", chmod_value);#}
+            $.ajax({
+                type: "POST",
+                url: "/user_manage_ajax/",
+                data: {
+                    "message": message,
+                    "id_value": id_value,
+                    "cname_value": cname_value,
+                    "pwd_value": pwd_value,
+                    "chmod_value": chmod_value
+                },
+                dataType: "json",
+                success: function (data) {
+                    console.log("state_list :", data);
+                    if (data.length == 0) {
+                        alert("添加成功");
+                        location.reload();
+                    } else {
+                        for (var i = 0; i < data.length; i++) {
+                            alert("工号：" + data[i] + " 已存在");
+                        }
+                    }
+
+                },
+                error: function () {
+                    alert("添加失败！！！");
+                    {#console.log("add failed...");#}
+                }
+            });
+        });
+
+    });
+    //删除用户
+    $("#delete").click(function () {
+        var message = "delete";
+        var checkbox_list = $("table#user_infor_tab :checked");
+        if (checkbox_list.length > 0) {
+            var del_id = "";
+            for (var i = 0; i < checkbox_list.length; i++) {
+                del_id += checkbox_list[i].value + "_";
+            }
+            $.ajax({
+                type: "POST",
+                url: "/user_manage_ajax/",
+                data: {"message": message, "del_id": del_id},
+                dataType: "json",
+                success: function (data) {
+                    console.log("delete complete");
+                    alert("删除成功!!!");
+                    location.reload();
+                },
+                error: function () {
+                    alert("删除失败！！！");
+                    console.log("delete failed...");
+                }
+            });
+        } else {
+            alert("no checkbox");
+        }
+
+    });
+</script>
+</html>
