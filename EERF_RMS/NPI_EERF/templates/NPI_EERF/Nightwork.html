@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html>
+<head>
+	{% load static %}
+	<meta charset="UTF-8">
+	<meta name="viewport"
+		  content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <link rel="shortcut icon"  href="{% static 'NPI_EERF/img/favicon.ico' %}" >
+	<title>EERF Management Nightwork</title>
+	<link rel="stylesheet" href="{% static 'NPI_EERF/css/amazeui.min.css' %}"/>
+	<script type="text/javascript" src="{% static 'NPI_EERF/js/jquery-3.2.1.min.js' %}"></script>
+	<script type="text/javascript" src="{% static 'NPI_EERF/js/ifvisible.js' %}"></script>
+	<script type="text/javascript" src="{% static 'NPI_EERF/js/js.cookie.js' %}"></script>
+	<script type="text/javascript" src="{% static 'NPI_EERF/js/amazeui.min.js' %}"></script>
+	<script type="text/javascript" src="{% static 'NPI_EERF/js/highstock.js' %}"></script>
+	<script type="text/javascript" src="{% static 'NPI_EERF/js/series-label.js' %}"></script>
+	<script type="text/javascript" src="{% static 'NPI_EERF/js/drilldown.js' %}"></script>
+	<script type="text/javascript" src="{% static 'NPI_EERF/js/exporting.js' %}"></script>
+	<script type="text/javascript" src="{% static 'NPI_EERF/js/offline-exporting.js' %}"></script>
+	<script type="text/javascript">
+        document.write("<link rel=\"stylesheet\" href=\"{% static 'NPI_EERF/css/style.css?v="+Math.random()+"' %}\">");
+        document.write("<script language=\"javascript\" type=\"text/javascript\" src=\"{% static 'NPI_EERF/js/html2canvas.js?v="+Math.random()+"' %}\"><\/script>");
+        document.write("<script language=\"javascript\" type=\"text/javascript\" src=\"{% static 'NPI_EERF/js/WebData.js?v="+Math.random()+"' %}\"><\/script>");
+	</script>
+    <style>
+        @media screen and (width: 1280px) and (max-height: 800px) and (min-height: 601px) {
+            #big-box {
+                height: 90%;
+            }
+        }
+        @media screen and (width: 1280px) and (max-height: 600px) {
+            #nightwork_column_chart {
+                height: 84%;
+            }
+        }
+		#test_click{
+			height: 10px;
+			width: 10px;
+			float: right;
+    		padding-right: 1.1rem;
+		}
+
+    </style>
+</head>
+<body>
+<header style="height: 5rem;width: 100%;padding: 0;margin:0;background:#2a8fbd;line-height: 5rem;">
+	<img id="header_logo" class="am-img-responsive" src="{% static 'NPI_EERF/img/header_logo.png' %}">
+	<a id="return_home" href="{% url 'NPI_EERF:index' %}"><i class="am-icon-home am-icon-md"></i></a>
+    <a id="headerPicture" class="chart_container" href="#"><i class="am-icon-camera am-icon-sm"></i></a>
+    <a id="test_click" href="#"></a>
+</header>
+<div class="am-g doc-am-g" id="container">
+	<nav data-am-widget="menu" class="am-menu  am-menu-offcanvas1" data-am-menu-offcanvas>
+		<a href="javascript: void(0)" class="am-menu-toggle">
+			<i class="am-menu-toggle-icon am-icon-bars" style="font-size: 3rem;"></i>
+		</a>
+		<div class="am-offcanvas">
+			<div class="am-offcanvas-bar">
+				<ul class="am-menu-nav am-avg-sm-1">
+					<li id="user_logo_content">
+						<img id="users_logo" class="am-img-responsive" src="{% static 'NPI_EERF/img/users.png' %}">
+						<p id="user_name" class="am-center">{{ user_cname }} {{ user_authority }}</p>
+					</li>
+					<li class="">
+						<a href="{% url 'NPI_EERF:overtimework' %}" class=""><i class="am-icon-clock-o am-icon-sm"></i>超時加班時數</a>
+					</li>
+					<li class="">
+						<a href="{% url 'NPI_EERF:overwork' %}" class=""><i
+								class="am-icon-calendar-plus-o am-icon-sm"></i>工作超時人數</a>
+					</li>
+					<li class="am-active">
+						<a href="{% url 'NPI_EERF:nightwork' %}" class=""><i class="am-icon-moon-o am-icon-sm"></i>晚點下班人數</a>
+					</li>
+					<li class="">
+						<a href="{% url 'NPI_EERF:eveningtrips' %}" class=""><i
+								class="am-icon-user-plus am-icon-sm"></i>晚班天數</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+</div>
+<!--chart绘图-->
+<div class="am-g doc-am-g" id="chart_container">
+
+
+    <div class="am-u-lg-3" id="search_con1">
+            <div class="am-input-group am-input-group-round">
+                        <span class="am-input-group-btn am-round">
+                            <button class="am-btn am-btn-primary" type="button"><span class="am-icon-list am-round"></span></button>
+                        </span>
+                <select id="select_search1" data-am-selected="{btnWidth: '100%'}">
+                    <option value="six">准點下班</option>
+                    <option value="do">加班</option>
+                    <option value="re">工作超過9小時</option>
+                    <option value="mi">工作超過9.5小時</option>
+                    <option value="fa" selected>工作超過10小時</option>
+                    <option value="so">工作超過10.5小時</option>
+                    <option value="la">工作超過11小時</option>
+                    <option value="xi">工作超過11.5小時</option>
+                </select>
+            </div>
+        </div>
+
+    <div id="Frame">
+
+        <div id="left_but">
+            <button id="bagbtn" type="button" class="am-btn am-btn-primary am-round ">
+                <i id="icon_count" class="am-icon-minus"></i>
+            </button>
+            <div id="choice">
+                <button id="all_mans" type="button" class="am-btn am-btn-primary am-round">總人數</button>
+                <button id="average_mans" type="button" class="am-btn am-btn-success am-round">平均天數</button>
+                <button id="percent" type="button" class="am-btn am-btn-success am-round">天数比例</button>
+            </div>
+        </div>
+
+        <div id="big-box">
+            <div class="am-u-md-12 am-u-lg-12" id="nightwork_column_chart"></div>
+            <div class="am-u-md-12 am-u-lg-12" id="search_chart_contain">
+
+            <div id="button_con" class="am-u-md-12 am-u-lg-12">
+
+                <button id="off_search_chart_contain">
+                    <img class="am-img-responsive" src="{% static 'NPI_EERF/img/offset.png' %}">
+                </button>
+                <!--  -->
+                <div id="check_div" class="check_label">
+                    <input class="check_legend" type="checkbox"><label for="check_all">取消選取全部</label>
+                </div>
+            </div>
+            <div class="am-u-md-12 am-u-lg-12" id="nightwork_line_chart"></div>
+        </div>
+
+            <div class="am-u-md-12 am-u-lg-12" id="section_search_chart_contain">
+
+            <div id="button_con" class="am-u-md-12 am-u-lg-12">
+
+                <button id="off_search_chart_contain_section">
+                    <img class="am-img-responsive" src="{% static 'NPI_EERF/img/offset.png' %}">
+                </button>
+                <div id="check_div_copy" class="check_label">
+                    <input class="check_legend" type="checkbox"><label for="check_all">取消選取全部</label>
+                </div>
+            </div>
+            <div class="am-u-md-12 am-u-lg-12" id="section_nightwork_line_chart"></div>
+        </div>
+        </div>
+    </div>
+
+</div>
+<div style="display:block;z-index:-100;position: fixed;">
+    <table class="am-table am-table-bordered am-table-radius am-table-striped am-table-centered am-text-nowrap">
+        <thead>
+            <tr>
+                <th>Leader</th>
+                <th>加班</th>
+                <th>同比上月</th>
+            </tr>
+        </thead>
+        <tbody id="downLoadTable">
+            
+        </tbody>
+    </table>
+</div>
+
+<!--模态框-->
+<div class="am-modal am-modal-alert" tabindex="-1" id="nightwork_modal">
+	<div class="am-modal-dialog" id="modal_nightwork">
+		<div class="am-modal-hd" id="nightwork_caption">
+			<span id="Time"></span>
+			<span id="Leader"></span>
+			<span id="Title">晚点下班详细信息</span>
+			<a id="close_logo_nightwork" href="javascript: void(0)" class="am-closunitssettinge am-close-spin"
+			   data-am-modal-close="">×</a>
+		</div>
+		<div class="am-modal-bd">
+			<table id="specific_nightwork_tab"
+				   class="am-table am-table-bordered am-table-radius am-table-striped am-table-centered am-text-nowrap">
+				<!-- <caption id="lizhi_caption">離職清單</caption> -->
+				<thead>
+				<tr>
+					<th>工號</th>
+					<th>姓名</th>
+					<th name="a_maxlastcard" class="nightwork_th_bac">最晚下班时间</th>
+					<th name="a_avglastcard" class="nightwork_th_bac">平均下班时间</th>
+					<th name="a_totalhours" class="nightwork_th_bac">總工作時时间</th>
+					<th name="a_totaldays" class="nightwork_th_bac">工作天數</th>
+					<th name="a_avghours" class="nightwork_th_bac">平均工作時间</th>
+					<th name="a_maxhours" class="nightwork_th_bac">最大工作時间</th>
+					<th name="a_offduty" class="nightwork_th_bac">準點下班天數</th>
+					<th name="a_unoffduty" class="nightwork_th_bac">非準點下班天數</th>
+                    <th name="a_offdutyper" class="nightwork_th_bac">準點百分比</th>
+					<th name="a_unoffdutyper" class="nightwork_th_bac">非準點百分比</th>
+				</tr>
+				</thead>
+				<tbody id="nightwork_tab">
+				</tbody>
+			</table>
+		</div>
+
+	</div>
+</div>
+<script type="text/javascript">
+    $("#headerPicture").click(function () {
+        if ($("#search_chart_contain").css("display") === "block" || $("#section_search_chart_contain").css("display") === "block"){
+             $('.highcharts-range-selector-group text').css("fontSize", "12px");
+        }
+    });
+
+    var greaterthanLeaderDict = {{ greth_leader_dic|safe }};
+    var AllLeaders = {{ AllLeaders|safe }};
+	var avg_greth_leader_data = {{ avg_greth_leader_data|safe }};
+    var percentageData = {{ percentageData|safe }};
+
+    var greaterthanSectionDict = {{ greth_section_dic|safe }};
+    var AllSections = {{ AllSections|safe }};
+	var avg_greth_section_data = {{ avg_greth_section_data|safe }};
+    var percentageDataSection = {{ percentageData_section|safe }};
+
+    //选择nightwork页面的下拉框选项触发该函数
+    function select_option_nightWork(data, sectionData, yAxisTitle) {
+        //获取下拉框的id
+        var selectedEle = $("#select_search1");
+        // 获取选择框的 index
+		var iii = document.getElementById("select_search1").selectedIndex;
+		// 通过selectedIndex 获取 text
+
+		drawChart_nightwork(iii, data, sectionData, yAxisTitle);
+        selectedEle.on("change", function () {
+            // console.log('this.selectedIndex:',this.selectedIndex);
+            drawChart_nightwork(this.selectedIndex, data, sectionData, yAxisTitle);
+        });
+    }
+
+    // 封装nightwork页面绘图的函数
+    function drawChart_nightwork(num, data, sectionData,yAxisTitle) {
+        // 获得 highcharts 绘图所需要的数据格式
+        var selectedNum = num; //[6, 6, 7.5, 8, 8.5, 9, 9.5, 10] 看选择哪个时段
+        var totalDataList = [];
+        var seriesDataList = [];
+        var sectionDataList = [];
+        var sectionRankDataDict = [];
+        var rankDataDict = {};
+        for (var l = 0; l < AllLeaders.length; l++) {
+            rankDataDict[AllLeaders[l]] = "";
+        }
+
+        /********************部级数据****************************/
+        for (keys in data) {
+            var totalSeriesNeedData = [];
+            var series_need_data = [];
+            for (var i = 0; i < data[keys].length; i++) {
+                var thisDateNum = Date.parse(new Date(data[keys][i][0]));
+                var oldDateNum = Date.parse(new Date("2018-01-31"));
+                data[keys][i] = [Date.parse(new Date(data[keys][i][0])), data[keys][i][1]];
+                var thisList = data[keys][i];   // [1520179200000, Array(7)]
+                var tempList = [];
+                tempList.push(thisList[0]);   // 时间
+                tempList.push(thisList[1][selectedNum]);   // 改时间点的数据
+                totalSeriesNeedData.push(tempList);
+                if (thisDateNum >= oldDateNum) {
+                    series_need_data.push(tempList);
+                }
+            }
+            var tempObj = {
+                name: keys,
+                data: series_need_data
+            };
+            //seriesDataList.push(tempObj);
+            totalDataList.push(totalSeriesNeedData);
+            rankDataDict[keys] = tempObj;
+        }
+        // console.log("seriesDataList:",seriesDataList);
+        for (leader in rankDataDict) {
+            var this_obj = rankDataDict[leader];
+            seriesDataList.push(this_obj);
+        }
+
+         /********************科级数据****************************/
+        for (keys in sectionData) {
+            var sectionTotalSeriesNeedData = [];
+            var sectionSeriesNeedData = [];
+            for (var i = 0; i < sectionData[keys].length; i++) {
+                var thisDataNum_Section = Date.parse(new Date(sectionData[keys][i][0]));
+                var oldDateNum = Date.parse(new Date("2018-01-31"));
+                sectionData[keys][i] = [Date.parse(new Date(sectionData[keys][i][0])), sectionData[keys][i][1]];
+                var thisList_Section = sectionData[keys][i];   // [1520179200000, Array(7)]
+                var tempSectionList = [];
+                tempSectionList.push(thisList_Section[0]);   // 时间
+                tempSectionList.push(thisList_Section[1][selectedNum]);   // 改时间点的数据
+                sectionTotalSeriesNeedData.push(tempSectionList);
+                if (thisDataNum_Section >= oldDateNum) {
+                    sectionSeriesNeedData.push(tempSectionList);
+                }
+            }
+            var tempSectionObj = {
+                name: keys,
+                data: sectionSeriesNeedData
+            };
+            //seriesDataList.push(tempSectionObj);
+            {#totalDataList.push(sectionTotalSeriesNeedData);#}
+            sectionRankDataDict[keys] = tempSectionObj;
+        }
+        // console.log("seriesDataList:",seriesDataList);
+        for (section_leader in sectionRankDataDict) {
+            var section_thisObj = sectionRankDataDict[section_leader];
+            sectionDataList.push(section_thisObj);
+        }
+
+
+
+        var totalSeriesDataList = [];
+        var totalSeriesTimeList = [];
+        var totalSeriesList = [];
+        var totalSeriesNeedData = [];
+        for (var i = 0; i < totalDataList.length; i++) {
+            // console.log("i:",i,"--",totalDataList[i]);
+            var this_data_list = [];
+            for (var k = 0; k < totalDataList[i].length; k++) {
+                this_data_list.push(totalDataList[i][k][1]);  // 该时间点的数据
+                if (totalSeriesTimeList.length != totalDataList[i].length) {
+                    totalSeriesTimeList.push(totalDataList[i][k][0]);  // 时间
+                }
+            }
+			// console.log('this_data_list:',this_data_list);
+            if (totalSeriesDataList.length == 0) {
+                totalSeriesDataList = this_data_list;
+            } else {
+                for (var l = 0; l < totalSeriesDataList.length; l++) {
+                    totalSeriesDataList[l] = totalSeriesDataList[l] + this_data_list[l];
+                }
+            }
+        }
+        // console.log('totalSeriesDataList:',totalSeriesDataList);
+        for (var j = 0; j < totalSeriesTimeList.length; j++) {
+            // 点击 平均天数时 柱状图 数据应该除以 leader数量
+			if (yAxisTitle == '人數(人)') {
+			    var avg_num = totalSeriesDataList[j];
+			}else {
+			    var avg_num = totalSeriesDataList[j] / AllLeaders.length;
+			};
+
+            var tempList = [totalSeriesTimeList[j], Math.round(avg_num*100)/100];
+            totalSeriesNeedData.push(tempList);
+        }
+
+        var selected_text = document.getElementById("select_search1").options[selectedNum].text;
+        var chart_name = '';
+        var chart_title = '';
+        if (yAxisTitle == '天數(天)'){
+            if (selectedNum == 0 || selectedNum == 1){
+                chart_name = 'EERF平均'+ selected_text+'天數';
+            	chart_title = 'EERF平均'+ selected_text+'天數';
+			} else {
+                chart_name = 'EERF平均'+ selected_text+'下班天數';
+            	chart_title = 'EERF平均'+ selected_text+'下班天數';
+			};
+
+		} else if (yAxisTitle == '百分比(%)') {
+            chart_name = 'EERF'+ selected_text+'百分比(%)';
+            chart_title = 'EERF'+ selected_text+'百分比(%)';
+		} else {
+			if (selectedNum == 0 || selectedNum == 1){
+                chart_name = 'EERF'+ selected_text+'人數';
+            	chart_title = 'EERF'+ selected_text+'人數';
+			} else {
+                chart_name = 'EERF'+ selected_text+'下班人數';
+            	chart_title = 'EERF'+ selected_text+'下班人數';
+			};
+		}
+        var _total_obj = {
+            type: "column",
+            name: chart_name,
+            data: totalSeriesNeedData
+        };
+        totalSeriesList.push(_total_obj);
+        Nightwork_column_chart(totalSeriesList, seriesDataList, sectionDataList, yAxisTitle, chart_title);
+    }
+
+    select_option_nightWork(greaterthanLeaderDict, greaterthanSectionDict, "人數(人)");
+    // drawChart_nightwork(7,greaterthanLeaderDict);
+        var num=false;
+    $("#bagbtn").click(function(){
+        if (num) {
+            $("#left_but").css("display","inline-block");
+            $("#left_but").css("margin-top","1.1rem");
+            $('#all_mans').css('display','inline-block');
+            $('#average_mans').css('display','inline-block');
+            $('#percent').css('display','inline-block');
+            num=false;
+            $('#icon_count').attr('class','am-icon-minus');
+        }else{
+            $('#all_mans').css('display','none');
+            $('#average_mans').css('display','none');
+            $('#percent').css('display','none');
+            num=true;
+            $('#icon_count').attr('class','am-icon-plus');
+        }     
+    })
+    $('#all_mans').click(function(){
+        var content = $('#average_mans').text();
+            $(this).css('background','#0e90d2');
+            $(this).css('font-size','18px');
+            $(this).css('font-weight','700');
+            $(this).css('box-shadow','0px 0px 12px 4px #504545');
+            $('#percent').css('background','#5eb95e');
+            $('#average_mans').css('background','#5eb95e');
+            $('#percent').css('box-shadow','none');
+            $('#average_mans').css('box-shadow','none');
+            $('#percent').css('font-size','17px');
+            $('#average_mans').css('font-size','17px');
+            $('#percent').css('font-weight','normal');
+            $('#average_mans').css('font-weight','normal');
+            select_option_nightWork(greaterthanLeaderDict, greaterthanSectionDict,"人數(人)");
+    		// drawChart_nightwork(7,avg_greth_leader_data);#5eb95e
+    })
+    $('#average_mans').click(function(){
+            $(this).css('background','#0e90d2');
+            $(this).css('font-size','18px');
+            $(this).css('font-weight','700');
+            $(this).css('box-shadow','0px 0px 12px 4px #504545');
+            $('#percent').css('background','#5eb95e');
+            $('#all_mans').css('background','#5eb95e');
+            $('#percent').css('box-shadow','none');
+            $('#all_mans').css('box-shadow','none');
+            $('#percent').css('font-size','17px');
+            $('#all_mans').css('font-size','17px');
+            $('#percent').css('font-weight','normal');
+            $('#all_mans').css('font-weight','normal');
+            select_option_nightWork(avg_greth_leader_data, avg_greth_section_data, "天數(天)");
+    		// drawChart_nightwork(7,greaterthanLeaderDict);
+    })
+    $('#percent').click(function(){
+            $(this).css('background','#0e90d2');
+            $(this).css('box-shadow','0px 0px 12px 4px #504545');
+            $(this).css('font-size','18px');
+            $(this).css('font-weight','700');
+            $('#all_mans').css('background','#5eb95e');
+            $('#average_mans').css('background','#5eb95e');
+            $('#all_mans').css('box-shadow','none');
+            $('#average_mans').css('box-shadow','none');
+            $('#all_mans').css('font-size','17px');
+            $('#average_mans').css('font-size','17px');
+            $('#all_mans').css('font-weight','normal');
+            $('#average_mans').css('font-weight','normal');
+            select_option_nightWork(percentageData, percentageDataSection,"百分比(%)");
+            // drawChart_nightwork(7,greaterthanLeaderDict);
+    })
+</script>
+</body>
+</html>
