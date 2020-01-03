@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <link rel="shortcut icon"  href="{% static 'NPI_EERF/img/favicon.ico' %}" >
+    <title>EERF Management System_Power</title>
+    <link rel="stylesheet" href="{% static 'NPI_EERF/css/amazeui.min.css' %}"/>
+    <script type="text/javascript" src="{% static 'NPI_EERF/js/jquery-3.2.1.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'NPI_EERF/js/ifvisible.js' %}"></script>
+    <script type="text/javascript" src="{% static 'NPI_EERF/js/js.cookie.js' %}"></script>
+    <script type="text/javascript" src="{% static 'NPI_EERF/js/amazeui.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'NPI_EERF/js/highstock.js' %}"></script>
+    <script type="text/javascript" src="{% static 'NPI_EERF/js/drilldown.js' %}"></script>
+    <script type="text/javascript" src="{% static 'NPI_EERF/js/exporting.js' %}"></script>
+    <script type="text/javascript" src="{% static 'NPI_EERF/js/offline-exporting.js' %}"></script>
+    <script type="text/javascript">
+        document.write("<link rel=\"stylesheet\" href=\"{% static 'NPI_EERF/css/style.css?v="+Math.random()+"' %}\">");
+        document.write("<script language=\"javascript\" type=\"text/javascript\" src=\"{% static 'NPI_EERF/js/WebData.js?v="+Math.random()+"' %}\"><\/script>");
+    </script>
+</head>
+<body>
+<header style="height: 5rem;width: 100%;padding: 0;margin:0;background:linear-gradient(#30cfd0,#04a090);line-height: 5rem;">
+    <img id="header_logo" class="am-img-responsive" src="{% static 'NPI_EERF/img/header_logo.png' %}">
+    <a id="return_home" href="{% url 'NPI_EERF:index' %}"><i class="am-icon-home am-icon-md"></i></a>
+</header>
+<div class="am-g doc-am-g" id="container">
+    <nav data-am-widget="menu" class="am-menu  am-menu-offcanvas1" data-am-menu-offcanvas>
+        <a href="javascript: void(0)" class="am-menu-toggle">
+            <i class="am-menu-toggle-icon am-icon-bars" style="font-size: 3rem;"></i>
+        </a>
+        <div class="am-offcanvas">
+            <div class="am-offcanvas-bar">
+                <ul class="am-menu-nav am-avg-sm-1">
+                    <li id="user_logo_content">
+                        <img id="users_logo" class="am-img-responsive" src="{% static 'NPI_EERF/img/users.png' %}">
+                        <p id="user_name" class="am-center">{{ user_cname }} {{ user_authority }}</p>
+                    </li>
+                    <li class="">
+                        <a href="{% url 'NPI_EERF:power' %}" class=""><i class="am-icon-crosshairs am-icon-sm"></i>实时人力状况</a>
+                    </li>
+                    <li class="am-active">
+                        <a href="{% url 'NPI_EERF:historypower' %}" class=""><i
+                                class="am-icon-line-chart am-icon-sm"></i>历史趋势</a>
+                    </li>
+                    <li class="">
+                        <a href="{% url 'NPI_EERF:unitspower' %}" class=""><i class="am-icon-user-plus am-icon-sm"></i>编制人力</a>
+                    </li>
+                    <li class="">
+                        <a href="{% url 'NPI_EERF:recruit' %}" class=""><i class="am-icon-edit  am-icon-sm"></i>招募状况</a>
+                    </li>
+                    <li class="">
+                        <a href="{% url 'NPI_EERF:dimission' %}" class=""><i class="am-icon-user-times am-icon-sm"></i>离职状况</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</div>
+<!--chart绘图-->
+<div class="am-g doc-am-g" id="chart_container">
+    <div id="Frame">
+        <div class="am-u-md-12 am-u-lg-12" id="search_chart_contain">
+            <div id="button_con" class="am-u-md-12 am-u-lg-12">
+                <button id="off_search_chart_contain" class="highcharts-drillup-button"><img class="am-img-responsive"
+                                                                                             src="{% static 'NPI_EERF/img/offset.png' %}">
+                </button>
+            </div>
+        </div>
+        <div class="am-u-md-12 am-u-lg-12" id="historypower_line_chart"></div>
+    </div>
+</div>
+</body>
+<script type="text/javascript" src="{% static 'NPI_EERF/js/WebData.js' %}"></script>
+<script type="text/javascript">
+
+    allYearsData = {{all_years_data|safe}};
+    //console.log('allYearsData:',allYearsData);
+    var allFixed = [], allTotal = [];
+    for (var x = 0; x < allYearsData.length; x++) {
+        var eachYearList = allYearsData[x];
+        for (var y = 0; y < eachYearList.length; y++) {
+            var eachMonthDict = eachYearList[y];
+            var thisFixed = eachMonthDict.fixed;
+            var thisMonth = eachMonthDict.month;
+            var thisTotal = eachMonthDict.total;
+            var thisYear = eachMonthDict.year;
+            var thisYearTimeStr = "'" + thisYear + "-" + thisMonth + "-06";
+            var thisYearTime = Date.parse(new Date(thisYearTimeStr));
+            var eachFixedList = [], eachTotalList = [];
+            eachFixedList.push(thisYearTime);
+            eachFixedList.push(thisFixed);
+            eachTotalList.push(thisYearTime);
+            eachTotalList.push(thisTotal);
+            allFixed.push(eachFixedList);
+            allTotal.push(eachTotalList);
+        }
+    }
+    var allSeriesList = [];
+    var fixedObj = {
+        name: "固定人力",
+        color: "#990076",
+        data: allFixed
+    };
+    var totalObj = {
+        name: "总人力(固定+支援)",
+        color: "#15bae2",
+        data: allTotal
+    };
+    allSeriesList.push(fixedObj);
+    allSeriesList.push(totalObj);
+    draw_chart4(allSeriesList);
+</script>
+</html>
