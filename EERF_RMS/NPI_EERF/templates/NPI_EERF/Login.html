@@ -1,0 +1,105 @@
+<!--
+	作者：Hsiao
+	时间：2018-01-30
+	描述：EERF Management System_login
+-->
+<!DOCTYPE html>
+<html>
+
+<head>
+    {% load static %}
+    <meta charset="utf-8"/>
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no"/>
+    <link rel="shortcut icon"  href="{% static 'NPI_EERF/img/favicon.ico' %}" >
+    <title>EERF Management System-Login</title>
+    <link rel="stylesheet" href="{% static 'NPI_EERF/css/amazeui.min.css' %} "/>
+    <script type="text/javascript" src="{% static 'NPI_EERF/js/jquery-3.2.1.min.js' %} "></script>
+    <script type="text/javascript" src="{% static 'NPI_EERF/js/amazeui.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'NPI_EERF/js/WebData.js' %}"></script>
+    <script type="text/javascript">
+        document.write("<link rel=\"stylesheet\" href=\"{% static 'NPI_EERF/css/style.css?v="+Math.random()+"' %}\">");
+    </script>
+    <script type="text/javascript" >
+    if (window.ActiveXObject) {
+        location.href = "{% url 'NPI_EERF:tip' %}?IE";
+    }
+</script>
+</head>
+
+<body id="body_login">
+<div class="am-g" id="form_con">
+    <img id="login_logo" src="{% static 'NPI_EERF/img/login-logo.png' %}" class="am-img-responsive"
+         alt="EERF Management System"/>
+    <!--<img id="title_logo" src="img/title.png" class="am-img-responsive" alt="EERF Management System">-->
+    <div class="am-u-lg-6 am-u-md-8 am-u-sm-centered">
+
+        <form method="post" class="am-form">
+            {% csrf_token %}
+            <div class="am-form-group am-form-icon" id="name_con">
+                <i class="am-icon-user am-icon-sm"></i>
+                <input id="login_name" type="text" class="am-form-field" name="username" placeholder="请输入工号">
+                <span id="user_pass">
+                            {% if user_is_wrong %}
+                                <p style="font-size:13px;color:#F00;text-align:center;">账号不存在</p>
+                            {% endif %}
+                        </span>
+            </div>
+            <div class="am-form-group am-form-icon" id="pass_con">
+                <i class="am-icon-lock am-icon-sm"></i>
+                <input id="login_pass" type="password" class="am-form-field" name="password" placeholder="请输入密码">
+                <span id="pwd_pass">
+                            <span id="pwd_error">
+                                {% if pwd_is_wrong %}
+                                    <p style="font-size:13px;color:#F00;text-align:center;">密码错误</p>
+                                {% endif %}
+                                {% if authority == False %}
+                                    <p style="font-size:13px;color:#F00;text-align:center;">权限不足</p>
+                                {% endif %}
+                            </span>
+                        </span>
+            </div>
+
+            <div class="am-form-group am-form-icon" id="change_name_con">
+                <i id="icon_gh" class="am-icon-user am-icon-sm"></i>
+                <input type="text" class="am-form-field" id="update_username" placeholder="请输入工号">
+                <span id="gh"
+                      style="color: #f8f8f8;display: none;margin: 0;background-color: #dd514c;text-align: center;border-radius: 15px;">请输入工号!!</span>
+            </div>
+            <div class="am-form-group am-form-icon" id="change_pass_con1">
+                <i id="icon_jmm" class="am-icon-lock am-icon-sm"></i>
+                <input type="password" class="am-form-field" id="old_pwd" placeholder="请输入旧密码">
+                <span id="jmm"
+                      style="color: #f8f8f8;display: none;margin: 0;background-color: #dd514c;text-align: center;border-radius: 15px;">请输入旧密码!!</span>
+            </div>
+            <div class="am-form-group am-form-icon" id="change_pass_con2">
+                <i id="icon_xmm" class="am-icon-lock am-icon-sm"></i>
+                <input type="password" id="new_pwd" class="am-form-field" placeholder="请输入新密码">
+                <span id="xmm"
+                      style="color: #f8f8f8;display: none;margin: 0;background-color: #dd514c;text-align: center;border-radius: 15px;">请输入新密码!!</span>
+            </div>
+
+            <div class="am-form-group">
+                <div id="check_box" class="am-u-sm-offset-2 am-u-sm-10">
+                    <div class="checkbox">
+                        <label>
+                            <input id="change_pass" type="checkbox"> 修改密码
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div id="login_btn" class="am-cf">
+                <button id="submit_btn" type="submit" class="am-btn am-btn-default am-round">
+                    登&nbsp;&nbsp;&nbsp;&nbsp;录
+                </button>
+                <button id="confirm_pass_btn" type="button" class="am-btn am-btn-default am-round">确&nbsp;&nbsp;&nbsp;&nbsp;定</button>
+            </div>
+        </form>
+
+    </div>
+</div>
+<p id="vision_num">© V2.00(20181005.08) Copyright © NPI-EERF FATP-SW All Rights Reserved.</p>
+<div id="cover" class="cover"></div>
+</body>
+
+</html>
