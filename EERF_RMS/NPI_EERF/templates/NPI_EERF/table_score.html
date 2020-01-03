@@ -152,7 +152,7 @@
       }
         #table_score_team_left ul li input{
             width: 12%;
-            font-size: 1px;
+            font-size: 11px;
             text-align: center;
             font-weight:700;
       }
@@ -171,7 +171,7 @@
       }
         #table_score_department_left ul li input{
             width: 12%;
-            font-size: 1px;
+            font-size: 11px;
             text-align: center;
             font-weight:700;
       }
@@ -234,10 +234,10 @@
   }
       @media screen and (min-width: 1370px) and (max-width: 1800px) {
         .team_right_tip{
-          font-size: 2rem;
+          font-size: 1.6rem;
           line-height: 3.6rem;
         }.department_right_tip{
-          font-size: 2rem;
+          font-size: 1.6rem;
           line-height: 3.6rem;
         }
           #therighttip div span{
@@ -317,7 +317,9 @@
               width: 11%;
           }
       }
-
+        .tip_bottom ul li input{
+           font-size: 11px;
+        }
     </style>
 </head>
 <body ng-app="app" ng-controller="ctrl" style="background: whitesmoke;">
@@ -470,7 +472,7 @@
 </div>
 <div class="common" id="zl">
     <h3 style="text-align: center;margin: 0;font-family: 微软雅黑;color: #d0cbca;">專利得分*n</h3>
-    <img class="img_common" src="../../static/NPI_EERF/img/專利得分.png"
+    <img class="img_common" src="../../static/NPI_EERF/img/專利得分xN.png"
          alt="">
 </div>
 <div class="common" id="Total03">
@@ -549,7 +551,7 @@
          alt="">
 </div>
 <div class="container" style="width: 100%;height: 92.3%;margin-top: 0.5%;">
-    <div class="" id="div_table" style="height: 83%">
+    <div class="" id="div_table">
 {#    <table class=" table-hover" id="table_score" border="1">#}
 
 
@@ -703,7 +705,7 @@
                             <td style="background: white;color: #1986dc;font-weight: 700;" class="attendance_percentagedepartment" id="{{ leader_bonus.team_id }}_attendance_percentagedepartment"></td>
                             <td style="display: none;background: white;color: #DD0CC2;font-weight: 700;" class="teamloadingdepartment" id="{{ leader_bonus.team_id }}_teamloadingdepartment">departmrnt_loading</td>
                             <td style="background: white" class="total_percentagedepartment" id="{{ leader_bonus.team_id }}_total_percentagedepartment"></td>
-                            <td  style="background: #cedfef" class="task_force_numdepartment" id="{{ leader_bonus.team_id }}_task_force_numdepartment" {% if leader_bonus.leader == "Shirley" %}contenteditable="true"{% endif %}>{{ leader_bonus.task_force }}</td>
+                            <td  style="background: white" class="task_force_numdepartment" id="{{ leader_bonus.team_id }}_task_force_numdepartment" {% if leader_bonus.leader == "Shirley" %}contenteditable="true"{% endif %}>{{ leader_bonus.task_force }}</td>
                             <td style="background: white" style="color: #1986dc;font-weight: 700;" class="task_force_pointdepartment" id="{{ leader_bonus.team_id }}_task_force_pointdepartment"></td>
                             <td  style="width: 150px;background:  white;" class="all_totaldepartment" id="{{ leader_bonus.team_id }}_all_totaldepartment"></td>
                             <td  style="width: 150px;background:  white;"  id="{{ leader_bonus.team_id }}_all_total_moneydepartment">0</td>
@@ -777,7 +779,7 @@
 {#                        <td style="background: #c38a86;color: white;font-weight: 700;">HR</td>#}
                         <td colspan="9" style="background: #e0c097">智權提案項目</td>
                         <td colspan="4" style="background: #d8aa6d">客戶評價 年中</td>
-                        <td colspan="16" style="background: #bd9969">加班 & 晚班 & 出差 & 離職率</td>
+                        <td colspan="13" style="background: #bd9969">加班 & 晚班 & 出差 & 離職率</td>
                         <td rowspan="3" colspan="2" style="line-height: 90px;color:#eceaea;background: #6d6663;font-size: 25px;">Task force</td>
                         <td rowspan="3" colspan="2" style="line-height: 90px;background: #f5eedc;font-size: 30px;color: #d63333;font-size: 50px;">Total</td>
                         <td rowspan="3" colspan="2"style="display: none;line-height: 90px;background: #f1f1f1;font-size: 30px;color: #e08d13;font-size: 25px;">個人分配金額</td>
@@ -791,7 +793,7 @@
                         <td style="background: #ececec"></td>
                         <td style="background: #ececec"></td>
 {#                        <td contenteditable="true" style="background: #229e93;color: white;font-weight: 700;">0%</td>#}
-                        <td colspan="29" style="background:#229e93" id="percentage_1" contenteditable="true">{{ bp_per.bp_otherper_t }}</td>
+                        <td colspan="26" style="background:#229e93" id="percentage_1" contenteditable="true">{{ bp_per.bp_otherper_t }}</td>
                         <td rowspan="2" style="width: 160px;background: #e6cead;line-height: 57px;">關務違規部門吸收</td>
                         <td rowspan="2" style="width: 160px;background: #e6cead;line-height: 57px;">英孚未達標</td>
                     </tr>
@@ -820,12 +822,12 @@
                         <td style="background: #bd9969">Team 月均晚班天次</td>
                         <td style="background: #bd9969">Team 每人月均晚班天次</td>
                         <td style="background: #bd9969">國外出差天次</td>
-                        <td style="background: #bd9969">人均國外出差天次</td>
+                        <td style="display:none;background: #bd9969">人均國外出差天次</td>
                         <td style="background: #bd9969">國內出差天次</td>
-                        <td style="background: #bd9969">人均國內出差天次</td>
+                        <td style="display:none;background: #bd9969">人均國內出差天次</td>
                         <td style="background: #bd9969" colspan='3'>離職</td>
                         <td style="background: #bd9969;line-height: 60px;" rowspan='2'>佔比</td>
-                        <td style="background: #bd9969;line-height: 60px;" rowspan='2'>TeamLoading</td>
+                        <td style="display:none;background: #bd9969;line-height: 60px;" rowspan='2'>TeamLoading</td>
                         <td style="background: #ecc99a;line-height: 60px;" rowspan='2'>Total</td>
                     </tr>
                     <tr >
@@ -853,9 +855,9 @@
                         <td contenteditable="true" style="background: #4db5ac" id="night_work_percentage">{{ bp_per.bp_night_t }}</td>
                         <td style="background: #ececec;"></td>
                         <td contenteditable="true" style="background: #4db5ac" id="travel_abroad_percentage">{{ bp_per.bp_travel_abroad_t }}</td>
-                        <td style="background: #ececec;"></td>
+                        <td style="display:none;background: #ececec;"></td>
                         <td contenteditable="true" style="background: #4db5ac" id="travel_cn_percentage">{{ bp_per.bp_travel_cn_t }}</td>
-                        <td style="background: #ececec;"></td>
+                        <td style="display:none;background: #ececec;"></td>
                         <td style="background: #ececec;">離職率</td>
                         <td style="background: #ececec;">離職率得分</td>
                         <td style="background:  #4db5ac;" contenteditable="true" id="leave_percentage">{{ bp_per.bp_leave_t }}</td>
@@ -896,16 +898,16 @@
                             <td style="background: white;" class="night_work" id="{{ leader_bonus.team_id }}_night_work">{{ leader_bonus.night_work }}</td>
                             <td style="background: white;color: #DD0CC2;font-weight: 700;" class="night_work_hc" id="{{ leader_bonus.team_id }}_night_work_hc">{{ leader_bonus.night_work_hc }}</td>
                             <td style="background: white;" class="travel_abroad" id="{{ leader_bonus.team_id }}_travel_abroad">{{ leader_bonus.travel_abroad }}</td>
-                            <td style="background: white;color: #DD0CC2;font-weight: 700;" class="travel_abroad_hc" id="{{ leader_bonus.team_id }}_travel_abroad_hc">{{ leader_bonus.travel_abroad_hc }}</td>
+                            <td style="display:none;background: white;color: #DD0CC2;font-weight: 700;" class="travel_abroad_hc" id="{{ leader_bonus.team_id }}_travel_abroad_hc">{{ leader_bonus.travel_abroad_hc }}</td>
                             <td style="background: white;" class="travel_cn" id="{{ leader_bonus.team_id }}_travel_cn">{{ leader_bonus.travel_cn }}</td>
-                            <td style="background: white;color: #DD0CC2;font-weight: 700;" class="travel_cn_hc" id="{{ leader_bonus.team_id }}_travel_cn_hc">{{ leader_bonus.travel_cn_hc }}</td>
+                            <td style="display:none;background: white;color: #DD0CC2;font-weight: 700;" class="travel_cn_hc" id="{{ leader_bonus.team_id }}_travel_cn_hc">{{ leader_bonus.travel_cn_hc }}</td>
                             <td style="background: white;">{{ leader_bonus.leave_prob }}%</td>
                             <td class="leave_point" id="{{ leader_bonus.team_id }}_leave_point">{{ leader_bonus.leave_prob_point }}</td>
                             <td style="background: white;color: #1986dc;font-weight: 700;" class="dimission_percentage" id="{{ leader_bonus.team_id }}_dimission_percentage"></td>
                             <td style="background: white;color: #1986dc;font-weight: 700;" class="attendance_percentage" id="{{ leader_bonus.team_id }}_attendance_percentage"></td>
-                            <td style="background: white;color: #DD0CC2;font-weight: 700;" class="teamloading" id="{{ leader_bonus.team_id }}_teamloading">teamloading</td>
+                            <td style="display:none;background: white;color: #DD0CC2;font-weight: 700;" class="teamloading" id="{{ leader_bonus.team_id }}_teamloading">teamloading</td>
                             <td style="background: white;" class="total_percentage" id="{{ leader_bonus.team_id }}_total_percentage"></td>
-                            <td contenteditable="true" style="background: white;color: #000000" class="task_force_num" id="{{ leader_bonus.team_id }}_task_force_num">{{ leader_bonus.task_force }}</td>
+                            <td style="background: white;color: #000000" class="task_force_num" id="{{ leader_bonus.team_id }}_task_force_num">{{ leader_bonus.task_force }}</td>
                             <td style="background: white;color: #1986dc;font-weight: 700;" class="task_force_point" id="{{ leader_bonus.team_id }}_task_force_point"></td>
                             <td  style="width: 150px;background:  white;" class="all_total" id="{{ leader_bonus.team_id }}_all_total"></td>
                             <td  style="width: 150px;background:  white;"  id="{{ leader_bonus.team_id }}_all_total_money">0</td>
@@ -1005,7 +1007,7 @@
 {#                        <td style="background: #c38a86;color: white;font-weight: 700;">HR</td>#}
                         <td colspan="9" style="background: #e0c097">智權提案項目</td>
                         <td colspan="4" style="background: #d8aa6d">客戶評價 年中</td>
-                        <td colspan="16" style="background: #bd9969">加班 & 晚班 & 出差 & 離職率</td>
+                        <td colspan="13" style="background: #bd9969">加班 & 晚班 & 出差 & 離職率</td>
                         <td rowspan="3" colspan="2" style="line-height: 90px;color:#eceaea;background: #6d6663;font-size: 25px;">Task force</td>
                         <td rowspan="3" colspan="2" style="line-height: 90px;background: #f5eedc;font-size: 30px;color: #d63333;font-size: 50px;">Total</td>
                         <td rowspan="3" colspan="2"style="display: none;line-height: 90px;background: #f1f1f1;font-size: 30px;color: #e08d13;font-size: 25px;">個人分配金額</td>
@@ -1019,7 +1021,7 @@
                         <td style="background: #ececec"></td>
                         <td style="background: #ececec"></td>
 {#                        <td contenteditable="true" style="background: #229e93;color: white;font-weight: 700;">0%</td>#}
-                        <td colspan="29" style="background:#229e93" id="percentage_1" contenteditable="true">{{ bp_per.bp_otherper_t }}</td>
+                        <td colspan="26" style="background:#229e93" id="percentage_1" contenteditable="true">{{ bp_per.bp_otherper_t }}</td>
                         <td rowspan="2" style="width: 160px;background: #e6cead;line-height: 57px;">關務違規部門吸收</td>
                         <td rowspan="2" style="width: 160px;background: #e6cead;line-height: 57px;">英孚未達標</td>
                     </tr>
@@ -1048,12 +1050,12 @@
                         <td style="background: #bd9969">Team 月均晚班天次</td>
                         <td style="background: #bd9969">Team 每人月均晚班天次</td>
                         <td style="background: #bd9969">國外出差天次</td>
-                        <td style="background: #bd9969">人均國外出差天次</td>
+                        <td style="display:none;background: #bd9969">人均國外出差天次</td>
                         <td style="background: #bd9969">國內出差天次</td>
-                        <td style="background: #bd9969">人均國內出差天次</td>
+                        <td style="display:none;background: #bd9969">人均國內出差天次</td>
                         <td style="background: #bd9969" colspan='3'>離職</td>
                         <td style="background: #bd9969;line-height: 60px;" rowspan='2'>佔比</td>
-                        <td style="background: #bd9969;line-height: 60px;" rowspan='2'>TeamLoading</td>
+                        <td style="display:none;background: #bd9969;line-height: 60px;" rowspan='2'>TeamLoading</td>
                         <td style="background: #ecc99a;line-height: 60px;" rowspan='2'>Total</td>
                     </tr>
                     <tr >
@@ -1081,9 +1083,9 @@
                         <td contenteditable="true" style="background: #4db5ac" id="night_work_percentage">{{ bp_per.bp_night_t }}</td>
                         <td style="background: #ececec;"></td>
                         <td contenteditable="true" style="background: #4db5ac" id="travel_abroad_percentage">{{ bp_per.bp_travel_abroad_t }}</td>
-                        <td style="background: #ececec;"></td>
+                        <td style="display:none;background: #ececec;"></td>
                         <td contenteditable="true" style="background: #4db5ac" id="travel_cn_percentage">{{ bp_per.bp_travel_cn_t }}</td>
-                        <td style="background: #ececec;"></td>
+                        <td style="display:none;background: #ececec;"></td>
                         <td style="background: #ececec;">離職率</td>
                         <td style="background: #ececec;">離職率得分</td>
                         <td style="background:  #4db5ac;" contenteditable="true" id="leave_percentage">{{ bp_per.bp_leave_t }}</td>
@@ -1124,16 +1126,16 @@
                             <td style="background: white;" class="night_work" id="{{ leader_bonus.team_id }}_night_work">{{ leader_bonus.night_work }}</td>
                             <td style="background: white;color: #DD0CC2;font-weight: 700;" class="night_work_hc" id="{{ leader_bonus.team_id }}_night_work_hc">{{ leader_bonus.night_work_hc }}</td>
                             <td style="background: white;" class="travel_abroad" id="{{ leader_bonus.team_id }}_travel_abroad">{{ leader_bonus.travel_abroad }}</td>
-                            <td style="background: white;color: #DD0CC2;font-weight: 700;" class="travel_abroad_hc" id="{{ leader_bonus.team_id }}_travel_abroad_hc">{{ leader_bonus.travel_abroad_hc }}</td>
+                            <td style="display:none;background: white;color: #DD0CC2;font-weight: 700;" class="travel_abroad_hc" id="{{ leader_bonus.team_id }}_travel_abroad_hc">{{ leader_bonus.travel_abroad_hc }}</td>
                             <td style="background: white;" class="travel_cn" id="{{ leader_bonus.team_id }}_travel_cn">{{ leader_bonus.travel_cn }}</td>
-                            <td style="background: white;color: #DD0CC2;font-weight: 700;" class="travel_cn_hc" id="{{ leader_bonus.team_id }}_travel_cn_hc">{{ leader_bonus.travel_cn_hc }}</td>
+                            <td style="display:none;background: white;color: #DD0CC2;font-weight: 700;" class="travel_cn_hc" id="{{ leader_bonus.team_id }}_travel_cn_hc">{{ leader_bonus.travel_cn_hc }}</td>
                             <td style="background: white;">{{ leader_bonus.leave_prob }}%</td>
                             <td class="leave_point" id="{{ leader_bonus.team_id }}_leave_point">{{ leader_bonus.leave_prob_point }}</td>
                             <td style="background: white;color: #1986dc;font-weight: 700;" class="dimission_percentage" id="{{ leader_bonus.team_id }}_dimission_percentage"></td>
                             <td style="background: white;color: #1986dc;font-weight: 700;" class="attendance_percentage" id="{{ leader_bonus.team_id }}_attendance_percentage"></td>
-                            <td style="background: white;color: #DD0CC2;font-weight: 700;" class="teamloading" id="{{ leader_bonus.team_id }}_teamloading">teamloading</td>
+                            <td style="display:none;background: white;color: #DD0CC2;font-weight: 700;" class="teamloading" id="{{ leader_bonus.team_id }}_teamloading">teamloading</td>
                             <td style="background: white;" class="total_percentage" id="{{ leader_bonus.team_id }}_total_percentage"></td>
-                            <td contenteditable="true" style="background: white;color: #000000" class="task_force_num" id="{{ leader_bonus.team_id }}_task_force_num">{{ leader_bonus.task_force }}</td>
+                            <td style="background: white;color: #000000" class="task_force_num" id="{{ leader_bonus.team_id }}_task_force_num">{{ leader_bonus.task_force }}</td>
                             <td style="background: white;color: #1986dc;font-weight: 700;" class="task_force_point" id="{{ leader_bonus.team_id }}_task_force_point"></td>
                             <td  style="width: 150px;background:  white;" class="all_total" id="{{ leader_bonus.team_id }}_all_total"></td>
                             <td  style="width: 150px;background:  white;"  id="{{ leader_bonus.team_id }}_all_total_money">0</td>
@@ -1323,7 +1325,7 @@
                             <td style="background: white;color: #1986dc;font-weight: 700;" class="attendance_percentagedepartment" id="{{ leader_bonus.team_id }}_attendance_percentagedepartment"></td>
                             <td style="display: none;background: white;color: #DD0CC2;font-weight: 700;" class="teamloadingdepartment" id="{{ leader_bonus.team_id }}_teamloadingdepartment">departmrnt_loading</td>
                             <td style="background: white" class="total_percentagedepartment" id="{{ leader_bonus.team_id }}_total_percentagedepartment"></td>
-                            <td  style="background: #cedfef" class="task_force_numdepartment" id="{{ leader_bonus.team_id }}_task_force_numdepartment" {% if leader_bonus.leader == "Shirley" %}contenteditable="true"{% endif %}>{{ leader_bonus.task_force }}</td>
+                            <td  style="background: white" class="task_force_numdepartment" id="{{ leader_bonus.team_id }}_task_force_numdepartment" {% if leader_bonus.leader == "Shirley" %}contenteditable="true"{% endif %}>{{ leader_bonus.task_force }}</td>
                             <td style="background: white" style="color: #1986dc;font-weight: 700;" class="task_force_pointdepartment" id="{{ leader_bonus.team_id }}_task_force_pointdepartment"></td>
                             <td  style="width: 150px;background:  white;" class="all_totaldepartment" id="{{ leader_bonus.team_id }}_all_totaldepartment"></td>
                             <td  style="width: 150px;background:  white;"  id="{{ leader_bonus.team_id }}_all_total_moneydepartment">0</td>
@@ -1535,7 +1537,9 @@
 </body>
 <script src="{% static 'NPI_EERF/js/new/mejs.js' %}"></script>
 <script type='text/javascript'>
-   $('#ipt_z').mouseover(function () {
+
+   function img_mouse(){
+       $('#ipt_z').mouseover(function () {
         $('#zjj').css('display', 'block');
     });
     $('#ipt_z').mouseout(function () {
@@ -1899,6 +1903,36 @@
     });
 
 
+    $("#table_score_team tr:nth-child(1)").each(function () {
+        $(this).children().unbind('mouseover')
+    });
+   $("#table_score_team tr:nth-child(2)").each(function () {
+        $(this).children().unbind('mouseover')
+    });
+    $("#table_score_team tr:nth-child(3)").each(function () {
+        $(this).children().unbind('mouseover')
+    });
+     $("#table_score_team tr:nth-child(4)").each(function () {
+        $(this).children().unbind('mouseover')
+    });
+
+     $("#table_score_department tr:nth-child(1)").each(function () {
+        $(this).children().unbind('mouseover')
+    });
+   $("#table_score_department tr:nth-child(2)").each(function () {
+        $(this).children().unbind('mouseover')
+    });
+    $("#table_score_department tr:nth-child(3)").each(function () {
+        $(this).children().unbind('mouseover')
+    });
+     $("#table_score_department tr:nth-child(4)").each(function () {
+        $(this).children().unbind('mouseover')
+    });
+
+   }
+
+    img_mouse();
+
     document.onkeydown = function (e) {
         if (e.keyCode == 13) {
             e.preventDefault();
@@ -1909,27 +1943,32 @@
         // $("#oDivL_table_score").css("height", oDivL_height.split("p")[0]-1);
         // 解决冻结背景分辨率问题
         setTimeout(function () {
+            var total_height=0;
+            for(height_i=1;height_i<=4;height_i++){
+                total_height+=($("#table_score_team tr:nth-child("+height_i+") td:nth-child("+height_i+")").height());
+            }
             if (current_size == 100) {
                 $("#div_L_color").css('width', $('#div_table').outerWidth() - 15);
                 $("#div_V_color").css('width', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").outerWidth()) + 2);
                 $("#div_C_color").css('width', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").outerWidth()) + 2);
 
                 $("#div_L_color").css('height', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").outerHeight()) * 4 + 5);
-                //$("#div_V_color").css('height', $("#table_score_team tr:nth-child(1) td:nth-child(1)").outerWidth())
+                $("#div_V_color").css('height', ($('#div_table').outerHeight()-18));
                 $("#div_C_color").css('height', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").outerHeight()) * 4 + 5);
 
                 $("#div_department_V_color").css('width', ($("#table_score_department tr:nth-child(1) td:nth-child(1)").outerWidth()) + 2);
 
                 $("#div_department_V_color").css('height', (($("#table_score_department tr:nth-child(1) td:nth-child(1)").outerHeight()) * ($('#table_score_department tr').length)) + 4);
 
+
             }else if(100<current_size && current_size <125){
                  $("#div_L_color").css('width', $('#div_table').width() - 15);
                 $("#div_V_color").css('width', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").width()) + 2);
                 $("#div_C_color").css('width', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").width()) + 2);
 
-                $("#div_L_color").css('height', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").height()) * 4 + 5);
-                //$("#div_V_color").css('height', $("#table_score_team tr:nth-child(1) td:nth-child(1)").outerWidth())
-                $("#div_C_color").css('height', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").height()) * 4 + 5);
+                $("#div_L_color").css('height', (total_height+2));
+                $("#div_V_color").css('height', ($('#div_table').height()-18));
+                $("#div_C_color").css('height', (total_height+2));
 
                 $("#div_department_V_color").css('width', ($("#table_score_department tr:nth-child(1) td:nth-child(1)").width()) + 2);
 
@@ -1943,7 +1982,7 @@
                  $("#div_L_color").css('height', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").outerHeight()) * 4 + 5);
                  //$("#div_V_color").css('height', $("#table_score_team tr:nth-child(1) td:nth-child(1)").outerWidth())
                  $("#div_C_color").css('height', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").outerHeight()) * 4 + 5);
-
+                 $("#div_V_color").css('height', ($('#div_table').outerHeight()-18));
                  $("#div_department_V_color").css('width', ($("#table_score_department tr:nth-child(1) td:nth-child(1)").outerWidth()) + 2);
 
                  $("#div_department_V_color").css('height', (($("#table_score_department tr:nth-child(1) td:nth-child(1)").outerHeight()) * ($('#table_score_department tr').length)) + 4);
@@ -1953,9 +1992,9 @@
                 $("#div_V_color").css('width', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").width()) + 2);
                 $("#div_C_color").css('width', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").width()) + 2);
 
-                $("#div_L_color").css('height', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").height()) * 4 + 5);
-                //$("#div_V_color").css('height', $("#table_score_team tr:nth-child(1) td:nth-child(1)").outerWidth())
-                $("#div_C_color").css('height', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").height()) * 4 + 5);
+                $("#div_L_color").css('height', (total_height+2));
+                $("#div_V_color").css('height', ($('#div_table').height()-18));
+                $("#div_C_color").css('height', (total_height+2));
 
                 $("#div_department_V_color").css('width', ($("#table_score_department tr:nth-child(1) td:nth-child(1)").width()) + 2);
 
@@ -1967,7 +2006,7 @@
                 $("#div_C_color").css('width', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").outerWidth()) + 2);
 
                 $("#div_L_color").css('height', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").outerHeight()) * 4 + 5);
-                //$("#div_V_color").css('height', $("#table_score_team tr:nth-child(1) td:nth-child(1)").outerWidth())
+                $("#div_V_color").css('height', ($('#div_table').outerHeight()-18));
                 $("#div_C_color").css('height', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").outerHeight()) * 4 + 5);
 
                 $("#div_department_V_color").css('width', ($("#table_score_department tr:nth-child(1) td:nth-child(1)").outerWidth()) + 2);
@@ -1978,9 +2017,9 @@
                  $("#div_L_color").css('width', $('#div_table').width() - 15);
                  $("#div_V_color").css('width', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").width()) + 2);
                  $("#div_C_color").css('width', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").width()) + 2);
-
-                 $("#div_L_color").css('height', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").height()) * 4 + 5);
-                 $("#div_C_color").css('height', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").height()) * 4 + 5);
+                 $("#div_V_color").css('height', ($('#div_table').height()-18));
+                 $("#div_L_color").css('height', (total_height+2));
+                 $("#div_C_color").css('height', (total_height+2));
 
                  $("#div_department_V_color").css('width', ($("#table_score_department tr:nth-child(1) td:nth-child(1)").width()) + 2);
 
@@ -2432,29 +2471,33 @@
          $("#div_department_V_color").css('display', 'none');
 
         setTimeout(function () {
+        var total_height=0;
+        for(height_i=1;height_i<=4;height_i++){
+            total_height+=($("#table_score_team tr:nth-child("+height_i+") td:nth-child("+height_i+")").height());
+        }
          if(current_size==100) {
              $("#div_L_color").css('width', $('#div_table').outerWidth() - 15);
              $("#div_V_color").css('width', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").outerWidth()) + 2);
              $("#div_C_color").css('width', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").outerWidth()) + 2);
 
              $("#div_L_color").css('height', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").outerHeight()) * 4 + 5);
-             //$("#div_V_color").css('height', $("#table_score_team tr:nth-child(1) td:nth-child(1)").outerWidth())
+             $("#div_V_color").css('height', ($('#div_table').outerHeight()-18));
              $("#div_C_color").css('height', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").outerHeight()) * 4 + 5);
          }else if(100<current_size && current_size <125){
               $("#div_L_color").css('width', $('#div_table').width() - 15);
               $("#div_V_color").css('width', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").width()) + 2);
               $("#div_C_color").css('width', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").width()) + 2);
 
-              $("#div_L_color").css('height', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").height()) * 4 + 5);
-              //$("#div_V_color").css('height', $("#table_score_team tr:nth-child(1) td:nth-child(1)").outerWidth())
-              $("#div_C_color").css('height', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").height()) * 4 + 5);
+              $("#div_L_color").css('height', (total_height+2));
+              $("#div_V_color").css('height', ($('#div_table').height()-18));
+              $("#div_C_color").css('height', (total_height+2));
          }else if(125<=current_size){
               $("#div_L_color").css('width', $('#div_table').outerWidth() - 15);
               $("#div_V_color").css('width', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").outerWidth()) + 2);
               $("#div_C_color").css('width', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").outerWidth()) + 2);
 
               $("#div_L_color").css('height', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").outerHeight()) * 4 + 5);
-              //$("#div_V_color").css('height', $("#table_score_team tr:nth-child(1) td:nth-child(1)").outerWidth())
+              $("#div_V_color").css('height', ($('#div_table').outerHeight()-18));
               $("#div_C_color").css('height', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").outerHeight()) * 4 + 5);
          }
          else if(80 <= current_size && current_size <= 100){
@@ -2462,14 +2505,14 @@
              $("#div_V_color").css('width', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").width()) + 2);
              $("#div_C_color").css('width', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").width()) + 2);
 
-             $("#div_L_color").css('height', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").height()) * 4 + 5);
-             //$("#div_V_color").css('height', $("#table_score_team tr:nth-child(1) td:nth-child(1)").outerWidth())
-             $("#div_C_color").css('height', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").height()) * 4 + 5);
+             $("#div_L_color").css('height', (total_height+2));
+             $("#div_V_color").css('height', ($('#div_table').height()-18));
+             $("#div_C_color").css('height', (total_height+2));
          }else if(67 < current_size && current_size <= 75){
             $("#div_L_color").css('width', $('#div_table').outerWidth() - 15);
              $("#div_V_color").css('width', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").outerWidth()) + 2);
              $("#div_C_color").css('width', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").outerWidth()) + 2);
-
+             $("#div_V_color").css('height', ($('#div_table').outerHeight()-18));
              $("#div_L_color").css('height', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").outerHeight()) * 4 + 5);
              //$("#div_V_color").css('height', $("#table_score_team tr:nth-child(1) td:nth-child(1)").outerWidth())
              $("#div_C_color").css('height', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").outerHeight()) * 4 + 5);
@@ -2479,9 +2522,9 @@
               $("#div_V_color").css('width', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").width()) + 2);
               $("#div_C_color").css('width', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").width()) + 2);
 
-              $("#div_L_color").css('height', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").height()) * 4 + 5);
-              //$("#div_V_color").css('height', $("#table_score_team tr:nth-child(1) td:nth-child(1)").outerWidth())
-              $("#div_C_color").css('height', ($("#table_score_team tr:nth-child(1) td:nth-child(1)").height()) * 4 + 5);
+              $("#div_L_color").css('height', (total_height+2));
+              $("#div_V_color").css('height', ($('#div_table').height()-18));
+              $("#div_C_color").css('height', (total_height+2));
          }
         },500)
     });
@@ -2920,31 +2963,6 @@
         });
     });
 
-  $("#table_score_team tr:nth-child(1)").each(function () {
-        $(this).children().unbind('mouseover')
-    });
-   $("#table_score_team tr:nth-child(2)").each(function () {
-        $(this).children().unbind('mouseover')
-    });
-    $("#table_score_team tr:nth-child(3)").each(function () {
-        $(this).children().unbind('mouseover')
-    });
-     $("#table_score_team tr:nth-child(4)").each(function () {
-        $(this).children().unbind('mouseover')
-    });
-
-     $("#table_score_department tr:nth-child(1)").each(function () {
-        $(this).children().unbind('mouseover')
-    });
-   $("#table_score_department tr:nth-child(2)").each(function () {
-        $(this).children().unbind('mouseover')
-    });
-    $("#table_score_department tr:nth-child(3)").each(function () {
-        $(this).children().unbind('mouseover')
-    });
-     $("#table_score_department tr:nth-child(4)").each(function () {
-        $(this).children().unbind('mouseover')
-    });
 </script>
 
 </html>
