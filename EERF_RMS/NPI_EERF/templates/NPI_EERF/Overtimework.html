@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <link rel="shortcut icon"  href="{% static 'NPI_EERF/img/favicon.ico' %}" >
+    <link rel="shortcut icon"  href="{% static 'NPI_EERF/img/favicon.ico' %}" >
+    <title>EERF Management Overtimework</title>
+    <link rel="stylesheet" href="{% static 'NPI_EERF/css/amazeui.min.css' %}"/>
+    <script type="text/javascript" src="{% static 'NPI_EERF/js/jquery-3.2.1.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'NPI_EERF/js/ifvisible.js' %}"></script>
+    <script type="text/javascript" src="{% static 'NPI_EERF/js/js.cookie.js' %}"></script>
+    <script type="text/javascript" src="{% static 'NPI_EERF/js/amazeui.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'NPI_EERF/js/highstock.js' %}"></script>
+    <script type="text/javascript" src="{% static 'NPI_EERF/js/series-label.js' %}"></script>
+    <script type="text/javascript" src="{% static 'NPI_EERF/js/drilldown.js' %}"></script>
+    <script type="text/javascript" src="{% static 'NPI_EERF/js/exporting.js' %}"></script>
+    <script type="text/javascript" src="{% static 'NPI_EERF/js/offline-exporting.js' %}"></script>
+    <!-- <script type="text/javascript" src="{% static 'NPI_EERF/js/WebData.js' %}" ></script> -->
+    <script type="text/javascript">
+        document.write("<link rel=\"stylesheet\" href=\"{% static 'NPI_EERF/css/style.css?v="+Math.random()+"' %}\">");
+        document.write("<script language=\"javascript\" type=\"text/javascript\" src=\"{% static 'NPI_EERF/js/WebData.js?v="+Math.random()+"' %}\"><\/script>");
+    </script>
+</head>
+<body>
+<header style="height: 5rem;width: 100%;padding: 0;margin:0;background:#2a8fbd;line-height: 5rem;">
+    <img id="header_logo" class="am-img-responsive" src="{% static 'NPI_EERF/img/header_logo.png' %}">
+    <a id="return_home" href="{% url 'NPI_EERF:index' %}"><i class="am-icon-home am-icon-md"></i></a>
+</header>
+<div class="am-g doc-am-g" id="container">
+    <nav data-am-widget="menu" class="am-menu  am-menu-offcanvas1" data-am-menu-offcanvas>
+        <a href="javascript: void(0)" class="am-menu-toggle">
+            <i class="am-menu-toggle-icon am-icon-bars" style="font-size: 3rem;"></i>
+        </a>
+        <div class="am-offcanvas">
+            <div class="am-offcanvas-bar">
+                <ul class="am-menu-nav am-avg-sm-1">
+                    <li id="user_logo_content">
+                        <img id="users_logo" class="am-img-responsive" src="{% static 'NPI_EERF/img/users.png' %}">
+                        <p id="user_name" class="am-center">{{ user_cname }} {{ user_authority }}</p>
+                    </li>
+                    <li class="am-active">
+                        <a href="{% url 'NPI_EERF:overtimework' %}" class=""><i class="am-icon-clock-o am-icon-sm"></i>超時加班時數</a>
+                    </li>
+                    <li class="">
+                        <a href="{% url 'NPI_EERF:overwork' %}" class=""><i
+                                class="am-icon-calendar-plus-o am-icon-sm"></i>工作超時人數</a>
+                    </li>
+                    <li class="">
+                        <a href="{% url 'NPI_EERF:nightwork' %}" class=""><i class="am-icon-moon-o am-icon-sm"></i>晚點下班人數</a>
+                    </li>
+                    <li class="">
+                        <a href="{% url 'NPI_EERF:eveningtrips' %}" class=""><i
+                                class="am-icon-user-plus am-icon-sm"></i>晚班天數</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</div>
+<!--chart绘图-->
+<div class="am-g doc-am-g" id="chart_container">
+    <div id="Frame">
+        <div class="am-u-md-12 am-u-lg-12" id="overtimework_column_chart"></div>
+        <div class="am-u-md-12 am-u-lg-12" id="search_chart_contain">
+        <div id="button_con" class="am-u-md-12 am-u-lg-12">
+            <button id="off_search_chart_contain"><img class="am-img-responsive" src="{% static 'NPI_EERF/img/offset.png' %}"></button>
+			<div id="check_div" class="check_label">
+                <input class="check_legend" type="checkbox"><label for="check_all">取消選取全部</label>
+            </div>
+        </div>
+        <div class="am-u-md-12 am-u-lg-12" id="overtimework_line_chart"></div>
+
+    </div>
+
+
+        <div class="am-u-md-12 am-u-lg-12" id="section_search_chart_contain">
+            <div id="button_con" class="am-u-md-12 am-u-lg-12">
+                <button id="off_search_chart_contain_section"><img class="am-img-responsive" src="{% static 'NPI_EERF/img/offset.png' %}"></button>
+                <div id="check_div_copy" class="check_label">
+                    <input class="check_legend" type="checkbox"><label for="check_all">取消選取全部</label>
+                </div>
+            </div>
+            <div class="am-u-md-12 am-u-lg-12" id="section_overtimework_line_chart"></div>
+        </div>
+
+
+    </div>
+
+
+</div>
+<!--模态框-->
+<div class="am-modal am-modal-alert" tabindex="-1" id="overtimework_modal">
+    <div class="am-modal-dialog" id="modal_overtimework">
+        <div class="am-modal-hd" id="overtimework_caption">
+            <span id="Time"></span>
+            <span id="Leader"></span>
+            <span id="Title">超时加班详细信息</span>
+            <a id="close_logo_Overtimework" href="javascript: void(0)" class="am-closunitssettinge am-close-spin"
+               data-am-modal-close="">×</a>
+        </div>
+        <div class="am-modal-bd">
+            <table id="specific_overtimework_tab"
+                   class="am-table am-table-bordered am-table-radius am-table-striped am-table-centered am-text-nowrap">
+                <thead>
+                <tr>
+                    <th>工號</th>
+                    <th>姓名</th>
+                    <th name="a_totaldutyhours" class="nightwork_th_bac">總義務時间</th>
+                    <th name="a_avgdutyhours" class="nightwork_th_bac">平均義務時间</th>
+                    <th name="a_maxdutyhours" class="nightwork_th_bac">最大義務時间</th>
+                    <th name="a_dutydays" class="nightwork_th_bac">義務工作天數</th>
+                    <th name="a_totalhours" class="nightwork_th_bac">總工作時间</th>
+                    <th name="a_totaldays" class="nightwork_th_bac">工作天數</th>
+                    <th name="a_avghours" class="nightwork_th_bac">平均工作時间</th>
+                    <th name="a_maxhours" class="nightwork_th_bac">最大工作時间</th>
+                </tr>
+                </thead>
+                <tbody id="overtimework_tab">
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+<script type="text/javascript">
+    var dutyworkLeaderDict = {{ edutywork_leader_dic|safe }};
+    var dutyworkYearList = {{ edutywork_year_list|safe }};
+    // 每个部门的leader
+    var AllLeaders = {{ AllLeaders|safe }};
+
+
+    var sectionworkLeaderDict = {{ sectionwork_leader_dic|safe }};
+    var sectionworkYearList = {{ sectionwork_year_list|safe }};
+    {#var Ministerial_SectionID = {{ Ministerial_SectionID|safe }};#}
+    {#var AllSectionID = {{ AllSectionID|safe }};#}
+
+    // 获得 highcharts 绘图所需要的数据格式
+    var totalDataList = [];
+    var seriesDataList = [];
+    var sectionDataList = [];
+    var sectionRankDataDict = [];
+    var rankDataDict = {};
+    // 遍历部门的leader 写入 rankDataDict字典中
+    for (var l = 0; l < AllLeaders.length; l++) {
+        rankDataDict[AllLeaders[l]] = "";
+    }
+    /********************部级数据****************************/
+    // 遍历人均义务加班时数字典 key
+    for (keys in dutyworkLeaderDict) {
+        var totalSeriesNeedData = [];
+        var seriesNeedData = [];
+        // 遍历每个部级下的人均义务加班时数
+        for (var i = 0; i < dutyworkLeaderDict[keys].length; i++) {
+            // 计算该笔数据的时间
+            var thisDataNum = Date.parse(new Date(dutyworkLeaderDict[keys][i][0]));
+            var oldDataNum = Date.parse(new Date("2018-01-31"));
+            // ???
+            dutyworkLeaderDict[keys][i] = [Date.parse(new Date(dutyworkLeaderDict[keys][i][0])), dutyworkLeaderDict[keys][i][1]];
+            var thisList = dutyworkLeaderDict[keys][i];   // [1520179200000, Array(5)]
+            var _list = [];
+            _list.push(thisList[0]);   // 时间
+            _list.push(thisList[1]);   // 该时间点的数据
+            totalSeriesNeedData.push(_list);
+            // 判断计算该笔数据的时间 是否大于2018-01-31
+            if (thisDataNum >= oldDataNum) {
+                // 大于就 添加
+                seriesNeedData.push(_list);
+            }
+        }
+        // 创建obj对象
+        var _obj = {
+            name: keys, // 部长名
+            data: dutyworkLeaderDict[keys] // [计算该笔数据的时间, 人均义务加班时数]
+        };
+        // push到大列表中  [ [], ... ]
+        totalDataList.push(totalSeriesNeedData);
+        // Richard Zhang: {data:[[计算该笔数据的时间, 人均义务加班时数], ....], name: "Richard Zhang"}
+        rankDataDict[keys] = _obj;
+    }
+
+     // 遍历数据字典
+    for (leader in rankDataDict) {
+        // 每个部级的数据
+        var thisObj = rankDataDict[leader];
+        // push到大列表中
+        seriesDataList.push(thisObj);
+    }
+
+    /********************科级数据****************************/
+    for (keys in sectionworkLeaderDict) {
+        var sectionTotalSeriesNeedData = [];
+        var sectionSeriesNeedData = [];
+
+         // 遍历每个科级下的人均义务加班时数
+        for (var i = 0; i < sectionworkLeaderDict[keys].length; i++) {
+            // 计算该笔数据的时间
+            var thisDataNum_Section = Date.parse(new Date(sectionworkLeaderDict[keys][i][0]));
+            var oldDataNum = Date.parse(new Date("2018-01-31"));
+            // ???
+            sectionworkLeaderDict[keys][i] = [Date.parse(new Date(sectionworkLeaderDict[keys][i][0])), sectionworkLeaderDict[keys][i][1]];
+            var thisList_Section = sectionworkLeaderDict[keys][i];   // [1520179200000, Array(5)]
+            var _list_Section = [];
+            _list_Section.push(thisList_Section[0]);   // 时间
+            _list_Section.push(thisList_Section[1]);   // 该时间点的数据
+            sectionTotalSeriesNeedData.push(_list_Section);
+            // 判断计算该笔数据的时间 是否大于2018-01-31
+            if (thisDataNum_Section >= oldDataNum) {
+                // 大于就 添加
+                sectionSeriesNeedData.push(_list_Section);
+            }
+        }
+        // 创建obj对象
+        var _obj_Section = {
+            name: keys, // 科级id
+            data: sectionworkLeaderDict[keys] // [计算该笔数据的时间, 人均义务加班时数]
+        };
+        // push到大列表中  [ [], ... ]
+        {#totalDataList.push(totalSeriesNeedData);#}
+        // Richard Zhang: {data:[[计算该笔数据的时间, 人均义务加班时数], ....], name: "Richard Zhang"}
+        sectionRankDataDict[keys] = _obj_Section;
+    }
+
+    // 遍历数据字典
+    for (section_leader in sectionRankDataDict) {
+        // 每个部级的数据
+        var section_thisObj = sectionRankDataDict[section_leader];
+        // push到大列表中
+        sectionDataList.push(section_thisObj);
+    }
+
+    var totalSeriesDataList = [];
+    var totalSeriesTimeList = [];
+    var totalSeriesList = [];
+    var totalSeriesNeedData = [];
+    // 需要的总序列数据
+    var totalSeriesNeedData = [];
+    for (var i = 0; i < totalDataList.length; i++) {
+        var this_data_list = [];
+        for (var k = 0; k < totalDataList[i].length; k++) {
+            this_data_list.push(totalDataList[i][k][1]);  // 该时间点的数据
+            if (totalSeriesTimeList.length != totalDataList[i].length) {
+                totalSeriesTimeList.push(totalDataList[i][k][0]);  // 时间
+            }
+        }
+        if (totalSeriesDataList.length == 0) {
+            totalSeriesDataList = this_data_list;
+        } else {
+            for (var l = 0; l < totalSeriesDataList.length; l++) {
+                // 计算每个部的超时加班总时数
+                totalSeriesDataList[l] = totalSeriesDataList[l] + this_data_list[l];
+            }
+        }
+    }
+
+    for (var j = 0; j < totalSeriesTimeList.length; j++) {
+                                             // 保留两位小数
+        var _list = [totalSeriesTimeList[j], (keepTwoDecimal(totalSeriesDataList[j] / 9))];
+        totalSeriesNeedData.push(_list);
+    }
+    // 全部的数据对象
+    var _total_obj = {
+        type: "column",
+        name: "EERF超時加班時數",
+        data: totalSeriesNeedData
+    };
+    totalSeriesList.push(_total_obj);
+
+    Overtimework_column_chart(totalSeriesList, seriesDataList, sectionDataList);
+</script>
+</body>
+</html>
