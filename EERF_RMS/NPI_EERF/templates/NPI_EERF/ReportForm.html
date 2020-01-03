@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <link rel="shortcut icon"  href="{% static 'NPI_EERF/img/favicon.ico' %}" >
+    <title>EERF Management UnitsPower</title>
+
+    <link rel="stylesheet" href="{% static 'NPI_EERF/css/amazeui.min.css' %}"/>
+    <script type="text/javascript" src="{% static 'NPI_EERF/js/jquery-3.2.1.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'NPI_EERF/js/amazeui.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'NPI_EERF/js/ifvisible.js' %}"></script>
+    <script type="text/javascript" src="{% static 'NPI_EERF/js/js.cookie.js' %}"></script>
+    <script src="{% static 'NPI_EERF/js/close.js' %}" defer=true ></script>
+    <script type="text/javascript" defer=true>
+        document.write("<link rel=\"stylesheet\" href=\"{% static 'NPI_EERF/css/style.css?v="+Math.random()+"' %}\">");
+        document.write("<script language=\"javascript\" type=\"text/javascript\" src=\"{% static 'NPI_EERF/js/WebData.js?v="+Math.random()+"' %}\"><\/script>");
+    </script>
+
+</head>
+<body>
+<header id="report_header">
+    <img id="header_logo" class="am-img-responsive" src="{% static 'NPI_EERF/img/header_logo.png' %}"
+         style="padding-left: 0.5rem;">
+    <a id="return_home" href="{% url 'NPI_EERF:index' %}"><i class="am-icon-home am-icon-md"></i></a>
+</header>
+<!--chart绘图-->
+<div class="am-g doc-am-g" id="unitstab_container">
+    <div class="am-u-md-12 am-u-lg-12" id="report_con">
+        <button type="button" id="report_setting"><i class="am-icon-cog am-icon-sm"></i></button>
+        <button type="button" id="down_load"><i class="am-icon-arrow-circle-o-down am-icon-sm"></i></button>
+        <div class="am-u-md-4 am-u-lg4" id="left_tab_con">
+            <table id="left_tab" class="am-table am-table-bordered am-table-striped am-text-nowrap">
+                <thead>
+                <tr>
+                    <th colspan='3' style="height: 43px;"></th>
+                </tr>
+                <tr>
+                    <th style="border-bottom: hidden;">Group</th>
+                    <th style="border-bottom: hidden;">Leader</th>
+                    <th style="border-bottom: hidden;">Function Team</th>
+                </tr>
+                <tr>
+                    <th style="height: 42px;border-top:hidden"></th>
+                    <th style="height: 42px;border-top:hidden"></th>
+                    <th style="height: 42px;border-top:hidden"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td rowspan='11'>Group1</td>
+                    <td rowspan='3'>Alex</td>
+                    <td>FATP OTA Testing</td>
+                </tr>
+                <tr>
+                    <td>FATP OTA FA</td>
+                </tr>
+                <tr>
+                    <td>Pre-OTA</td>
+                </tr>
+                <tr>
+                    <td rowspan='4'>Vincent</td>
+                    <td>OTA Chamber</td>
+                </tr>
+                <tr>
+                    <td>Field</td>
+                </tr>
+                <tr>
+                    <td>EMI/ESD</td>
+                </tr>
+                <tr>
+                    <td>FATP Data</td>
+                </tr>
+                <tr>
+                    <td rowspan='3'>RichedZhang</td>
+                    <td>EE System</td>
+                </tr>
+                <tr>
+                    <td>OSD</td>
+                </tr>
+                <tr>
+                    <td>Motion Sensor</td>
+                </tr>
+                <tr>
+                    <td colspan='3'>Total</td>
+                </tr>
+                <tr>
+                    <td rowspan='7'>Group2</td>
+                    <td rowspan='4'>John</td>
+                    <td>MLB CoEx & Regulatory</td>
+                </tr>
+                <tr>
+                    <td>FATP CoEx & Regulatory</td>
+                </tr>
+                <tr>
+                    <td>BBHW</td>
+                </tr>
+                <tr>
+                    <td>Desense</td>
+                </tr>
+                <tr>
+                    <td>MG</td>
+                    <td>RFHW</td>
+                </tr>
+                <tr>
+                    <td>Taichun</td>
+                    <td>MLB EE</td>
+                </tr>
+                <tr>
+                    <td colspan='2'>Total</td>
+                </tr>
+                <tr>
+                    <td rowspan='10'>Group3</td>
+                    <td rowspan='4'>Richard Yu</td>
+                    <td>MLB WiPAS</td>
+                </tr>
+                <tr>
+                    <td>FATP WiPAS</td>
+                </tr>
+                <tr>
+                    <td>RF EPM WDPPM</td>
+                </tr>
+                <tr>
+                    <td>MLB AP Stations</td>
+                </tr>
+                <tr>
+                    <td rowspan='3'>Andy</td>
+                    <td>MLB RF Stations</td>
+                </tr>
+                <tr>
+                    <td>MLB Data Process</td>
+                </tr>
+                <tr>
+                    <td>Common</td>
+                </tr>
+                <tr>
+                    <td>Don</td>
+                    <td>EE Validation</td>
+                </tr>
+                <tr>
+                    <td colspan='2'>Total</td>
+                </tr>
+                <tr>
+                    <td colspan='3'>Magma</td>
+                </tr>
+                <tr>
+                    <td colspan='3'>EERF Total</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="am-u-md-8 am-u-lg8" id="right_tab_con">
+            <table id="right_tab" class="am-table am-table-bordered am-table-striped am-text-nowrap">
+                <thead>
+                <tr>
+                    <th colspan="10" style="height: 43px">EERF实时人力状态</th>
+                </tr>
+                <tr>
+                    <th colspan="13">常设人力</th>
+                    <th colspan="3">浪花人力</th>
+                    <th rowspan="2">总人数</th>
+                    <th colspan="8">招募状态</th>
+                    <th colspan="3">离职人数</th>
+                    <th>2015 F1 Approved HC</th>
+                    <th>2018 F1 Approved HC</th>
+                    <th>2017/9 实际(高峰)人力</th>
+                    <th>2018 FX Approved HC</th>
+                    <th>Magma Approved HC</th>
+                </tr>
+                <tr>
+                    <th colspan="2">中干（GL）</th>
+                    <th colspan="2">中干（ZZ）</th>
+                    <th colspan="2">台干</th>
+                    <th colspan="2">员级（GL）</th>
+                    <th colspan="2">员级（ZZ）</th>
+                    <th>总师级人数</th>
+                    <th>总员级人数</th>
+                    <th>总常设人数</th>
+                    <th>师级人数</th>
+                    <th>员级人数</th>
+                    <th>借用员级</th>
+                    <th colspan="2">需求</th>
+                    <th colspan="2">招募中</th>
+                    <th colspan="2">已录用</th>
+                    <th colspan="2">剩余招募名额</th>
+                    <th>Eng.</th>
+                    <th>Tech.</th>
+                    <th>Total</th>
+                    <th>Total</th>
+                    <th>Total</th>
+                    <th>Total</th>
+                    <th>Total</th>
+                    <th>Total</th>
+                </tr>
+                </thead>
+                <tbody id="right_tab_tbody">
+                </tbody>
+            </table>
+        </div>
+        <table id="report_tab3" class="am-table am-table-bordered am-table-striped am-text-nowrap am-table-centered">
+            <thead>
+            <tr>
+                <th>工号</th>
+                <th>姓名</th>
+                <th>资位</th>
+                <th>干别</th>
+                <th>管理职</th>
+                <th>直屬主管</th>
+                <th>Function Team</th>
+                <th>人员类型</th>
+                <th>学历</th>
+                <th>入厂日期</th>
+                <th>年资</th>
+                <th>部级组织</th>
+                <th>課级组织</th>
+                <th>邮箱</th>
+                <th>座机</th>
+                <th>手机</th>
+                <th>上月G1计薪加班时数</th>
+                <th>上月G1超时加班时数</th>
+                <th>上月G1调休时数</th>
+                <th>上月G2计薪加班时数</th>
+                <th>上月G2超时加班时数</th>
+                <th>上月G2可调休时数</th>
+                <th>上月G3计薪加班时数</th>
+                <th>上月夜班天数</th>
+                <th>当月可调休时数</th>
+            </tr>
+            </thead>
+            <tbody id="report_tab3_tbody">
+
+            </tbody>
+        </table>
+        <table id="report_overwork"
+               class="am-table am-table-bordered am-table-striped am-text-nowrap am-table-centered">
+            <thead>
+            <tr>
+                <th>工號</th>
+                <th>姓名</th>
+                <th>Leader</th>
+                <th>Team</th>
+                <th>月份</th>
+                <!--<th>平均義務時長</th>
+                <th>總義務時長</th>
+                <th>最大義務時長</th>-->
+                <th>平均超時時長</th>
+                <th>總超時時長</th>
+                <!--<th>最大超時工作</th>-->
+                <th>平均工作時長</th>
+                <th>總工作时長</th>
+                <!--<th>最大工作時長</th>-->
+                <th>工作天數</th>
+                <th>夜班天数</th>
+                <th>准點天數</th>
+                <th>加班天數</th>
+                <th>工時>10.5小時天數</th>
+                <th>工時>11.5小時天數</th>
+                <th>工時>12.5小時天數</th>
+                <th>工時>10.5小時累計時數</th>
+                <!--<th>平均下班時間</th>
+                <th>最晚下班時間</th>-->
+            </tr>
+            </thead>
+            <tbody id="report_tab4_tbody">
+            </tbody>
+        </table>
+        <table id="report_tab5" class="am-table am-table-bordered am-table-striped am-text-nowrap am-table-centered" style="display:none;">
+            <thead>
+            <tr>
+                <th>工號</th>
+                <th>姓名</th>
+                <th>Leader</th>
+                <th>Team</th>
+                <th>月份時段</th>
+                <!--<th>平均義務時長</th>
+                <th>總義務時長</th>
+                <th>最大義務時長</th>-->
+                <th>平均超時時長</th>
+                <th>總超時時長</th>
+                <!--<th>最大超時工作</th>-->
+                <th>平均工作時長</th>
+                <th>總工作时長</th>
+                <!--<th>最大工作時長</th>-->
+                <th>工作天數</th>
+                <th>夜班天数</th>
+                <th>准點天數</th>
+                <th>加班天數</th>
+                <th>工時>10.5小時天數</th>
+                <th>工時>11.5小時天數</th>
+                <th>工時>12.5小時天數</th>
+                <th>工時>10.5小時累計時數</th>
+                <!--<th>平均下班時間</th>
+                <th>最晚下班時間</th>-->
+            </tr>
+            </thead>
+            <tbody id="report_tab5_tbody">
+
+            </tbody>
+        </table>
+
+        <table id="report_anomaly_lg"
+               class="am-table am-table-bordered am-table-striped am-text-nowrap am-table-centered" style="display: none">
+            <thead>
+            <tr>
+                <th>法人</th>
+                <th>工作厂区</th>
+                <th>处级</th>
+                <th>部级</th>
+                <th>课级</th>
+                <th>工号</th>
+                <th>姓名</th>
+                <th>日期</th>
+                <th>日期类型</th>
+                <th>班别</th>
+                <th>上班时间</th>
+                <th>上班刷卡时间</th>
+                <th>异常类型</th>
+                <th>迟到时长</th>
+                <th>回复状况</th>
+                <th>下班时间</th>
+                <th>下班刷卡时间</th>
+                <th>异常类型</th>
+                <th>早退时长</th>
+                <th>回复状况</th>
+            </tr>
+            </thead>
+            <tbody id="report_anomaly_lg_tbody">
+            </tbody>
+        </table>
+
+        <table id="report_anomaly_tg"
+               class="am-table am-table-bordered am-table-striped am-text-nowrap am-table-centered" style="display: none">
+            <thead>
+            <tr>
+
+                <th>工作厂区</th>
+                <th>处级</th>
+
+                <th>课级</th>
+                <th>工号</th>
+                <th>姓名</th>
+                <th>日期</th>
+                <th>日期类型</th>
+                <th>班别</th>
+                <th>上班时间</th>
+                <th>上班刷卡时间</th>
+                <th>异常类型</th>
+                <th>迟到时长</th>
+                <th>回复状况</th>
+                <th>下班时间</th>
+                <th>下班刷卡时间</th>
+                <th>异常类型</th>
+                <th>早退时长</th>
+                <th>回复状况</th>
+            </tr>
+            </thead>
+            <tbody id="report_anomaly_tg_tbody">
+            </tbody>
+        </table>
+
+
+
+        <div id="div_delayfood" class="am-scrollable-horizontal">
+            <div id="title_header">
+                <span id="title_date">123</span>
+                 <div id="meal_box" class="am-input-group am-input-group-round">
+                    <select id="select_search2" data-am-selected="{btnWidth: '100%'}">
+                        <option value="do">工時>10.5小時天數</option>
+                        <option value="re" selected>工時>11.5小時天數</option>
+                        <option value="mi">工時>12.5小時天數</option>
+                        <option value="fa">工時>13.5小時天數</option>
+                    </select>
+                </div>
+            </div>
+           <table id="table_delayfood"
+               class="am-table am-table-bordered am-table-hover am-text-nowrap am-table-centered">
+            <thead></thead>
+            <tbody id="tbody_delayfood">
+                
+            </tbody>
+            </table> 
+        </div>
+        
+    </div>
+</div>
+<!--等待加载-->
+<div class="am-modal am-modal-loading am-modal-no-btn" tabindex="-1" id="my-modal-loading">
+    <div id="loading_body" class="am-modal-dialog">
+        <div id="load_hd" class="am-modal-hd"></div>
+        <div class="am-modal-bd">
+            <span id="load_trasition" class="am-icon-spinner am-icon-spin"></span>
+        </div>
+    </div>
+</div>
+<!--模态框-->
+<div class="am-modal am-modal-alert" tabindex="-1" id="reportsetting">
+    <div class="am-modal-dialog" id="mysettings">
+        <div id="setting_table" class="am-modal-hd">报表设定
+            <a id="close" href="javascript: void(0)" class="am-close am-close-spin" data-am-modal-close>&times;</a>
+        </div>
+        <div class="am-modal-bd">
+            <div class="am-form-group am-form-icon" id="Date_select">
+                <label style="display: block;float: left;">日期:</label>
+                <i class="am-icon-calendar" style="color: #3C3C3C;"></i>
+                <input id="doc_select_time" type="date" class="am-form-field am-input-lg am-round" placeholder="日期">
+            </div>
+            <hr id="hr_wcf">
+            <div id="food_time">
+            <!-- <label id="label_wcf" style="display: block;">误餐费日期</label> -->
+                <div id="middle_line">
+                    <div class="am-form-group am-form-icon" id="time_start">
+                        <label style="display: block;">开始时间:</label>
+                        <i class="am-icon-calendar" style="color: #3C3C3C;"></i>
+                        <input id="start_select_time" type="date" class="am-form-field am-input-lg am-round" placeholder="开始日期">
+                    </div>
+                </div>
+                <div class="am-form-group am-form-icon" id="time_end">
+                        <label style="display: block;">结束时间:</label>
+                        <i class="am-icon-calendar" style="color: #3C3C3C;"></i>
+                        <input id="end_select_time" type="date" class="am-form-field am-input-lg am-round" placeholder="开始日期">
+                </div>
+                <span style="color: #e22f2f;">注：结束时间不能小于开始时间！</span>
+            </div>
+            <div class="am-form-group">
+                <label style="display: block;float: left;">事业处:</label>
+                <select id="doc-select-1">
+                    <option value="option1">EERF</option>
+                </select>
+                <span class="am-form-caret"></span>
+            </div>
+            <div class="am-form-group">
+                <label style="display: block;float: left;">报表类型:</label>
+                <select id="doc-select-2" onChange="show_leader_select()">
+                    <option value="option1">实时人力状态</option>
+                    <option value="option2">实时超时状态</option>
+                    <option value="option3">人力基础总表</option>
+                    <option value="option4">月人力超时状态</option>
+                    <option value="option5">误餐费</option>
+                    <option value="option6">考勤异常(陆干)</option>
+                    <option value="option6">考勤异常(台干)</option>
+                </select>
+                <span class="am-form-caret"></span>
+            </div>
+            <div class="am-form-group" id="select_leader_team" style="display: none;">
+                <label style="display: block;float: left;">Department:</label>
+                <select id="leader_select" onChange="getTeam()">
+                    <option>All</option>
+                    {% for leader in leaders_list %}
+                        <option>{{ leader }}</option>
+                    {% endfor %}
+                </select>
+
+                <select id="team_select">
+                    <option value="0">All</option>
+                </select>
+            </div>
+        </div>
+        <div class="am-modal-footer">
+            <button id="report_confirm" type="button" class="am-modal-btn am-round">确&nbsp;&nbsp;&nbsp;定</button>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    document.getElementById("doc_select_time").valueAsDate = new Date();
+
+    // 默认开始日期  当前时间 - 7天
+    first_day = new Date();
+    first_day.setDate(first_day.getDate()-7);
+    var start_select_time=document.getElementById("start_select_time").valueAsDate = first_day;
+    var end_select_time=document.getElementById("end_select_time").valueAsDate = new Date();
+    var sorted_team_list = {{sorted_team_list|safe}}
+            function getTeam() {
+                var sltLeader = document.getElementById("leader_select");
+                var sltTeam = document.getElementById("team_select");
+                if (sltLeader.selectedIndex >= 1) {
+                    var selectedLeader_team = sorted_team_list[sltLeader.selectedIndex - 1].team;
+                    sltTeam.length = 1;
+                    for (var i = 0; i < selectedLeader_team.length; i++) {
+                        sltTeam[i + 1] = new Option(selectedLeader_team[i], selectedLeader_team[i]);
+                    }
+                } else {
+                    sltTeam.length = 1;
+                    sltTeam[0] = new Option("All", "All");
+                }
+            };
+    function show_leader_select() {
+        var selectedValue = $("#doc-select-2 option:selected").text();
+        console.log(selectedValue)
+        if (selectedValue == "月人力超时状态"||selectedValue == "实时超时状态") {
+            $("#select_leader_team").css("display", "block");
+            $("#Date_select").css("display", "block");
+            $("#food_time").css("display", "none");
+            $("#hr_wcf").css("display", "none");
+        } else if (selectedValue == "误餐费") {
+            $("#food_time").css("display", "block");
+            $("#select_leader_team").css("display", "none");
+            $("#Date_select").css("display", "none");
+            $("#hr_wcf").css("display", "block");
+        } else if (selectedValue == "考勤异常(陆干)"){
+            $("#select_leader_team").css("display", "block");
+            $("#Date_select").css("display", "none");
+            $("#food_time").css("display", "none");
+            $("#hr_wcf").css("display", "none");
+        }else if (selectedValue == "考勤异常(台干)"){
+            $("#select_leader_team").css("display", "block");
+            $("#Date_select").css("display", "none");
+            $("#food_time").css("display", "none");
+            $("#hr_wcf").css("display", "none");
+        } else {
+            $("#select_leader_team").css("display", "none");
+            $("#Date_select").css("display", "block");
+            $("#food_time").css("display", "none");
+            $("#hr_wcf").css("display", "none");
+        }
+    }
+</script>
+</body>
+</html>
