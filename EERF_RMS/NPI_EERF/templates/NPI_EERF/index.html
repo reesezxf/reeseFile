@@ -1,0 +1,117 @@
+<!--
+	作者：Hsiao
+	时间：2018-01-31
+	描述：EERF Management System_index
+-->
+<!DOCTYPE html>
+<html>
+
+<head>
+    {% load static %}
+    <meta charset="utf-8"/>
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no"/>
+    <link rel="shortcut icon"  href="{% static 'NPI_EERF/img/favicon.ico' %}" >
+    <title>EERF Management System_index</title>
+    <link rel="stylesheet" href="{% static 'NPI_EERF/css/amazeui.min.css' %}"/>
+    <script type="text/javascript" src="{% static 'NPI_EERF/js/jquery-3.2.1.min.js' %}">
+    </script>
+    <script type="text/javascript" src="{% static 'NPI_EERF/js/ifvisible.js' %}"></script>
+    <script type="text/javascript" src="{% static 'NPI_EERF/js/js.cookie.js' %}"></script>
+    <script type="text/javascript" src="{% static 'NPI_EERF/js/amazeui.min.js' %}"></script>
+    <script  type="text/javascript" src="{% static 'NPI_EERF/js/ReFresh.js' %}" defer=true ></script>
+    <script type="text/javascript">
+        document.write("<link rel=\"stylesheet\" href=\"{% static 'NPI_EERF/css/style.css?v="+Math.random()+"' %}\">");
+        document.write("<script language=\"javascript\" type=\"text/javascript\" src=\"{% static 'NPI_EERF/js/WebData.js?v="+Math.random()+"' %}\"><\/script>");
+    </script>
+
+</head>
+
+<body>
+<header>
+    <p id="user_con">您好,{{ user_cname }} {{ user_authority }},欢迎登陆&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="{% url 'NPI_EERF:logout' %}" id="turn_off"></a>
+    </p>
+</header>
+<div id="container" class="am-accordion-content">
+    <div id="content-box">
+        <div class="am-u-lg-8 am-u-md-10 am-u-sm-centered">
+            <div class="am-u-lg-12 am-u-md-12" id="title_logo_con">
+                <img id="title_logo" class="am-img-responsive" src="{% static 'NPI_EERF/img/title_logo.png' %}">
+            </div>
+            <div id="project_con" class="am-u-lg-12 am-u-md-12">
+            <div id="Web_con" class="am-u-lg-6 am-u-md-6">
+                <div id="project_logo" class="am-u-lg-12 am-u-md-12">
+                    <img class="am-img-responsive" src="{% static 'NPI_EERF/img/menu_pic1.png' %}">
+                </div>
+                {% if user_chmod == 'admin' %}
+                    <div id="data_logo" class="am-u-lg-12 am-u-md-12">
+                        <a href="{% url 'NPI_EERF:user_manage' %}"><img class="am-img-responsive"
+                                                                        src="{% static 'NPI_EERF/img/menu_pic2.png' %}"></a>
+                    </div>
+                {% else %}
+                    <div id="data_logo" class="am-u-lg-12 am-u-md-12">
+                        <a style="cursor: not-allowed;"> <img class="am-img-responsive"
+                                                              src="{% static 'NPI_EERF/img/menu_pic2.png' %}"></a>
+                    </div>
+                {% endif %}
+
+
+            </div>
+            <div id="other_item_con" class="am-u-lg-6 am-u-md-6">
+                <div id="power_logo" class="am-u-lg-6 am-u-md-6">
+                    <a href="{% url 'NPI_EERF:power' %}"><img class="am-img-responsive"
+                                                              src="{% static 'NPI_EERF/img/menu_pic3.png' %}"></a>
+                </div>
+                <div id="work_time_logo" class="am-u-lg-6 am-u-md-6">
+                    <a href="{% url 'NPI_EERF:overtimework' %}"><img class="am-img-responsive"
+                                                                     src="{% static 'NPI_EERF/img/menu_pic4.png' %}"></a>
+                </div>
+                <div id="table_logo" class="am-u-lg-6 am-u-md-6">
+                    <a href="{% url 'NPI_EERF:reportform' %}"><img class="am-img-responsive"
+                                                                   src="{% static 'NPI_EERF/img/menu_pic5.png' %}"></a>
+                </div>
+                <div id="index_menu" class="am-u-lg-6 am-u-md-6">
+                    <div id="cost_logo" class="am-u-lg-6 am-u-md-6">
+                       {% if user_chmod == 'admin' %}
+                                <a id="cost_a" href="{% url 'NPI_EERF:table_score' %}"><img class="am-img-responsive"
+                                                     src="{% static 'NPI_EERF/img/menu_pic7.png' %} "></a>
+                        {% else %}
+                                <a id="cost_a" href="#"><img class="am-img-responsive" style="cursor: not-allowed;"
+                                                     src="{% static 'NPI_EERF/img/menu_pic7.png' %} "></a>
+                        {% endif %}
+                   </div>
+                    <div id="asset_logo" class="am-u-lg-12 am-u-md-12">
+                        <a href="#"><img class="am-img-responsive" src="{% static 'NPI_EERF/img/menu_pic6.png' %} "></a>
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
+        </div>
+    </div>
+    <div id="amg_container" class="am-g doc-am-g">
+
+    </div>
+
+</div>
+
+<div id="cover_bg" class="cover"></div>
+
+<video id="video_bg" autoplay loop muted>
+    <source src="{% static 'NPI_EERF/img/Video_bg.mp4' %} "></source>
+</video>
+
+{% if message == '權限不足' %}
+        <script type="text/javascript">
+            alert("權限不足")
+        </script>
+{% else %}
+
+{% endif %}
+
+</body>
+<script type="text/javascript" src="{% static 'NPI_EERF/js/WebData.js' %}"></script>
+</html>
